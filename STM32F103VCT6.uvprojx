@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>.\CMSIS;.\FWLIB\inc;.\USER;.\USER\Delay</IncludePath>
+              <IncludePath>.\CMSIS;.\FWLIB\inc;.\USER;.\USER\Delay;.\USER\LED</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -548,6 +548,11 @@
               <FileType>1</FileType>
               <FilePath>.\USER\Delay\Delay.c</FilePath>
             </File>
+            <File>
+              <FileName>LED.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USER\LED\LED.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
@@ -559,5 +564,20 @@
     <components/>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>&lt;Project Info&gt;</LayName>
+        <LayDesc></LayDesc>
+        <LayUrl></LayUrl>
+        <LayKeys></LayKeys>
+        <LayCat></LayCat>
+        <LayLic></LayLic>
+        <LayTarg>0</LayTarg>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>

@@ -7,7 +7,8 @@ extern "C"{
 
 /* 头文件包含 */
 #include "stm32f10x.h"								// Device header
-#include "Delay.h"										// Delay Func
+#include "Delay.h"								    // Delay Func
+#include "LED.h"                                    // LED
 
 /* 宏定义 */
 
