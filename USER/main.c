@@ -2,21 +2,16 @@
 
 int main(void)
 {
-	LED_Init();
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
+    LED_Init();
+		MODBUS_USART1_Init();
+    MODBUS_USART1_SEND_STATUS;
 
     while(1)
     {
-        LED1(ON);	
-        SysTick_Delayms(1000);
-        LED1(OFF);
-        SysTick_Delayms(1000);
-        LED2(ON);
-        SysTick_Delayms(1000);
-        LED2(OFF);
-        SysTick_Delayms(1000);
-        LED2_TOGGLE;
-        SysTick_Delayms(1000);
-		LED1_TOGGLE;
+        LED1_TOGGLE;
+        //printf("Hello World!\n");
+        USART1_SendStr("hELLO");
         SysTick_Delayms(1000);
     }
 }

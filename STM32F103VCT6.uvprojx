@@ -337,9 +337,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER</Define>
+              <Define>USE_STDPERIPH_DRIVER,STM32F10X_HD</Define>
               <Undefine></Undefine>
-              <IncludePath>.\CMSIS;.\FWLIB\inc;.\USER;.\USER\Delay;.\USER\LED</IncludePath>
+              <IncludePath>.\CMSIS;.\FWLIB\inc;.\USER;.\USER\Delay;.\USER\LED;.\USER\USART1;.\USER\MODBUS_USART1</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -552,6 +552,16 @@
               <FileName>LED.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\USER\LED\LED.c</FilePath>
+            </File>
+            <File>
+              <FileName>USART1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USER\USART1\USART1.c</FilePath>
+            </File>
+            <File>
+              <FileName>MODBUS_USART1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USER\MODBUS_USART1\MODBUS_USART1.c</FilePath>
             </File>
           </Files>
         </Group>

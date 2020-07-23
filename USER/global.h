@@ -9,6 +9,8 @@ extern "C"{
 #include "stm32f10x.h"								// Device header
 #include "Delay.h"								    // Delay Func
 #include "LED.h"                                    // LED
+#include "USART1.h"                                 // USART1
+#include "MODBUS_USART1.h"                          // MODBUS_USART1
 
 /* ∫Í∂®“Â */
 

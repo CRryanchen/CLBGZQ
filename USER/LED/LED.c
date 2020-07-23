@@ -10,7 +10,7 @@
  * @par 修改日志:
  * <table>
  * <tr><th>Date       <th>Version <th>Author  <th>Description
- * <tr><td>23-07-2020 <td>1.0     <td>wangh     <td>内容
+ * <tr><td>23-07-2020 <td>1.0     <td>Ryan·Chen     <td>LED使用GPIO引脚初始化
  * </table>
  */
 
