@@ -1,0 +1,5 @@
+# 忽略.vscode文件夹
+.vscode/*
+# 忽略中间文件
+Listings/*
+Objects/*

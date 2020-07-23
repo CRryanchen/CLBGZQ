@@ -1,0 +1,11 @@
+本工程于2020.07.23创建。第一版创建的是一个空工程，以STM32F103VCT6为芯片模版创建的，
+外部晶振为16MHz，并自带一个Delay延时文件。其他的STM32F103系列的单片机也可以以这个工程为模版，稍加修改就可以作为
+其他型号单片机开发的工程，只是需要做以下修改：
+1、只需要移植CMSIS、FWLIB、USER等文件夹，其他的文件创建工程时会自动创建；
+2、MDK创建工程时选择自己型号的单片机；
+3、使用固件库里面的"stm32f10x.h"复制到CMSIS文件夹中覆盖我的该文件，因为我是外部16MHz的晶振，
+我在里面做了一些更改，因为固件库默认是8MHz的。也可以手动修改，我在笔记中有相关记录。
+    新建工程，第一次编译时有如下地方需要注意：
+1、定义USE_STDPERIPH_DRIVER宏，不然编译会提示`assert`的警告；
+2、我现在使用的是MDK531版本，该软件默认使用的编译器较新，如果使用固件库会报很多错误，所以在Option For Target->Target->Code Generation ARM Compile中，
+将默认的使用"use default compiler version 6"选择为"use default compiler version 5"。这样就不会报错了。
