@@ -29,6 +29,7 @@ extern "C"{
 void MODBUS_USART2_Init(void);
 int fputc(int ch, FILE *f);
 int fgetc(FILE *f);
+void MODBUS_USART2_COMMUNICATION(void);
 
 /* 全局变量声明 */
 

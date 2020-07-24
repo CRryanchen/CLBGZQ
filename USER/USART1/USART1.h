@@ -19,7 +19,7 @@ extern "C"{
 #define USART1_RX_GPIO_PORT								(GPIOB)
 #define USART1_RX_GPIO_PIN								(GPIO_Pin_7)
 
-#define USART1_BAUDRATE								(115200)
+#define USART1_BAUDRATE								(9600)
 
 /* º¯ÊýÉùÃ÷ */
 void USART1_Init(void);

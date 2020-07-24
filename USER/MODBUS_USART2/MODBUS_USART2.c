@@ -118,3 +118,11 @@ int fgetc(FILE *f)
 }
 
 #endif /* PRINTF_USE_USART2 */
+
+/**
+ * @brief MOSBUS_USART2通信处理函数
+ */
+void MODBUS_USART2_COMMUNICATION(void)
+{
+    printf("MODBUS_USART2 通信结束，您输入的字符串是%s，共%d个。\n", MODBUS_USART2_RECV.MODBUS_USART_RECVBUF, MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT);
+}
