@@ -179,6 +179,31 @@ void USART1_IRQHandler(void)
 
 
 /**
+* @brief  This function handles USART2 interrupt request.
+* @param  None
+* @retval None
+*/
+void USART2_IRQHandler(void)
+{
+	if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+	{
+		// 置为发送状态
+		MODBUS_USART2_SEND_STATUS;
+		// 将接收到的数据发送出去
+		USART_SendData(USART2,(uint16_t)USART_ReceiveData(USART2));
+		// 等待发送完毕
+		while (USART_GetFlagStatus(USART2, USART_FLAG_TC) == RESET)
+		{
+			;
+		}
+		// 置为接收状态
+		MODBUS_USART2_RECV_STATUS;
+		// 不需要手动清除标志位，因为当读取数据寄存器的时候，硬件会自动清除
+	}
+}
+
+
+/**
   * @}
   */ 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/

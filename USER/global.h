@@ -10,10 +10,12 @@ extern "C"{
 #include "Delay.h"								    // Delay Func
 #include "LED.h"                                    // LED
 #include "USART1.h"                                 // USART1
+#include "USART2.h"																	// USART2
 #include "MODBUS_USART1.h"                          // MODBUS_USART1
+#include "MODBUS_USART2.h"                          // MODBUS_USART2
 
 /* 宏定义 */
-
+#define PRINTF_USE_USART2								
 
 /* 函数声明 */
 
