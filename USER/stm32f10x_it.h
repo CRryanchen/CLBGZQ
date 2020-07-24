@@ -45,6 +45,16 @@ void DebugMon_Handler(void);
 void PendSV_Handler(void);
 void SysTick_Handler(void);
 
+// 宏定义
+#define MODBUS_USART_RECV_MAX_BUFSIZE								(100)
+
+// 数据定义
+typedef struct
+{
+    uint8_t MODBUS_USART_RECVBUF[MODBUS_USART_RECV_MAX_BUFSIZE];
+    uint8_t MODBUS_USART_RECV_COUNT;
+}MODBUS_USART_RECV_STRUCT;
+
 #ifdef __cplusplus
 }
 #endif

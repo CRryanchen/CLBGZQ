@@ -16,6 +16,8 @@
 
 #include "MODBUS_USART1.h"
 
+// 声明一个用于接收数据的结构体
+MODBUS_USART_RECV_STRUCT MODBUS_USART1_RECV;                /**< 用于MODBUS_USART1数据接收的结构体 */
 
 /**
  * @brief MODBUS_USART1_CTL1引脚初始化
@@ -66,6 +68,9 @@ void MODBUS_USART1_Init(void)
 
     // MODBUS_USART1置为接收模式
     MODBUS_USART1_RECV_STATUS;
+
+    // 清零MODBUS_USART1数据接收计数器
+    MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT = 0;
 }
 
 // 因为串口2测试时也会用重写printf函数，所以我用一个宏来区分
