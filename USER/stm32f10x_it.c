@@ -23,6 +23,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
+#include "global.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{
@@ -153,8 +154,31 @@ void SysTick_Handler(void)
 }*/
 
 /**
+* @brief  This function handles USART1 interrupt request.
+* @param  None
+* @retval None
+*/
+void USART1_IRQHandler(void)
+{
+	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
+	{
+		// 置为发送状态
+		MODBUS_USART1_SEND_STATUS;
+		// 将接收到的数据发送出去
+		USART_SendData(USART1,(uint16_t)USART_ReceiveData(USART1));
+		// 等待发送完毕
+		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET)
+		{
+			;
+		}
+		// 置为接收状态
+		MODBUS_USART1_RECV_STATUS;
+		// 不需要手动清除标志位，因为当读取数据寄存器的时候，硬件会自动清除
+	}
+}
+
+
+/**
   * @}
   */ 
-
-
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
