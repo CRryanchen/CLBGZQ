@@ -30,6 +30,7 @@ void MODBUS_USART1_Init(void);
 int fputc(int ch, FILE *f);
 int fgetc(FILE *f);
 void MODBUS_USART1_COMMUNICATION(void);
+unsigned int CRC16(unsigned char *nData, unsigned int wLength);
 
 /* 全局变量声明 */
 

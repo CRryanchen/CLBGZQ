@@ -220,11 +220,14 @@ void TIM6_IRQHandler(void)
         TIM_ClearITPendingBit(TIM6, TIM_IT_Update);
         // 关闭定时器
         TIM_Cmd(TIM6, DISABLE);
+
+        // 接收完成标志置1
+
         // 调用MODBUS通信处理函数
 #if defined PRINTF_USE_USART2
-        MODBUS_USART2_COMMUNICATION();
+        MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG = 1;
 #else
-        MODBUS_USART1_COMMUNICATION();
+        MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG = 1;
 #endif  /* PRINTF_USE_USART2 */
     }
     

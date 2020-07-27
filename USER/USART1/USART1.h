@@ -24,6 +24,7 @@ extern "C"{
 /* 函数声明 */
 void USART1_Init(void);
 void USART1_SendStr(char * l_str);
+void USART1_SendData(uint8_t *l_addr, uint8_t l_count);
 
 /* 全局变量声明 */
 

@@ -15,9 +15,10 @@ extern "C"{
 #include "MODBUS_USART2.h"                          // MODBUS_USART2
 #include "stm32f10x_it.h"                           // interrupt
 #include "TIM6.h"                                   // TIM6
+#include "INTER_FLASH.h"                            // INTER FLASH
 
 /* 宏定义 */
-#define PRINTF_USE_USART2								
+//#define PRINTF_USE_USART2								
 
 /* 函数声明 */
 

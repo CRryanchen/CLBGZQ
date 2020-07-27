@@ -159,6 +159,26 @@ void USART1_SendStr(char * l_str)
     }
 }
 
+/**
+ * @brief  USART1 发送数据
+ * @param  l_addr           数据的起始地址
+ * @param  l_count          数据的个数
+ */
+void USART1_SendData(uint8_t *l_addr, uint8_t l_count)
+{
+    while (l_count != 0)
+    {
+        USART1_SendByte(*l_addr++);
+        l_count--;
+    }
+
+    // 等待数据全部发送完毕
+    while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET)
+    {
+        ;
+    }
+}
+
 
 
 

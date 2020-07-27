@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F10X_HD</Define>
               <Undefine></Undefine>
-              <IncludePath>.\CMSIS;.\FWLIB\inc;.\USER;.\USER\Delay;.\USER\LED;.\USER\USART1;.\USER\MODBUS_USART1;.\USER\USART2;.\USER\MODBUS_USART2;.\USER\TIM6</IncludePath>
+              <IncludePath>.\CMSIS;.\FWLIB\inc;.\USER;.\USER\Delay;.\USER\LED;.\USER\USART1;.\USER\MODBUS_USART1;.\USER\USART2;.\USER\MODBUS_USART2;.\USER\TIM6;.\USER\INTER_FLASH</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -577,6 +577,11 @@
               <FileName>TIM6.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\USER\TIM6\TIM6.c</FilePath>
+            </File>
+            <File>
+              <FileName>INTER_FLASH.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USER\INTER_FLASH\INTER_FLASH.c</FilePath>
             </File>
           </Files>
         </Group>
