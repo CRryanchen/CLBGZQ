@@ -7,6 +7,7 @@ extern "C"{
 
 /* 头文件包含 */
 #include <stdio.h>
+#include <string.h>
 #include "stm32f10x.h"								// Device header
 #include "global.h"
 

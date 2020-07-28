@@ -19,6 +19,10 @@
 // 声明一个用于接收数据的结构体
 MODBUS_USART_RECV_STRUCT MODBUS_USART1_RECV;                /**< 用于MODBUS_USART1数据接收的结构体 */
 uint8_t DEVICE_ID;                                          /*!< 设备ID */
+float WEIYI1 = 0.555;                                         /*!< 位移1 */
+float WEIYI2 = 1.0;                                         /*!< 位移2 */
+float WEIYI3 = 1.5;                                         /*!< 位移3 */
+float WEIYI4 = 2.0;                                         /*!< 位移4 */
 
 /**
  * @brief MODBUS_USART1_CTL1引脚初始化
@@ -161,6 +165,19 @@ static void MOSBUS_USART_ErrorHandle(uint8_t l_ErrorNum)
 }
 
 
+static void MOSBUS_USART_Memcpy(void * l_des, void * l_src, uint8_t l_length)
+{
+    uint8_t * des = (uint8_t *)l_des;
+    uint8_t * src = (uint8_t *)l_src;
+    while (l_length)
+    {
+        l_length--;
+        *des = *(src + l_length);
+        des++;
+    }
+}
+
+
 static void MODBUS_USART_03_Handle()
 {
     // 读取的字节长度应该是8个字节，如果不是，则出错
@@ -206,16 +223,16 @@ static void MODBUS_USART_03_Handle()
 
             case 1002:
             {
-                l_ResCnt = *(uint16_t *)&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4];
+                l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
                 if (l_ResCnt == 8)
                 {
                     l_ResponseBuf[2] = 0x10;
                     
                     // 读取位移1-4
-                    // memcpy(l_ResponseBuf[3], (uint8_t *)&WEIYI1, 4);
-                    // memcpy(l_ResponseBuf[7], (uint8_t *)&WEIYI2, 4);
-                    // memcpy(l_ResponseBuf[11], (uint8_t *)&WEIYI3, 4);
-                    // memcpy(l_ResponseBuf[15], (uint8_t *)&WEIYI4, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3], &WEIYI1, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[7], (uint8_t *)&WEIYI2, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[11], (uint8_t *)&WEIYI3, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[15], (uint8_t *)&WEIYI4, 4);
 
                     l_CRC16CheckNum = CRC16(l_ResponseBuf, 19);
                     l_ResponseBuf[19] = l_CRC16CheckNum & 0XFF;      // 校验码低8位
