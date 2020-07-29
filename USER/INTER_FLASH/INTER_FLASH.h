@@ -29,6 +29,7 @@ extern "C"{
 
 
 /* 函数声明 */
+int INTER_FLASH_ProgramWord(uint32_t l_address, uint32_t l_data);
 
 /* 全局变量声明 */
 

@@ -18,8 +18,13 @@ extern "C"{
 #include "INTER_FLASH.h"                            // INTER FLASH
 
 /* 宏定义 */
-//#define PRINTF_USE_USART2								
+//#define PRINTF_USE_USART2
 
+#define DEBUG								1
+#define DEBUG_INFO(fmt, arg...)					do{\
+																				if(DEBUG)\
+																				printf("<<-DEBUG-INFO->> [%s],[%d]"fmt"\n", __FILE__, __LINE__, ##arg );\
+																				}while(0)
 /* 函数声明 */
 
 /* 全局变量声明 */

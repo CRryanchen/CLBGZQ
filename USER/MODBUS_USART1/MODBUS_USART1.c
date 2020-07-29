@@ -328,7 +328,7 @@ static void MODBUS_USART_10_Handle()
                         // 更新Device ID
                         DEVICE_ID = (uint8_t)l_temp_DeviceID;
                         // 写入FLASH，重启后可以更新
-                        //FLASH_ProgramWord(DEVICE_ID_ADDR, l_temp_DeviceID);
+                        INTER_FLASH_ProgramWord(DEVICE_ID_ADDR, l_temp_DeviceID);
 
                         // 这里需要更新一次
                         l_ResponseBuf[0] = DEVICE_ID;
@@ -414,6 +414,11 @@ void MODBUS_USART1_COMMUNICATION(void)
                 }
             }
         }
+				else
+				{
+					// 设备ID不同
+					DEBUG_INFO("Error Device_ID");
+				}
     }
 }
 
