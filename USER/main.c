@@ -1,5 +1,23 @@
 #include "global.h"
 
+/**
+ * @brief 初始化K值，暂时放在main函数
+ */
+static void K_ValueInit()
+{
+    K1_Value = *(float *)K1_ADDR;
+    K2_Value = *(float *)K2_ADDR;
+    K3_Value = *(float *)K3_ADDR;
+    K4_Value = *(float *)K4_ADDR;
+    K5_Value = *(float *)K5_ADDR;
+    K6_Value = *(float *)K6_ADDR;
+    K7_Value = *(float *)K7_ADDR;
+    K8_Value = *(float *)K8_ADDR;
+    K9_Value = *(float *)K9_ADDR;
+    K10_Value = *(float *)K10_ADDR;
+}
+
+
 int main(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
@@ -10,6 +28,7 @@ int main(void)
     MODBUS_USART1_Init();
 #endif /* PRINTF_USE_USART2 */
     TIM6_Init();
+    K_ValueInit();
     
     while(1)
     {

@@ -19,10 +19,21 @@
 // 声明一个用于接收数据的结构体
 MODBUS_USART_RECV_STRUCT MODBUS_USART1_RECV;                /**< 用于MODBUS_USART1数据接收的结构体 */
 uint8_t DEVICE_ID;                                          /*!< 设备ID */
-float WEIYI1 = 0.555;                                         /*!< 位移1 */
+float WEIYI1 = 0.555;                                       /*!< 位移1 */
 float WEIYI2 = 1.0;                                         /*!< 位移2 */
 float WEIYI3 = 1.5;                                         /*!< 位移3 */
 float WEIYI4 = 2.0;                                         /*!< 位移4 */
+
+float K1_Value = 0.0;                                       /*!< 参数1 */
+float K2_Value = 0.0;                                       /*!< 参数2 */
+float K3_Value = 0.0;                                       /*!< 参数3 */
+float K4_Value = 0.0;                                       /*!< 参数4 */
+float K5_Value = 0.0;                                       /*!< 参数5 */
+float K6_Value = 0.0;                                       /*!< 参数6 */
+float K7_Value = 0.0;                                       /*!< 参数7 */
+float K8_Value = 0.0;                                       /*!< 参数8 */
+float K9_Value = 0.0;                                       /*!< 参数9 */
+float K10_Value = 0.0;                                       /*!< 参数10 */
 
 /**
  * @brief MODBUS_USART1_CTL1引脚初始化
@@ -177,6 +188,23 @@ static void MOSBUS_USART_Memcpy(void * l_des, void * l_src, uint8_t l_length)
     }
 }
 
+static float MODBUS_USART_FloatAss(uint8_t *l_src)
+{
+    uint8_t l_tempbuf[4] = {0};
+    float l_tempres = 0.0;
+
+    l_tempbuf[3] = *(l_src + 0);
+    l_tempbuf[2] = *(l_src + 1);
+    l_tempbuf[1] = *(l_src + 2);
+    l_tempbuf[0] = *(l_src + 3);
+
+	l_tempres = *(float *)l_tempbuf;
+		
+    return l_tempres;
+
+
+}
+
 
 static void MODBUS_USART_03_Handle()
 {
@@ -250,22 +278,22 @@ static void MODBUS_USART_03_Handle()
 
             case 1010:
             {
-                l_ResCnt = *(uint16_t *)&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4];
+                l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
                 if (l_ResCnt == 20)
                 {
                     l_ResponseBuf[2] = 0x28;
                     
-                    // 读取位移1-4
-                    // memcpy(l_ResponseBuf[3], (uint8_t *)K1_ADDR, 4);
-                    // memcpy(l_ResponseBuf[7], (uint8_t *)K2_ADDR, 4);
-                    // memcpy(l_ResponseBuf[11], (uint8_t *)K3_ADDR, 4);
-                    // memcpy(l_ResponseBuf[15], (uint8_t *)K4_ADDR, 4);
-                    // memcpy(l_ResponseBuf[19], (uint8_t *)K5_ADDR, 4);
-                    // memcpy(l_ResponseBuf[23], (uint8_t *)K6_ADDR, 4);
-                    // memcpy(l_ResponseBuf[27], (uint8_t *)K7_ADDR, 4);
-                    // memcpy(l_ResponseBuf[31], (uint8_t *)K8_ADDR, 4);
-                    // memcpy(l_ResponseBuf[35], (uint8_t *)K9_ADDR, 4);
-                    // memcpy(l_ResponseBuf[39], (uint8_t *)K10_ADDR, 4);
+                    // 读取参数K1-K10
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3], (uint8_t *)K1_ADDR, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[7], (uint8_t *)K2_ADDR, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[11], (uint8_t *)K3_ADDR, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[15], (uint8_t *)K4_ADDR, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[19], (uint8_t *)K5_ADDR, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[23], (uint8_t *)K6_ADDR, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[27], (uint8_t *)K7_ADDR, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[31], (uint8_t *)K8_ADDR, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[35], (uint8_t *)K9_ADDR, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[39], (uint8_t *)K10_ADDR, 4);
 
                     l_CRC16CheckNum = CRC16(l_ResponseBuf, 43);
                     l_ResponseBuf[43] = l_CRC16CheckNum & 0XFF;      // 校验码低8位
@@ -334,10 +362,10 @@ static void MODBUS_USART_10_Handle()
                         l_ResponseBuf[0] = DEVICE_ID;
 
                         // [2][3]返回时还是寄存器地址，[4][5]返回时依旧是寄存器个数
-												l_ResponseBuf[2] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[2];
-												l_ResponseBuf[3] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[3];
-												l_ResponseBuf[4] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4];
-												l_ResponseBuf[5] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
+                        l_ResponseBuf[2] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[2];
+                        l_ResponseBuf[3] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[3];
+                        l_ResponseBuf[4] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4];
+                        l_ResponseBuf[5] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
 											
                         l_CRC16CheckNum = CRC16(l_ResponseBuf, 6);
                         l_ResponseBuf[6] = l_CRC16CheckNum & 0XFF;      // 校验码低8位
@@ -358,12 +386,102 @@ static void MODBUS_USART_10_Handle()
                 }
             }
             break;
+
+            case 1010:
+            {
+                l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
+                if (0X14 == l_ResCnt)
+                {
+                    l_ByteCnt = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[6];
+                    if (0x28 == l_ByteCnt)
+                    {
+                        // 存储K值临时变量
+                        float l_temp_K1 = 0;
+                        float l_temp_K2 = 0;
+                        float l_temp_K3 = 0;
+                        float l_temp_K4 = 0;
+                        float l_temp_K5 = 0;
+                        float l_temp_K6 = 0;
+                        float l_temp_K7 = 0;
+                        float l_temp_K8 = 0;
+                        float l_temp_K9 = 0;
+                        float l_temp_K10 = 0;
+
+                        l_temp_K1 = MODBUS_USART_FloatAss(&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[7]);
+                        l_temp_K2 = MODBUS_USART_FloatAss(&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[11]);
+                        l_temp_K3 = MODBUS_USART_FloatAss(&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[15]);
+                        l_temp_K4 = MODBUS_USART_FloatAss(&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[19]);
+                        l_temp_K5 = MODBUS_USART_FloatAss(&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[23]);
+                        l_temp_K6 = MODBUS_USART_FloatAss(&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[27]);
+                        l_temp_K7 = MODBUS_USART_FloatAss(&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[31]);
+                        l_temp_K8 = MODBUS_USART_FloatAss(&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[35]);
+                        l_temp_K9 = MODBUS_USART_FloatAss(&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[39]);
+                        l_temp_K10 = MODBUS_USART_FloatAss(&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[43]);
+
+                        // 更新K1-K10
+                        K1_Value = l_temp_K1;
+                        K2_Value = l_temp_K2;
+                        K3_Value = l_temp_K3;
+                        K4_Value = l_temp_K4;
+                        K5_Value = l_temp_K5;
+                        K6_Value = l_temp_K6;
+                        K7_Value = l_temp_K7;
+                        K8_Value = l_temp_K8;
+                        K9_Value = l_temp_K9;
+                        K10_Value = l_temp_K10;
+
+                        // 将新的K1-K10写入FLASH
+                        // 解锁
+                        FLASH_Unlock();
+
+                        // 擦除页数据
+                        FLASH_ErasePage(K1_ADDR);
+                        // 写入数据
+                        FLASH_ProgramWord(K1_ADDR, *(uint32_t *)&K1_Value);
+                        FLASH_ProgramWord(K2_ADDR, *(uint32_t *)&K2_Value);
+                        FLASH_ProgramWord(K3_ADDR, *(uint32_t *)&K3_Value);
+                        FLASH_ProgramWord(K4_ADDR, *(uint32_t *)&K4_Value);
+                        FLASH_ProgramWord(K5_ADDR, *(uint32_t *)&K5_Value);
+                        FLASH_ProgramWord(K6_ADDR, *(uint32_t *)&K6_Value);
+                        FLASH_ProgramWord(K7_ADDR, *(uint32_t *)&K7_Value);
+                        FLASH_ProgramWord(K8_ADDR, *(uint32_t *)&K8_Value);
+                        FLASH_ProgramWord(K9_ADDR, *(uint32_t *)&K9_Value);
+                        FLASH_ProgramWord(K10_ADDR,*(uint32_t *)&K10_Value);
+
+                        // 上锁
+                        FLASH_Lock();
+
+                        // 返回数据
+                        // [2][3]返回时还是寄存器地址，[4][5]返回时依旧是寄存器个数
+                        l_ResponseBuf[2] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[2];
+                        l_ResponseBuf[3] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[3];
+                        l_ResponseBuf[4] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4];
+                        l_ResponseBuf[5] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
+
+                        l_CRC16CheckNum = CRC16(l_ResponseBuf, 6);
+                        l_ResponseBuf[6] = l_CRC16CheckNum & 0XFF;      // 校验码低8位
+                        l_ResponseBuf[7] = l_CRC16CheckNum >> 8;        // 校验码高8位
+
+                        MODBUS_USART1_SendData(l_ResponseBuf, sizeof(l_ResponseBuf)/sizeof(uint8_t));
+                    }
+                    // 内部寄存器数据异常
+                    else
+                    {
+                        MOSBUS_USART_ErrorHandle(0x04);
+                    }
+                }
+                // 寄存器数量异常
+                else
+                {
+                    MOSBUS_USART_ErrorHandle(0x03);
+                }
+                
+            }
+            break;
         
             default:
             break;
         }
-
-
     }
     // 数据长度异常
     else
@@ -414,11 +532,11 @@ void MODBUS_USART1_COMMUNICATION(void)
                 }
             }
         }
-				else
-				{
-					// 设备ID不同
-					DEBUG_INFO("Error Device_ID");
-				}
+        else
+        {
+            // 设备ID不同
+            DEBUG_INFO("Error Device_ID");
+        }
     }
 }
 
