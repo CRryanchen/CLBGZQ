@@ -16,6 +16,7 @@ extern "C"{
 #include "stm32f10x_it.h"                           // interrupt
 #include "TIM6.h"                                   // TIM6
 #include "INTER_FLASH.h"                            // INTER FLASH
+#include "ADC.h"
 
 /* 宏定义 */
 //#define PRINTF_USE_USART2
@@ -46,6 +47,7 @@ extern float K8_Value;                                       /*!< 参数8 */
 extern float K9_Value;                                       /*!< 参数9 */
 extern float K10_Value;                                      /*!< 参数10 */
 
+extern uint16_t ADC_ConvertValue[NUMBER_OF_CHANNELS];		 /*!< AD转换值 */	
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,9 @@
 #include "global.h"
 
+/* 全局变量声明 */
+float ADC_ConvertVol[NUMBER_OF_CHANNELS] = {0};
+
+
 /**
  * @brief 初始化K值，暂时放在main函数
  */
@@ -29,35 +33,40 @@ int main(void)
 #endif /* PRINTF_USE_USART2 */
     TIM6_Init();
     K_ValueInit();
-    
+    ADC_LocalInit();
+
     while(1)
     {
-        /* 这个实验的效果是，LED2会一直闪烁，MODBUS接收数据时也会一直闪，如果两个数据之间
-        间隔超过3S，则认定为通信结束，结束后MODBUS会打印你输入的数据。 */
-        LED2_TOGGLE;
-        
-        // printf("MODBUS_USART2_RECVBUF:%s\n",MODBUS_USART2_RECV.MODBUS_USART_RECVBUF);
-        // printf("MODBUS_USART2_RECV_COUNT = %d\n", MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT);
-        
-        // printf("MODBUS_USART1_RECVBUF:%s\n",MODBUS_USART1_RECV.MODBUS_USART_RECVBUF);
-        // printf("MODBUS_USART1_RECV_COUNT = %d\n", MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT);
+        LED1_TOGGLE;
+        ADC_ConvertVol[0] = (float)ADC_ConvertValue[0] / 4096 * 2.5;
+        ADC_ConvertVol[1] = (float)ADC_ConvertValue[1] / 4096 * 2.5;
+        ADC_ConvertVol[2] = (float)ADC_ConvertValue[2] / 4096 * 2.5;
+        ADC_ConvertVol[3] = (float)ADC_ConvertValue[3] / 4096 * 2.5;
 
-        SysTick_Delayms(1000);
+        printf("\r\n CH1 Value = %f V\r\n", ADC_ConvertVol[0]);
+        printf("\r\n CH2 Value = %f V\r\n", ADC_ConvertVol[1]);
+        printf("\r\n CH3 Value = %f V\r\n", ADC_ConvertVol[2]);
+        printf("\r\n CH4 Value = %f V\r\n", ADC_ConvertVol[3]);
+
+        SysTick_Delayms(2000);
+
+        
+
 			
-#if defined PRINTF_USE_USART2
-        if (MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
-				{
-					MODBUS_USART2_COMMUNICATION();
-					MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT = 0;
-				MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG = 0;
-				}
-#else
-        if (MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
-				{
-					MODBUS_USART1_COMMUNICATION();
-					MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT = 0;
-					MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG = 0;
-				}
-#endif
+// #if defined PRINTF_USE_USART2
+//         if (MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
+// 				{
+// 					MODBUS_USART2_COMMUNICATION();
+// 					MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT = 0;
+// 				MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG = 0;
+// 				}
+// #else
+//         if (MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
+// 				{
+// 					MODBUS_USART1_COMMUNICATION();
+// 					MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT = 0;
+// 					MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG = 0;
+// 				}
+// #endif
     }
 }
