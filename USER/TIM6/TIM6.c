@@ -29,14 +29,14 @@ static void TIM6_TimeBaseConfig(void)
     // 开启TIM6时钟
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, ENABLE);
 
-    // // 计数器预频率， 72 / 72 = 1MHz
-    // TIM_TimeBaseInitStructure.TIM_Prescaler = (72 - 1);
-    // // 计数器周期， 3000
-    // TIM_TimeBaseInitStructure.TIM_Period = (3000 - 1);
+    // 计数器预频率， 72 / 72 = 1MHz
+    TIM_TimeBaseInitStructure.TIM_Prescaler = (72 - 1);
+    // 计数器周期， 3000
+    TIM_TimeBaseInitStructure.TIM_Period = (3000 - 1);
 
     // 因为我是手动测试，3ms不好掌控，所以我这里测试时改为定时3s
-    TIM_TimeBaseInitStructure.TIM_Prescaler = (7200 - 1);
-    TIM_TimeBaseInitStructure.TIM_Period = (30000 - 1);
+    //TIM_TimeBaseInitStructure.TIM_Prescaler = (7200 - 1);
+    //TIM_TimeBaseInitStructure.TIM_Period = (30000 - 1);
 
     // 一下三个配置基本定时器不使用
     TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;

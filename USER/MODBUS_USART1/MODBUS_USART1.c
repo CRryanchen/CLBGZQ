@@ -535,7 +535,7 @@ void MODBUS_USART1_COMMUNICATION(void)
         else
         {
             // 设备ID不同
-            DEBUG_INFO("Error Device_ID");
+            //DEBUG_INFO("Error Device_ID");
         }
     }
 }
