@@ -111,8 +111,8 @@
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
           <SimDllArguments> -REMAP</SimDllArguments>
-          <SimDlgDll>DCM.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pCM3</SimDlgDllArguments>
+          <SimDlgDll>DARMSTM.dll</SimDlgDll>
+          <SimDlgDllArguments>-pSTM32F103VC</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
           <TargetDllArguments></TargetDllArguments>
           <TargetDlgDll>DARMSTM.dll</TargetDlgDll>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F10X_HD</Define>
               <Undefine></Undefine>
-              <IncludePath>.\CMSIS;.\FWLIB\inc;.\USER;.\USER\Delay;.\USER\LED;.\USER\USART1;.\USER\MODBUS_USART1;.\USER\USART2;.\USER\MODBUS_USART2;.\USER\TIM6;.\USER\INTER_FLASH;.\USER\ADC</IncludePath>
+              <IncludePath>.\CMSIS;.\FWLIB\inc;.\USER;.\USER\Delay;.\USER\LED;.\USER\USART1;.\USER\MODBUS_USART1;.\USER\USART2;.\USER\MODBUS_USART2;.\USER\TIM6;.\USER\INTER_FLASH;.\USER\ADC;.\USER\TIM1;.\USER\TIM3</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -587,6 +587,16 @@
               <FileName>ADC.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\USER\ADC\ADC.c</FilePath>
+            </File>
+            <File>
+              <FileName>TIM1.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USER\TIM1\TIM1.c</FilePath>
+            </File>
+            <File>
+              <FileName>TIM3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USER\TIM3\TIM3.c</FilePath>
             </File>
           </Files>
         </Group>

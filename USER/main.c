@@ -33,24 +33,36 @@ int main(void)
 #endif /* PRINTF_USE_USART2 */
     TIM6_Init();
     K_ValueInit();
-    ADC_LocalInit();
+    //ADC_LocalInit();
+    TIM1_Init();
+    TIM3_Init();
 
     while(1)
     {
-        LED1_TOGGLE;
-        ADC_ConvertVol[0] = (float)ADC_ConvertValue[0] / 4096 * 2.5;
-        ADC_ConvertVol[1] = (float)ADC_ConvertValue[1] / 4096 * 2.5;
-        ADC_ConvertVol[2] = (float)ADC_ConvertValue[2] / 4096 * 2.5;
-        ADC_ConvertVol[3] = (float)ADC_ConvertValue[3] / 4096 * 2.5;
+        // LED1_TOGGLE;
+        // ADC_ConvertVol[0] = (float)ADC_ConvertValue[0] / 4096 * 2.5;
+        // ADC_ConvertVol[1] = (float)ADC_ConvertValue[1] / 4096 * 2.5;
+        // ADC_ConvertVol[2] = (float)ADC_ConvertValue[2] / 4096 * 2.5;
+        // ADC_ConvertVol[3] = (float)ADC_ConvertValue[3] / 4096 * 2.5;
 
-        printf("\r\n CH1 Value = %f V\r\n", ADC_ConvertVol[0]);
-        printf("\r\n CH2 Value = %f V\r\n", ADC_ConvertVol[1]);
-        printf("\r\n CH3 Value = %f V\r\n", ADC_ConvertVol[2]);
-        printf("\r\n CH4 Value = %f V\r\n", ADC_ConvertVol[3]);
+        // printf("\r\n CH1 Value = %f V\r\n", ADC_ConvertVol[0]);
+        // printf("\r\n CH2 Value = %f V\r\n", ADC_ConvertVol[1]);
+        // printf("\r\n CH3 Value = %f V\r\n", ADC_ConvertVol[2]);
+        // printf("\r\n CH4 Value = %f V\r\n", ADC_ConvertVol[3]);
 
-        SysTick_Delayms(2000);
-
+        // SysTick_Delayms(2000);
         
+        SysTick_Delayms(100);
+        TIM_SetCompare1(TIM3, 0);
+        
+        SysTick_Delayms(100);
+        TIM_SetCompare1(TIM3, 250);
+        
+        SysTick_Delayms(100);
+        TIM_SetCompare1(TIM3, 500);
+        
+        SysTick_Delayms(100);
+        TIM_SetCompare1(TIM3, 1000);
 
 			
 // #if defined PRINTF_USE_USART2

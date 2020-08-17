@@ -96,6 +96,18 @@ static void TIM1_OCConfig(void)
 
     TIM_OC4Init(TIM1, &TIM_OCInitStructure);
     TIM_OC4PreloadConfig(TIM1, TIM_OCPreload_Enable);
+
+    // 使能计数器
+    TIM_Cmd(TIM1, ENABLE);
+    // 主输出使能
+    TIM_CtrlPWMOutputs(TIM1, ENABLE);
+}
+
+void TIM1_Init(void)
+{
+    TIM1_CH_GpioInit();
+    TIM1_TimeBaseConfig();
+    TIM1_OCConfig();
 }
 
 

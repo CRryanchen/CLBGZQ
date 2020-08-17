@@ -36,6 +36,10 @@ extern "C"{
 
 
 /* 函数声明 */
+static void TIM1_CH_GpioInit(void);
+static void TIM1_TimeBaseConfig(void);
+static void TIM1_OCConfig(void);
+void TIM1_Init(void);
 
 /* 全局变量声明 */
 

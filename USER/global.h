@@ -17,6 +17,8 @@ extern "C"{
 #include "TIM6.h"                                   // TIM6
 #include "INTER_FLASH.h"                            // INTER FLASH
 #include "ADC.h"
+#include "TIM1.h"
+#include "TIM3.h"
 
 /* ∫Í∂®“Â */
 //#define PRINTF_USE_USART2
