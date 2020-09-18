@@ -233,6 +233,26 @@ void TIM6_IRQHandler(void)
     
 }
 
+void DMA1_Channel1_IRQHandler(void)
+{    
+  if(DMA_GetITStatus(DMA1_IT_TC1) != RESET)
+  {
+      DMA_ClearITPendingBit(DMA1_IT_TC1);
+      DMA_ClearITPendingBit(DMA1_IT_HT1);   //清除全部中断标志
+    
+    if (ADC_ConvertCompleteFlag == 0)
+    {
+        // 转换完成标志置1
+        ADC_ConvertCompleteFlag = 1;
+        // 关闭 ADC
+        ADC_Cmd(ADC1, DISABLE);
+        //ADC_SoftwareStartConvCmd(ADC1, DISABLE);
+        // 关闭 DMA
+        DMA_Cmd(ADC_DMA_CHANNEL, DISABLE);
+    }
+  }
+}
+
 
 /**
   * @}

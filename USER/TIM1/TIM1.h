@@ -15,24 +15,24 @@ extern "C"{
 #define TIM1_PULSE                              500
 
 // TIM1 输出比较通道1
-#define TIM1_CH1_GPIO_CLK								(RCC_APB2Periph_GPIOA)
-#define TIM1_CH1_GPIO_PORT								(GPIOA)
-#define TIM1_CH1_GPIO_PIN								(GPIO_Pin_8)
+#define TIM1_CH1_GPIO_CLK								(RCC_APB2Periph_GPIOC)
+#define TIM1_CH1_GPIO_PORT								(GPIOC)
+#define TIM1_CH1_GPIO_PIN								(GPIO_Pin_6)
 
 // TIM1 输出比较通道2
-#define TIM1_CH2_GPIO_CLK								(RCC_APB2Periph_GPIOA)
-#define TIM1_CH2_GPIO_PORT								(GPIOA)
-#define TIM1_CH2_GPIO_PIN								(GPIO_Pin_9)
+#define TIM1_CH2_GPIO_CLK								(RCC_APB2Periph_GPIOC)
+#define TIM1_CH2_GPIO_PORT								(GPIOC)
+#define TIM1_CH2_GPIO_PIN								(GPIO_Pin_7)
 
 // TIM1 输出比较通道3
-#define TIM1_CH3_GPIO_CLK								(RCC_APB2Periph_GPIOA)
-#define TIM1_CH3_GPIO_PORT								(GPIOA)
-#define TIM1_CH3_GPIO_PIN								(GPIO_Pin_10)
+#define TIM1_CH3_GPIO_CLK								(RCC_APB2Periph_GPIOC)
+#define TIM1_CH3_GPIO_PORT								(GPIOC)
+#define TIM1_CH3_GPIO_PIN								(GPIO_Pin_8)
 
 // TIM1 输出比较通道4
-#define TIM1_CH4_GPIO_CLK								(RCC_APB2Periph_GPIOA)
-#define TIM1_CH4_GPIO_PORT								(GPIOA)
-#define TIM1_CH4_GPIO_PIN								(GPIO_Pin_11)
+#define TIM1_CH4_GPIO_CLK								(RCC_APB2Periph_GPIOC)
+#define TIM1_CH4_GPIO_PORT								(GPIOC)
+#define TIM1_CH4_GPIO_PIN								(GPIO_Pin_9)
 
 
 /* 函数声明 */

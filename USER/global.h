@@ -23,7 +23,7 @@ extern "C"{
 /* 宏定义 */
 //#define PRINTF_USE_USART2
 
-#define DEBUG								1
+#define DEBUG									1
 #define DEBUG_INFO(fmt, arg...)					do{\
 												if(DEBUG)\
 												printf("<<-DEBUG-INFO->> [%s],[%d]"fmt"\n", __FILE__, __LINE__, ##arg );\
@@ -49,7 +49,11 @@ extern float K8_Value;                                       /*!< 参数8 */
 extern float K9_Value;                                       /*!< 参数9 */
 extern float K10_Value;                                      /*!< 参数10 */
 
-extern uint16_t ADC_ConvertValue[NUMBER_OF_CHANNELS];		 /*!< AD转换值 */	
+extern uint16_t ADC_ConvertValue[SAMPLE_TIMES][NUMBER_OF_CHANNELS];		 /*!< AD转换值 */
+extern uint16_t ADC_ConvertValue_x[SAMPLE_TIMES * NUMBER_OF_CHANNELS];
+extern uint8_t ADC_ConvertCompleteFlag;
+extern float ADC_RootMeanSquare[NUMBER_OF_CHANNELS];
+extern float ADC_WeiYi[NUMBER_OF_CHANNELS];
 
 #ifdef __cplusplus
 }

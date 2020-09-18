@@ -31,8 +31,8 @@ static void USART2_TX_GpioInit(void)
     GPIO_PinRemapConfig(GPIO_Remap_USART2, ENABLE);
 
     // 结构体配置
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-    GPIO_InitStructure.GPIO_Pin = USART2_TX_GPIO_PIN;
+    GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_AF_PP;
+    GPIO_InitStructure.GPIO_Pin   = USART2_TX_GPIO_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(USART2_TX_GPIO_PORT, &GPIO_InitStructure);
 }
@@ -52,7 +52,7 @@ static void USART2_RX_GpioInit(void)
 
     // 结构体配置
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-    GPIO_InitStructure.GPIO_Pin = USART2_RX_GPIO_PIN;
+    GPIO_InitStructure.GPIO_Pin  = USART2_RX_GPIO_PIN;
     GPIO_Init(USART2_RX_GPIO_PORT, &GPIO_InitStructure);
 }
 
@@ -66,16 +66,11 @@ static void USART2_NVICConfig(void)
 
     // 每个工程都需要选择嵌套向量中断控制分组，但是只选择一次，所以我在主函数中选择
 
-    // 选择中断源
-    NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
-    // 设置中断的抢占优先级
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;
-    // 设置中断的子优先级
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
-    // 是否使能该中断源
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    // 初始化结构体
-    NVIC_Init(&NVIC_InitStructure);
+    NVIC_InitStructure.NVIC_IRQChannel                   = USART2_IRQn;  // 选择中断源
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;            // 设置中断的抢占优先级
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 1;            // 设置中断的子优先级
+    NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;       // 是否使能该中断源
+    NVIC_Init(&NVIC_InitStructure);                                      // 初始化结构体
 }
 
 /**
@@ -85,24 +80,17 @@ static void USART2_ModeConfig(void)
 {
     // 串口初始化结构体声明
     USART_InitTypeDef USART_InitStructure;
-    
+
     // 使能串口时钟,串口1是APB2，串口2,3,4,5是APB1
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
-    
-    // 波特率
-    USART_InitStructure.USART_BaudRate = USART2_BAUDRATE;
-    // 数据字长，一般为8
-    USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-    // 停止位，一般为1
-    USART_InitStructure.USART_StopBits = USART_StopBits_1;
-    // 校验为，一般无校验
-    USART_InitStructure.USART_Parity = USART_Parity_No;
-    // 模式，一般发送和接收
-    USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
-    // 硬件流控制，一般不使用
-    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-    // 初始化串口配置结构体
-    USART_Init(USART2, &USART_InitStructure);
+
+    USART_InitStructure.USART_BaudRate            = USART2_BAUDRATE;                 // 波特率
+    USART_InitStructure.USART_WordLength          = USART_WordLength_8b;             // 数据字长，一般为8
+    USART_InitStructure.USART_StopBits            = USART_StopBits_1;                // 停止位，一般为1
+    USART_InitStructure.USART_Parity              = USART_Parity_No;                 // 校验为，一般无校验
+    USART_InitStructure.USART_Mode                = USART_Mode_Rx | USART_Mode_Tx;   // 模式，一般发送和接收
+    USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;  // 硬件流控制，一般不使用
+    USART_Init(USART2, &USART_InitStructure);                                        // 初始化串口配置结构体
 
     // 需要使用串口接收中断的话，需要开启
     USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);

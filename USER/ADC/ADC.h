@@ -7,9 +7,11 @@ extern "C"{
 
 /* 头文件包含 */
 #include "stm32f10x.h"								// Device header
+#include "Delay.h"
 
 /* 宏定义 */
 #define NUMBER_OF_CHANNELS                          (4)
+#define SAMPLE_TIMES                                (215)
 
 #define ADC_0_GPIO_CLK								(RCC_APB2Periph_GPIOA)
 #define ADC_0_GPIO_PORT								(GPIOA)
@@ -31,12 +33,27 @@ extern "C"{
 #define ADC_3_GPIO_PIN								(GPIO_Pin_3)
 #define ADC_CHANNEL_3                               (ADC_Channel_3)
 
+#define ADC_SampleTime_MACRO                         ADC_SampleTime_1Cycles5
+
 // ADC1 对应DMA1通道1，
 #define ADC_DMA_CHANNEL                             (DMA1_Channel1)
 
+#define ADC_CHANNEL_0_MAX                            1954.632859
+#define ADC_CHANNEL_0_MIN                            1070.972657
+
+#define ADC_CHANNEL_1_MAX                            1
+#define ADC_CHANNEL_1_MIN                            1
+
+#define ADC_CHANNEL_2_MAX                            1
+#define ADC_CHANNEL_2_MIN                            1  
+
+#define ADC_CHANNEL_3_MAX                            1
+#define ADC_CHANNEL_3_MIN                            1
 
 /* 函数声明 */
 void ADC_LocalInit(void);
+void ADC_CalcRootMeanSquare(void);
+void ADC_CalcWeiYi(uint8_t channel);
 
 /* 全局变量声明 */
 

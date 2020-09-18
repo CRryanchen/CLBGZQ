@@ -19,21 +19,20 @@
 // 声明一个用于接收数据的结构体
 MODBUS_USART_RECV_STRUCT MODBUS_USART1_RECV;                /**< 用于MODBUS_USART1数据接收的结构体 */
 uint8_t DEVICE_ID;                                          /*!< 设备ID */
-float WEIYI1 = 0.555;                                       /*!< 位移1 */
-float WEIYI2 = 1.0;                                         /*!< 位移2 */
-float WEIYI3 = 1.5;                                         /*!< 位移3 */
-float WEIYI4 = 2.0;                                         /*!< 位移4 */
-
-float K1_Value = 0.0;                                       /*!< 参数1 */
-float K2_Value = 0.0;                                       /*!< 参数2 */
-float K3_Value = 0.0;                                       /*!< 参数3 */
-float K4_Value = 0.0;                                       /*!< 参数4 */
-float K5_Value = 0.0;                                       /*!< 参数5 */
-float K6_Value = 0.0;                                       /*!< 参数6 */
-float K7_Value = 0.0;                                       /*!< 参数7 */
-float K8_Value = 0.0;                                       /*!< 参数8 */
-float K9_Value = 0.0;                                       /*!< 参数9 */
-float K10_Value = 0.0;                                       /*!< 参数10 */
+float WEIYI1    = 0.555;  /*!< 位移1 */
+float WEIYI2    = 1.0;    /*!< 位移2 */
+float WEIYI3    = 1.5;    /*!< 位移3 */
+float WEIYI4    = 2.0;    /*!< 位移4 */
+float K1_Value  = 0.0;    /*!< 参数1 */
+float K2_Value  = 0.0;    /*!< 参数2 */
+float K3_Value  = 0.0;    /*!< 参数3 */
+float K4_Value  = 0.0;    /*!< 参数4 */
+float K5_Value  = 0.0;    /*!< 参数5 */
+float K6_Value  = 0.0;    /*!< 参数6 */
+float K7_Value  = 0.0;    /*!< 参数7 */
+float K8_Value  = 0.0;    /*!< 参数8 */
+float K9_Value  = 0.0;    /*!< 参数9 */
+float K10_Value = 0.0;    /*!< 参数10 */
 
 /**
  * @brief MODBUS_USART1_CTL1引脚初始化
@@ -47,8 +46,8 @@ static void MODBUS_USART1_CTL1_GpioInit(void)
     RCC_APB2PeriphClockCmd(MODBUS_USART1_CTL1_GPIO_CLK, ENABLE);
 
     // 结构体配置
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_InitStructure.GPIO_Pin = MODBUS_USART1_CTL1_GPIO_PIN;
+    GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Pin   = MODBUS_USART1_CTL1_GPIO_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(MODBUS_USART1_CTL1_GPIO_PORT, &GPIO_InitStructure);
 }
@@ -65,8 +64,8 @@ static void MODBUS_USART1_CTL2_GpioInit(void)
     RCC_APB2PeriphClockCmd(MODBUS_USART1_CTL2_GPIO_CLK, ENABLE);
 
     // 结构体配置
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
-    GPIO_InitStructure.GPIO_Pin = MODBUS_USART1_CTL2_GPIO_PIN;
+    GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Pin   = MODBUS_USART1_CTL2_GPIO_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(MODBUS_USART1_CTL2_GPIO_PORT, &GPIO_InitStructure);
 }
@@ -154,8 +153,8 @@ int fgetc(FILE *f)
 
 static void MOSBUS_USART_ErrorHandle(uint8_t l_ErrorNum)
 {
-    uint8_t l_ErrResponseBuf[5] = {0};    // 用于存储返回错误信息
-    uint32_t l_CRC16CheckNum = 0;        // CRC校验码
+    uint8_t  l_ErrResponseBuf[5] = {0};  // 用于存储返回错误信息
+    uint32_t l_CRC16CheckNum     = 0;    // CRC校验码
 
     // 返回数据的前两个字节固定，都是Device_ID和功能码加0x80
     l_ErrResponseBuf[0] = DEVICE_ID;
@@ -167,10 +166,9 @@ static void MOSBUS_USART_ErrorHandle(uint8_t l_ErrorNum)
      * 0X04：内部寄存器数据异常
      */
     l_ErrResponseBuf[2] = l_ErrorNum;
-
-    l_CRC16CheckNum = CRC16(l_ErrResponseBuf, sizeof(l_ErrResponseBuf) - 2);
-    l_ErrResponseBuf[3] = l_CRC16CheckNum & 0XFF;      // 校验码低8位
-    l_ErrResponseBuf[4] = l_CRC16CheckNum >> 8;        // 校验码高8位
+    l_CRC16CheckNum     = CRC16(l_ErrResponseBuf, sizeof(l_ErrResponseBuf) - 2);
+    l_ErrResponseBuf[3] = l_CRC16CheckNum & 0XFF;                                 // 校验码低8位
+    l_ErrResponseBuf[4] = l_CRC16CheckNum >> 8;                                   // 校验码高8位
 
     MODBUS_USART1_SendData(l_ErrResponseBuf, sizeof(l_ErrResponseBuf));
 }
@@ -191,7 +189,7 @@ static void MOSBUS_USART_Memcpy(void * l_des, void * l_src, uint8_t l_length)
 static float MODBUS_USART_FloatAss(uint8_t *l_src)
 {
     uint8_t l_tempbuf[4] = {0};
-    float l_tempres = 0.0;
+    float   l_tempres    = 0.0;
 
     l_tempbuf[3] = *(l_src + 0);
     l_tempbuf[2] = *(l_src + 1);
@@ -199,7 +197,7 @@ static float MODBUS_USART_FloatAss(uint8_t *l_src)
     l_tempbuf[0] = *(l_src + 3);
 
 	l_tempres = *(float *)l_tempbuf;
-		
+
     return l_tempres;
 
 
@@ -212,17 +210,17 @@ static void MODBUS_USART_03_Handle()
     if (8 == MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT)
     {
         // 局部变量声明
-        uint16_t l_RegAddr = 0;             // 寄存器地址
-        uint16_t l_ResCnt = 0;              // 寄存器个数
-        uint32_t l_CRC16CheckNum = 0;        // CRC校验码
-        uint8_t l_ResponseBuf[46] = {0};    // 用于存储返回数据
+        uint16_t l_RegAddr         = 0;    // 寄存器地址
+        uint16_t l_ResCnt          = 0;    // 寄存器个数
+        uint32_t l_CRC16CheckNum   = 0;    // CRC校验码
+        uint8_t  l_ResponseBuf[46] = {0};  // 用于存储返回数据
 
         // 返回数据的前两个字节固定，都是Device_ID和功能码
         l_ResponseBuf[0] = DEVICE_ID;
         l_ResponseBuf[1] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[1];
-				
+
 		l_RegAddr = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[2] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[3];
-				
+
         switch (l_RegAddr)
         {
             /* 设备ID号 */
@@ -235,9 +233,9 @@ static void MODBUS_USART_03_Handle()
                     l_ResponseBuf[3] = 0x00;
                     l_ResponseBuf[4] = DEVICE_ID;
 
-                    l_CRC16CheckNum = CRC16(l_ResponseBuf, 5);
-                    l_ResponseBuf[5] = l_CRC16CheckNum & 0XFF;      // 校验码低8位
-                    l_ResponseBuf[6] = l_CRC16CheckNum >> 8;        // 校验码高8位
+                    l_CRC16CheckNum  = CRC16(l_ResponseBuf, 5);
+                    l_ResponseBuf[5] = l_CRC16CheckNum & 0XFF;   // 校验码低8位
+                    l_ResponseBuf[6] = l_CRC16CheckNum >> 8;     // 校验码高8位
 
                     MODBUS_USART1_SendData(l_ResponseBuf, 7);
                 }
@@ -255,17 +253,17 @@ static void MODBUS_USART_03_Handle()
                 if (l_ResCnt == 8)
                 {
                     l_ResponseBuf[2] = 0x10;
-                    
+
                     // 读取位移1-4
-                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3], &WEIYI1, 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3], (uint8_t *)&WEIYI1, 4);
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[7], (uint8_t *)&WEIYI2, 4);
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[11], (uint8_t *)&WEIYI3, 4);
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[15], (uint8_t *)&WEIYI4, 4);
 
-                    l_CRC16CheckNum = CRC16(l_ResponseBuf, 19);
+                    l_CRC16CheckNum   = CRC16(l_ResponseBuf, 19);
                     l_ResponseBuf[19] = l_CRC16CheckNum & 0XFF;      // 校验码低8位
                     l_ResponseBuf[20] = l_CRC16CheckNum >> 8;        // 校验码高8位
-                
+
                     MODBUS_USART1_SendData(l_ResponseBuf, 21);
                 }
                 // 寄存器数量异常
@@ -282,7 +280,7 @@ static void MODBUS_USART_03_Handle()
                 if (l_ResCnt == 20)
                 {
                     l_ResponseBuf[2] = 0x28;
-                    
+
                     // 读取参数K1-K10
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[3], (uint8_t *)K1_ADDR, 4);
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[7], (uint8_t *)K2_ADDR, 4);
@@ -295,10 +293,10 @@ static void MODBUS_USART_03_Handle()
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[35], (uint8_t *)K9_ADDR, 4);
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[39], (uint8_t *)K10_ADDR, 4);
 
-                    l_CRC16CheckNum = CRC16(l_ResponseBuf, 43);
+                    l_CRC16CheckNum   = CRC16(l_ResponseBuf, 43);
                     l_ResponseBuf[43] = l_CRC16CheckNum & 0XFF;      // 校验码低8位
                     l_ResponseBuf[44] = l_CRC16CheckNum >> 8;        // 校验码高8位
-                
+
                     MODBUS_USART1_SendData(l_ResponseBuf, 45);
                 }
                 // 寄存器数量异常

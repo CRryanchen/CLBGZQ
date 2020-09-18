@@ -25,21 +25,21 @@
   */
 static u8 SysTick_Configuration(uint32_t ticks)
 {
-	if (ticks > SysTick_LOAD_RELOAD_Msk)  						/* 重装载值不合法 */		
+	if (ticks > SysTick_LOAD_RELOAD_Msk)  						/* 重装载值不合法 */
 	{
-		return (1);            
+		return (1);
 	}
-                                                               
+
 	SysTick->LOAD  = (ticks & SysTick_LOAD_RELOAD_Msk) - 1;  	/* 设置重装载寄存器 */  
 	SysTick->VAL   = 0;                             			/* 清零计数器值 */
-/* 设置SysTick预分频 */   
-#if defined SysTickUseAHB										
+/* 设置SysTick预分频 */
+#if defined SysTickUseAHB
 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);			/* 使用AHB--72M */
 #else
 	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);		/* 使用AHB/8--9M */
 #endif
 	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;     				/* 使能SysTick */
-	return (0);    
+	return (0);
 }
 
 /**
@@ -52,7 +52,7 @@ static u8 SysTick_Configuration(uint32_t ticks)
 void SysTick_Delayus(__IO uint32_t nus)
 {
 	uint32_t i;
-	
+
 	SysTick_Configuration(SysTickClock / 1000000);
 	for (i = 0; i < nus; i++)
 	{
