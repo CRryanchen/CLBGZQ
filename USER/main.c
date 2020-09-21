@@ -1,22 +1,22 @@
 /**
  * @file main.c
- * @brief ³ÌÐòµÄÖ÷ÒªÖ´ÐÐÁ÷³Ì£¬2020.09.21Ìí¼Ó
- * @author Ryan¡¤Chen (ryan.cr.chen@gmail.com)
+ * @brief ç¨‹åºçš„ä¸»è¦æ‰§è¡Œæµç¨‹ï¼Œ2020.09.21æ·»åŠ 
+ * @author RyanÂ·Chen (ryan.cr.chen@gmail.com)
  * @version 1.0
  * @date 21-09-2020
  *
- * @copyright Copyright (c) 2020  Ryan¡¤Chen
+ * @copyright Copyright (c) 2020  RyanÂ·Chen
  *
- * @par ¸ü¸ÄÈÕÖ¾:
+ * @par æ›´æ”¹æ—¥å¿—:
  * <table>
  * <tr><th>Date       <th>Version <th>Author  <th>Description
- * <tr><td>21-09-2020 <td>1.0     <td>Ryan¡¤Chen     <td>Ôö¼ÓÎÄ¼þÍ·ËµÃ÷£¬¹æ·¶×¢ÊÍ£¬É¾³ý²»±ØÒª´úÂë¡¢±äÁ¿
+ * <tr><td>21-09-2020 <td>1.0     <td>RyanÂ·Chen     <td>å¢žåŠ æ–‡ä»¶å¤´è¯´æ˜Žï¼Œè§„èŒƒæ³¨é‡Šï¼Œåˆ é™¤ä¸å¿…è¦ä»£ç ã€å˜é‡
  * </table>
  */
 #include "global.h"
 
 /**
- * @brief ³õÊ¼»¯KÖµ£¬ÔÝÊ±·ÅÔÚmainº¯Êý
+ * @brief åˆå§‹åŒ–Kå€¼ï¼Œæš‚æ—¶æ”¾åœ¨mainå‡½æ•°
  */
 static void K_ValueInit()
 {
@@ -36,25 +36,25 @@ static void K_ValueInit()
 
 int main(void)
 {
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);             // Ñ¡ÔñNVIC ·Ö×é
-    LED_Init();                                                 // LED³õÊ¼»¯
+    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);             // é€‰æ‹©NVIC åˆ†ç»„
+    LED_Init();                                                 // LEDåˆå§‹åŒ–
 #if defined PRINTF_USE_USART2
-	MODBUS_USART2_Init();                                       // ³õÊ¼»¯´®¿Ú2
+	MODBUS_USART2_Init();                                       // åˆå§‹åŒ–ä¸²å£2
 #else
-    MODBUS_USART1_Init();                                       // ³õÊ¼»¯´®¿Ú1
+    MODBUS_USART1_Init();                                       // åˆå§‹åŒ–ä¸²å£1
 #endif /* PRINTF_USE_USART2 */
-    TIM6_Init();                                                // TIM6 ³õÊ¼»¯
-    K_ValueInit();                                              // KÖµ³õÊ¼»¯
-    TIM1_Init();                                                // TIM1 ³õÊ¼»¯
-    TIM3_Init();                                                // TIM3 ³õÊ¼»¯
-    ADC_LocalInit();                                            // ADC1 ³õÊ¼»¯
+    TIM6_Init();                                                // TIM6 åˆå§‹åŒ–
+    K_ValueInit();                                              // Kå€¼åˆå§‹åŒ–
+    TIM1_Init();                                                // TIM1 åˆå§‹åŒ–
+    TIM3_Init();                                                // TIM3 åˆå§‹åŒ–
+    ADC_LocalInit();                                            // ADC1 åˆå§‹åŒ–
 
     while(1)
     {
         if (ADC_ConvertCompleteFlag == 1)
         {
-            /* ÎªÁË±ãÓÚµ÷ÊÔ£¬ÏÂÃæÕâ¸öÑ­»·ÓÃÓÚ´òÓ¡²ÉÑùÊý×éÖÐ£¨µÚÒ»¸öÍ¨µÀ£©µÄÃ¿Ò»¸öµãµÄÖµ£¬ÓÃÓÚÔÚExcel²é¿´
-             * ²¨ÐÎÊÇ·ñ¿ÉÐÐ¡£Èç¹û¶¨Òå¸ÃºêÔò´òÓ¡¡£Ã»ÓÐ¶¨ÒåÔòÊä³ö¼ÆËãµÚÒ»Í¨µÀµÄÎ»ÒÆ£¬Óë´¥ÃþÆÁÍ¨ÐÅ¡£
+            /* ä¸ºäº†ä¾¿äºŽè°ƒè¯•ï¼Œä¸‹é¢è¿™ä¸ªå¾ªçŽ¯ç”¨äºŽæ‰“å°é‡‡æ ·æ•°ç»„ä¸­ï¼ˆç¬¬ä¸€ä¸ªé€šé“ï¼‰çš„æ¯ä¸€ä¸ªç‚¹çš„å€¼ï¼Œç”¨äºŽåœ¨ExcelæŸ¥çœ‹
+             * æ³¢å½¢æ˜¯å¦å¯è¡Œã€‚å¦‚æžœå®šä¹‰è¯¥å®åˆ™æ‰“å°ã€‚æ²¡æœ‰å®šä¹‰åˆ™è¾“å‡ºè®¡ç®—ç¬¬ä¸€é€šé“çš„ä½ç§»ï¼Œä¸Žè§¦æ‘¸å±é€šä¿¡ã€‚
              */
 #ifdef WAVEPRINT
             for (int i = 0; i < SAMPLE_TIMES; i++)
@@ -69,24 +69,24 @@ int main(void)
             ADC_CalcRootMeanSquare();
             ADC_CalcWeiYi(0);
 #endif
-            ADC_ConvertCompleteFlag = 0;                        // ADC_ConvertCompleteFlag ÖÃÎª0
-            ADC_LocalInit();                                    // ÖØÆô DMA
+            ADC_ConvertCompleteFlag = 0;                        // ADC_ConvertCompleteFlag ç½®ä¸º0
+            ADC_LocalInit();                                    // é‡å¯ DMA
 
         }
 
 #if defined PRINTF_USE_USART2
         if (MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
 				{
-					MODBUS_USART2_COMMUNICATION();                    // ´¦ÀíMODBUSÐÅÏ¢
-					MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT = 0;   // ´®¿Ú¼ÆÊýÆ÷ÇåÁã
-				MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG = 0;    // ´®¿ÚÍ¨ÐÅ±êÖ¾ÇåÁã
+					MODBUS_USART2_COMMUNICATION();                    // å¤„ç†MODBUSä¿¡æ¯
+					MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT = 0;   // ä¸²å£è®¡æ•°å™¨æ¸…é›¶
+				MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG = 0;    // ä¸²å£é€šä¿¡æ ‡å¿—æ¸…é›¶
 				}
 #else
         if (MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
 				{
-					MODBUS_USART1_COMMUNICATION();                    // ´¦ÀíMODBUSÐÅÏ¢
-					MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT = 0;   // ´®¿Ú¼ÆÊýÆ÷ÇåÁã
-					MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG = 0;// ´®¿ÚÍ¨ÐÅ±êÖ¾ÇåÁã
+					MODBUS_USART1_COMMUNICATION();                    // å¤„ç†MODBUSä¿¡æ¯
+					MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT = 0;   // ä¸²å£è®¡æ•°å™¨æ¸…é›¶
+					MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG = 0;// ä¸²å£é€šä¿¡æ ‡å¿—æ¸…é›¶
 				}
 #endif
     }

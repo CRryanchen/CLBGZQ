@@ -15,9 +15,11 @@
  */
 
 #include "ADC.h"
-#include "math.h"
+#include <math.h>
 #include <stdio.h>
+#include "global.h"
 #include "MODBUS_USART1.h"
+#include "Delay.h"
 
 /* 全局变量定义 */
 uint16_t ADC_ConvertValue[SAMPLE_TIMES][NUMBER_OF_CHANNELS]    = {0};

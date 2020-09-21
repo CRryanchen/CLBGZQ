@@ -7,7 +7,7 @@ extern "C"{
 
 /* 头文件包含 */
 #include "stm32f10x.h"								// Device header
-#include "Delay.h"
+
 
 /* 宏定义 */
 #define NUMBER_OF_CHANNELS                          (4)
