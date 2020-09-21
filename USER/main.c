@@ -24,9 +24,6 @@ static void K_ValueInit()
 
 int main(void)
 {
-    //uint16_t i = 0;
-    //uint16_t j = 0;
-    
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
     LED_Init();
 #if defined PRINTF_USE_USART2
@@ -41,32 +38,34 @@ int main(void)
     ADC_LocalInit();
 
     RCC_GetClocksFreq(&get_rcc_clock);
-    
+
     while(1)
     {
         if (ADC_ConvertCompleteFlag == 1)
         {
-        //     for (i = 0; i < SAMPLE_TIMES; i++)
-        //     {
-        //         for (j = 0; j < 1; j++)
-        //         {
-        //             printf("%d\r\n", ADC_ConvertValue[i][j]);
-        //         }
-        //     }
-            
-             ADC_CalcRootMeanSquare();
-        //     printf("------------%f-------------------\r\n", ADC_RootMeanSquare[0]);
-            
+            /* 为了便于调试，下面这个循环用于打印采样数组中（第一个通道）的每一个点的值，用于在Excel查看
+             * 波形是否可行。如果定义该宏则打印。没有定义则输出计算第一通道的位移，与触摸屏通信。
+             */
+#ifdef WAVEPRINT
+            for (int i = 0; i < SAMPLE_TIMES; i++)
+            {
+                for (int j = 0; j < 1; j++)
+                {
+                    printf("%d\r\n", ADC_ConvertValue[i][j]);
+                }
+            }
+            SysTick_Delayms(2000);
+#else
+            ADC_CalcRootMeanSquare();
             ADC_CalcWeiYi(0);
-            
-            // SysTick_Delayms(1000);
-            
+#endif
             // ADC_ConvertCompleteFlag 置为0
             ADC_ConvertCompleteFlag = 0;
             // 开启 DMA
             ADC_LocalInit();
+
         }
-        
+
 #if defined PRINTF_USE_USART2
         if (MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
 				{

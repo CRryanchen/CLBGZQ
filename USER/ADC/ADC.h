@@ -38,14 +38,14 @@ extern "C"{
 // ADC1 对应DMA1通道1，
 #define ADC_DMA_CHANNEL                             (DMA1_Channel1)
 
-#define ADC_CHANNEL_0_MAX                            1954.632859
-#define ADC_CHANNEL_0_MIN                            1070.972657
+#define ADC_CHANNEL_0_MAX                            2004.182856
+#define ADC_CHANNEL_0_MIN                            1142.077691
 
 #define ADC_CHANNEL_1_MAX                            1
 #define ADC_CHANNEL_1_MIN                            1
 
 #define ADC_CHANNEL_2_MAX                            1
-#define ADC_CHANNEL_2_MIN                            1  
+#define ADC_CHANNEL_2_MIN                            1
 
 #define ADC_CHANNEL_3_MAX                            1
 #define ADC_CHANNEL_3_MIN                            1
