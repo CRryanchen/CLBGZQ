@@ -1,19 +1,21 @@
 /**
  * @file ADC.c
- * @brief 
+ * @brief ADC 采样配置以及位移计算
  * @author Ryan·Chen (ryan.cr.chen@gmail.com)
  * @version 1.0
  * @date 13-08-2020
- * 
+ *
  * @copyright Copyright (c) 2020  Ryan·Chen
- * 
+ *
  * @par 更改日志:
  * <table>
  * <tr><th>Date       <th>Version <th>Author  <th>Description
  * <tr><td>13-08-2020 <td>1.0     <td>Ryan·Chen     <td>ADC采集电压信号
+ * <tr><td>22-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范
  * </table>
  */
 
+/* 头文件包含 */
 #include "ADC.h"
 #include <math.h>
 #include <stdio.h>
@@ -33,13 +35,11 @@ uint8_t  ADC_ConvertCompleteFlag                               = 0;
  */
 static void ADC_GpioInit(void)
 {
-    /* 初始化结构体定义 */
-    GPIO_InitTypeDef GPIO_InitStructure;
+    GPIO_InitTypeDef GPIO_InitStructure;                                                              // 初始化结构体定义
 
-    // 开启GPIO时钟
-    RCC_APB2PeriphClockCmd(ADC_0_GPIO_CLK | ADC_1_GPIO_CLK | ADC_2_GPIO_CLK | ADC_3_GPIO_CLK, ENABLE);
+    RCC_APB2PeriphClockCmd(ADC_0_GPIO_CLK | ADC_1_GPIO_CLK | ADC_2_GPIO_CLK | ADC_3_GPIO_CLK, ENABLE);// 开启GPIO时钟
 
-    // 结构体配置
+    /* 结构体配置 */
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;
 
     GPIO_InitStructure.GPIO_Pin  = ADC_0_GPIO_PIN;
@@ -55,6 +55,8 @@ static void ADC_GpioInit(void)
     GPIO_Init(ADC_3_GPIO_PORT, &GPIO_InitStructure);
 }
 
+
+
 /**
  * @brief ADC 模式配置
  */
@@ -62,10 +64,9 @@ static void ADC_ModeConfig(void)
 {
     ADC_InitTypeDef ADC_InitStructure;
 
-    // 打开ADC时钟
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);                   // 打开ADC时钟
 
-    // ADC模式配置
+    /* ADC模式配置 */
     ADC_InitStructure.ADC_Mode               = ADC_Mode_Independent;       // 只使用一个ADC，属于单模式
     ADC_InitStructure.ADC_ScanConvMode       = ENABLE;                     // 开启扫描模式
     ADC_InitStructure.ADC_ContinuousConvMode = ENABLE;                     // 连续转换模式
@@ -74,39 +75,33 @@ static void ADC_ModeConfig(void)
     ADC_InitStructure.ADC_NbrOfChannel       = NUMBER_OF_CHANNELS;         // 转换通道个数
     ADC_Init(ADC1, &ADC_InitStructure);                                    // 初始化配置
 
-    // 配置ADC时钟为PCLK2的6分频，即12MHz
-    RCC_ADCCLKConfig(RCC_PCLK2_Div6);
+    RCC_ADCCLKConfig(RCC_PCLK2_Div6);                                      // 配置ADC时钟为PCLK2的6分频，即12MHz
 
-    // 配置ADC通道的转换顺序和采样时间
-
+    /* 配置ADC通道的转换顺序和采样时间 */
     ADC_RegularChannelConfig(ADC1, ADC_CHANNEL_0, 1, ADC_SampleTime_MACRO);
     ADC_RegularChannelConfig(ADC1, ADC_CHANNEL_1, 2, ADC_SampleTime_MACRO);
     ADC_RegularChannelConfig(ADC1, ADC_CHANNEL_2, 3, ADC_SampleTime_MACRO);
     ADC_RegularChannelConfig(ADC1, ADC_CHANNEL_3, 4, ADC_SampleTime_MACRO);
 
-    // 使能ADC DMA请求
-    ADC_DMACmd(ADC1, ENABLE);
-    // 开启ADC，并开始转换
-    ADC_Cmd(ADC1, ENABLE);
-    // 初始化ADC校准寄存器
-    ADC_ResetCalibration(ADC1);
-    // 等待校准寄存器初始化完成
-    while (ADC_GetResetCalibrationStatus(ADC1));
-    // ADC开始校准
-    ADC_StartCalibration(ADC1);
-    // 等待校准完成
-    while (ADC_GetCalibrationStatus(ADC1));
+    ADC_DMACmd(ADC1, ENABLE);                                              // 使能ADC DMA请求
+    ADC_Cmd(ADC1, ENABLE);                                                 // 开启ADC，并开始转换
+    ADC_ResetCalibration(ADC1);                                            // 初始化ADC校准寄存器
+    while (ADC_GetResetCalibrationStatus(ADC1));                           // 等待校准寄存器初始化完成
+    ADC_StartCalibration(ADC1);                                            // ADC开始校准
+    while (ADC_GetCalibrationStatus(ADC1));                                // 等待校准完成
 
-    // 由于没有采用外部触发，所以使用软件触发ADC转换
-    ADC_SoftwareStartConvCmd(ADC1, ENABLE);
+    ADC_SoftwareStartConvCmd(ADC1, ENABLE);                                // 由于没有采用外部触发，所以使用软件触发ADC转换
 }
 
+
+/**
+ * @brief ADC DMA 中断配置
+ */
 static void ADC_DMA_NVICConfig(void)
 {
-    // 声明中断控制向量的初始化结构体变量
-    NVIC_InitTypeDef NVIC_InitStructure;
+    NVIC_InitTypeDef NVIC_InitStructure;                                        // 声明中断控制向量的初始化结构体变量
 
-    // 每个工程都需要选择嵌套向量中断控制分组，但是只选择一次，所以我在主函数中选择
+    /* 每个工程都需要选择嵌套向量中断控制分组，但是只选择一次，所以我在主函数中选择 */
 
     NVIC_InitStructure.NVIC_IRQChannel                   = DMA1_Channel1_IRQn;  // 选择中断源
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;                   // 设置中断的抢占优先级
@@ -124,14 +119,9 @@ static void ADC_DmaConfig(void)
 {
     DMA_InitTypeDef DMA_InitStructure;
 
-    // 打开DMA时钟
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);                               // 打开DMA时钟
 
-    // 复位DMA控制器
-    DMA_DeInit(DMA1_Channel1);
-
-    // DMA 模式配置
-    DMA_DeInit(ADC_DMA_CHANNEL);
+    DMA_DeInit(DMA1_Channel1);                                                       // 复位DMA控制器
 
     /* 配置DMA初始化结构体 */
     DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)(&(ADC1->DR));              // 外设基地址：ADC 数据寄存器地址
@@ -147,14 +137,11 @@ static void ADC_DmaConfig(void)
     DMA_InitStructure.DMA_M2M                = DMA_M2M_Disable;                      // 禁止存储器到存储器模式
     DMA_Init(ADC_DMA_CHANNEL, &DMA_InitStructure);                                   // 初始化DMA
 
-    // DMA 中断配置
-    ADC_DMA_NVICConfig();
+    ADC_DMA_NVICConfig();                                                            // DMA 中断配置
 
-    // 使能DMA传送完成中断
-    DMA_ITConfig(ADC_DMA_CHANNEL, DMA_IT_TC, ENABLE);
+    DMA_ITConfig(ADC_DMA_CHANNEL, DMA_IT_TC, ENABLE);                                // 使能DMA传送完成中断
 
-    // 使能DMA通道
-    DMA_Cmd(ADC_DMA_CHANNEL, ENABLE);
+    DMA_Cmd(ADC_DMA_CHANNEL, ENABLE);                                                // 使能DMA通道
 }
 
 /**
@@ -198,9 +185,9 @@ void ADC_CalcRootMeanSquare(void)
  */
 static double ADC_CalcHuanSuan(double Value, float Max, float Min)
 {
-    // 计算方法
-    // MAX -- MIN
-    // 0   -- 20   这里20代表2厘米
+    /* 计算方法
+    MAX -- MIN
+    0   -- 20   这里20代表2厘米 */
     return (20 * ((Value - Max) / (Min - Max)));
 }
 
@@ -220,7 +207,6 @@ void ADC_CalcWeiYi(uint8_t channel)
     else if (0 == channel)
     {
         ADC_WeiYi[0] = ADC_CalcHuanSuan(ADC_RootMeanSquare[0], ADC_CHANNEL_0_MAX, ADC_CHANNEL_0_MIN);
-        //printf("ADC_WeiYi[0] = %f\r\n", ADC_WeiYi[0]);
     }
     else if (1 == channel)
     {
@@ -235,7 +221,7 @@ void ADC_CalcWeiYi(uint8_t channel)
         ADC_WeiYi[3] = ADC_CalcHuanSuan(ADC_RootMeanSquare[3], ADC_CHANNEL_3_MAX, ADC_CHANNEL_3_MIN);
     }
 
-    // 位移赋值
+    /* 位移赋值 */
     WEIYI1 = ADC_WeiYi[0];
     WEIYI2 = ADC_WeiYi[1];
     WEIYI3 = ADC_WeiYi[2];

@@ -1,33 +1,36 @@
 /**
  * @file TIM3.c
- * @brief ÅäÖÃ¶¨Ê±Æ÷3£¬Í¨µÀ1£¬2£¬3£¬4Êä³öÆµÂÊÎª2KÕ¼¿Õ±ÈÎª50%µÄ·½²¨
- * @author Ryan¡¤Chen (ryan.cr.chen@gmail.com)
+ * @brief é…ç½®å®šæ—¶å™¨3ï¼Œé€šé“1ï¼Œ2ï¼Œ3ï¼Œ4è¾“å‡ºé¢‘ç‡ä¸º2Kå ç©ºæ¯”ä¸º50%çš„æ–¹æ³¢
+ * @author RyanÂ·Chen (ryan.cr.chen@gmail.com)
  * @version 1.0
  * @date 17-08-2020
- * 
- * @copyright Copyright (c) 2020  Ryan¡¤Chen
- * 
- * @par ¸ü¸ÄÈÕÖ¾:
+ *
+ * @copyright Copyright (c) 2020  RyanÂ·Chen
+ *
+ * @par æ›´æ”¹æ—¥å¿—:
  * <table>
  * <tr><th>Date       <th>Version <th>Author  <th>Description
- * <tr><td>17-08-2020 <td>1.0     <td>Ryan¡¤Chen     <td>ÄÚÈİ
- * </table>
+ * <tr><td>17-08-2020 <td>1.0     <td>RyanÂ·Chen     <td>é…ç½®å®šæ—¶å™¨3
+ * <tr><td>22-09-2020 <td>1.0     <td>RyanÂ·Chen     <td>ä»£ç è§„èŒƒåŒ–
  */
 
+/* å¤´æ–‡ä»¶åŒ…å« */
 #include "TIM3.h"
 
+
+
+/**
+ * @brief TIM3 CH1-CH4 GPIOåˆå§‹åŒ–
+ */
 static void TIM3_CH_GpioInit(void)
 {
-    /* ³õÊ¼»¯½á¹¹Ìå¶¨Òå */
-    GPIO_InitTypeDef GPIO_InitStructure;
+    GPIO_InitTypeDef GPIO_InitStructure;                                                                                                // åˆå§‹åŒ–ç»“æ„ä½“å®šä¹‰
 
-    // ¿ªÆôGPIOÊ±ÖÓ¡¢AFIOÊ±ÖÓ
-    RCC_APB2PeriphClockCmd(TIM3_CH1_GPIO_CLK | TIM3_CH2_GPIO_CLK | TIM3_CH3_GPIO_CLK | TIM3_CH4_GPIO_CLK | RCC_APB2Periph_AFIO, ENABLE);
+    RCC_APB2PeriphClockCmd(TIM3_CH1_GPIO_CLK | TIM3_CH2_GPIO_CLK | TIM3_CH3_GPIO_CLK | TIM3_CH4_GPIO_CLK | RCC_APB2Periph_AFIO, ENABLE);// å¼€å¯GPIOæ—¶é’Ÿã€AFIOæ—¶é’Ÿ
 
-    // ¿ªÆôÖØÓ³Éä
-    GPIO_PinRemapConfig(GPIO_FullRemap_TIM3, ENABLE);
+    GPIO_PinRemapConfig(GPIO_FullRemap_TIM3, ENABLE);                                                                                   // å¼€å¯é‡æ˜ å°„
 
-    // ½á¹¹ÌåÅäÖÃ
+    /* ç»“æ„ä½“é…ç½® */
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_InitStructure.GPIO_Pin = TIM3_CH1_GPIO_PIN;
@@ -43,35 +46,42 @@ static void TIM3_CH_GpioInit(void)
     GPIO_Init(TIM3_CH4_GPIO_PORT, &GPIO_InitStructure);
 }
 
+
+
+/**
+ * @brief TIM3 æ—¶åŸºç»“æ„ä½“åˆå§‹åŒ–
+ */
 static void TIM3_TimeBaseConfig(void)
 {
-    // ¶¨Ê±Æ÷Ê±»ù³õÊ¼»¯½á¹¹ÌåÉùÃ÷
-    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;                                                                                  // å®šæ—¶å™¨æ—¶åŸºåˆå§‹åŒ–ç»“æ„ä½“å£°æ˜
 
-    // ¿ªÆôTIM3Ê±ÖÓ
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);                                                                                // å¼€å¯TIM3æ—¶é’Ÿ
 
-    TIM_TimeBaseInitStructure.TIM_Prescaler         = TIM3_PSC;            // ¼ÆÊıÆ÷Ô¤ÆµÂÊ£¬ 720
-    TIM_TimeBaseInitStructure.TIM_Period            = TIM3_PERIOD;         // ¼ÆÊıÆ÷ÖÜÆÚ£¬ 1000
-    TIM_TimeBaseInitStructure.TIM_ClockDivision     = TIM_CKD_DIV1;        // Ê±ÖÓ·ÖÆµÒò×Ó£¬ÅäÖÃËÀÇøÊ±¼äÊ±ĞèÒªÓÃµ½
-    TIM_TimeBaseInitStructure.TIM_CounterMode       = TIM_CounterMode_Up;  // ¼ÆÊıÆ÷¼¼ÊõÄ£Ê½£¬ÏòÉÏ¼ÆÊı
-    TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;                   // ÖØ¸´¼ÆÊıÆ÷µÄÖµ£¬Ã»ÓĞÊ¹ÓÃÉèÎª0
-    TIM_TimeBaseInit(TIM3, &TIM_TimeBaseInitStructure);                    // ³õÊ¼»¯Ê±»ù½á¹¹Ìå
+    TIM_TimeBaseInitStructure.TIM_Prescaler         = TIM3_PSC;                                                                         // è®¡æ•°å™¨é¢„é¢‘ç‡ï¼Œ 720
+    TIM_TimeBaseInitStructure.TIM_Period            = TIM3_PERIOD;                                                                      // è®¡æ•°å™¨å‘¨æœŸï¼Œ 1000
+    TIM_TimeBaseInitStructure.TIM_ClockDivision     = TIM_CKD_DIV1;                                                                     // æ—¶é’Ÿåˆ†é¢‘å› å­ï¼Œé…ç½®æ­»åŒºæ—¶é—´æ—¶éœ€è¦ç”¨åˆ°
+    TIM_TimeBaseInitStructure.TIM_CounterMode       = TIM_CounterMode_Up;                                                               // è®¡æ•°å™¨æŠ€æœ¯æ¨¡å¼ï¼Œå‘ä¸Šè®¡æ•°
+    TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;                                                                                // é‡å¤è®¡æ•°å™¨çš„å€¼ï¼Œæ²¡æœ‰ä½¿ç”¨è®¾ä¸º0
+    TIM_TimeBaseInit(TIM3, &TIM_TimeBaseInitStructure);                                                                                 // åˆå§‹åŒ–æ—¶åŸºç»“æ„ä½“
 }
 
+
+
+/**
+ * @brief TIM3 CH1-CH4 è¾“å‡ºæ¯”è¾ƒé…ç½®
+ */
 static void TIM3_OCConfig(void)
 {
-    // ¶¨Ê±Æ÷Êä³ö±È½Ï³õÊ¼»¯½á¹¹ÌåÉùÃ÷
-    TIM_OCInitTypeDef TIM_OCInitStructure;
+    TIM_OCInitTypeDef TIM_OCInitStructure;                                                                                              // å®šæ—¶å™¨è¾“å‡ºæ¯”è¾ƒåˆå§‹åŒ–ç»“æ„ä½“å£°æ˜
 
-    TIM_OCInitStructure.TIM_OCMode       = TIM_OCMode_PWM1;           // ÅäÖÃÎªPWMÄ£Ê½1
-    TIM_OCInitStructure.TIM_OutputState  = TIM_OutputState_Enable;    // Êä³öÊ¹ÄÜ
-    TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;  // »¥²¹Êä³ö²»Ê¹ÄÜ
-    TIM_OCInitStructure.TIM_Pulse        = TIM3_PULSE;                // ÉèÖÃÕ¼¿Õ±È´óĞ¡
-    TIM_OCInitStructure.TIM_OCPolarity   = TIM_OCPolarity_High;       // Êä³öÍ¨µÀµçÆ½¼«ĞÔÉèÖÃ
-    TIM_OCInitStructure.TIM_OCNPolarity  = TIM_OCNPolarity_High;      // »¥²¹Êä³öÍ¨µÀµçÆ½¼«ĞÔÉèÖÃ
-    TIM_OCInitStructure.TIM_OCIdleState  = TIM_OCIdleState_Set;       // Êä³öÍ¨µÀ¿ÕÏĞµçÆ½¼«ĞÔÉèÖÃ
-    TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCNIdleState_Reset;    // »¥²¹Êä³öÍ¨µÀ¿ÕÏĞµçÆ½¼«ĞÔÉèÖÃ
+    TIM_OCInitStructure.TIM_OCMode       = TIM_OCMode_PWM1;                                                                             // é…ç½®ä¸ºPWMæ¨¡å¼1
+    TIM_OCInitStructure.TIM_OutputState  = TIM_OutputState_Enable;                                                                      // è¾“å‡ºä½¿èƒ½
+    TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;                                                                    // äº’è¡¥è¾“å‡ºä¸ä½¿èƒ½
+    TIM_OCInitStructure.TIM_Pulse        = TIM3_PULSE;                                                                                  // è®¾ç½®å ç©ºæ¯”å¤§å°
+    TIM_OCInitStructure.TIM_OCPolarity   = TIM_OCPolarity_High;                                                                         // è¾“å‡ºé€šé“ç”µå¹³ææ€§è®¾ç½®
+    TIM_OCInitStructure.TIM_OCNPolarity  = TIM_OCNPolarity_High;                                                                        // äº’è¡¥è¾“å‡ºé€šé“ç”µå¹³ææ€§è®¾ç½®
+    TIM_OCInitStructure.TIM_OCIdleState  = TIM_OCIdleState_Set;                                                                         // è¾“å‡ºé€šé“ç©ºé—²ç”µå¹³ææ€§è®¾ç½®
+    TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCNIdleState_Reset;                                                                      // äº’è¡¥è¾“å‡ºé€šé“ç©ºé—²ç”µå¹³ææ€§è®¾ç½®
 
     TIM_OC1Init(TIM3, &TIM_OCInitStructure);
     TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Enable);
@@ -85,12 +95,15 @@ static void TIM3_OCConfig(void)
     TIM_OC4Init(TIM3, &TIM_OCInitStructure);
     TIM_OC4PreloadConfig(TIM3, TIM_OCPreload_Enable);
 
-    // Ê¹ÄÜ¼ÆÊıÆ÷
-    TIM_Cmd(TIM3, ENABLE);
-    // Ö÷Êä³öÊ¹ÄÜ
-    TIM_CtrlPWMOutputs(TIM3, ENABLE);
+    TIM_Cmd(TIM3, ENABLE);                                                                                                              // ä½¿èƒ½è®¡æ•°å™¨
+    TIM_CtrlPWMOutputs(TIM3, ENABLE);                                                                                                   // ä¸»è¾“å‡ºä½¿èƒ½
 }
 
+
+
+/**
+ * @brief TIM3 åˆå§‹åŒ–ï¼Œä¾›å¤–éƒ¨è°ƒç”¨
+ */
 void TIM3_Init(void)
 {
     TIM3_CH_GpioInit();
