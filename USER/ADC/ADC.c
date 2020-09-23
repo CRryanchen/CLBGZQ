@@ -18,17 +18,13 @@
 /* 头文件包含 */
 #include "ADC.h"
 #include <math.h>
-#include <stdio.h>
-#include "global.h"
 #include "MODBUS_USART1.h"
-#include "Delay.h"
 
 /* 全局变量定义 */
-uint16_t ADC_ConvertValue[SAMPLE_TIMES][NUMBER_OF_CHANNELS]    = {0};
-uint16_t ADC_ConvertValue_x[SAMPLE_TIMES * NUMBER_OF_CHANNELS] = {0};
-float    ADC_RootMeanSquare[NUMBER_OF_CHANNELS]                = {0.0};
-float    ADC_WeiYi[NUMBER_OF_CHANNELS]                         = {0.0};
-uint8_t  ADC_ConvertCompleteFlag                               = 0;
+uint16_t ADC_ConvertValue       [SAMPLE_TIMES][NUMBER_OF_CHANNELS] = {0};  /**< 存储AD 4个通道转换的AD值 */
+float    ADC_RootMeanSquare     [NUMBER_OF_CHANNELS]               = {0.0};/**< 存储AD 4个通道的转换值计算的均方根值 */
+float    ADC_WeiYi              [NUMBER_OF_CHANNELS]               = {0.0};/**< 存储AD 4个通道对应计算的位移值 */
+uint8_t  ADC_ConvertCompleteFlag                                   = 0;    /**< ADC-DMA转换完成一次标志位 */
 
 /**
  * @brief ADC 引脚配置
@@ -138,7 +134,6 @@ static void ADC_DmaConfig(void)
     DMA_Init(ADC_DMA_CHANNEL, &DMA_InitStructure);                                   // 初始化DMA
 
     ADC_DMA_NVICConfig();                                                            // DMA 中断配置
-
     DMA_ITConfig(ADC_DMA_CHANNEL, DMA_IT_TC, ENABLE);                                // 使能DMA传送完成中断
 
     DMA_Cmd(ADC_DMA_CHANNEL, ENABLE);                                                // 使能DMA通道

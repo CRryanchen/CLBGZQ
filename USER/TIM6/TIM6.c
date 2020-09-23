@@ -1,71 +1,71 @@
 /**
  * @file TIM6.c
- * @brief  ä½¿ç”¨åŸºæœ¬å®šæ—¶å™¨TIM6è¿›è¡Œå®šæ—¶è®¡ç®—Modbusé€šä¿¡çš„ç»“æŸã€‚æ¯æ¬¡æ¥æ”¶åˆ°æ•°æ®åˆ™å¼€å¯å®šæ—¶å™¨ï¼Œ
- * å¦‚æœå®šæ—¶å™¨æº¢å‡ºï¼Œè¡¨æ˜è¾¾åˆ°æœ€é•¿é€šä¿¡æ—¶é—´ï¼Œå³ç»“æŸé€šä¿¡çš„åˆ¤æ–­æ ‡å‡†ã€‚å®šæ—¶æ—¶é—´ä¸º3.5ä¸ªå­—èŠ‚æ¥æ”¶æ—¶é—´ï¼Œ
- * å¦‚æœæˆ‘ä»¬æ³¢ç‰¹ç‡è®¾ç½®ä¸º9600ï¼Œåˆ™æ—¶é—´ä¸ºï¼š3.5*8/9600ï¼Œçº¦ç­‰äº3mså·¦å³
- * @author RyanÂ·Chen (ryan.cr.chen@gmail.com)
+ * @brief  Ê¹ÓÃ»ù±¾¶¨Ê±Æ÷TIM6½øĞĞ¶¨Ê±¼ÆËãModbusÍ¨ĞÅµÄ½áÊø¡£Ã¿´Î½ÓÊÕµ½Êı¾İÔò¿ªÆô¶¨Ê±Æ÷£¬
+ * Èç¹û¶¨Ê±Æ÷Òç³ö£¬±íÃ÷´ïµ½×î³¤Í¨ĞÅÊ±¼ä£¬¼´½áÊøÍ¨ĞÅµÄÅĞ¶Ï±ê×¼¡£¶¨Ê±Ê±¼äÎª3.5¸ö×Ö½Ú½ÓÊÕÊ±¼ä£¬
+ * Èç¹ûÎÒÃÇ²¨ÌØÂÊÉèÖÃÎª9600£¬ÔòÊ±¼äÎª£º3.5*8/9600£¬Ô¼µÈÓÚ3ms×óÓÒ
+ * @author Ryan¡¤Chen (ryan.cr.chen@gmail.com)
  * @version 1.0
  * @date 24-07-2020
  *
- * @copyright Copyright (c) 2020  RyanÂ·Chen
+ * @copyright Copyright (c) 2020  Ryan¡¤Chen
  *
- * @par æ›´æ”¹æ—¥å¿—:
+ * @par ¸ü¸ÄÈÕÖ¾:
  * <table>
  * <tr><th>Date       <th>Version <th>Author  <th>Description
- * <tr><td>24-07-2020 <td>1.0     <td>RyanÂ·Chen     <td>ä½¿ç”¨åŸºæœ¬å®šæ—¶å™¨TIM6åˆ¤æ–­MODBUSé€šä¿¡çš„ç»“æŸ
- * <tr><td>22-09-2020 <td>1.0     <td>RyanÂ·Chen     <td>ä»£ç è§„èŒƒåŒ–
+ * <tr><td>24-07-2020 <td>1.0     <td>Ryan¡¤Chen     <td>Ê¹ÓÃ»ù±¾¶¨Ê±Æ÷TIM6ÅĞ¶ÏMODBUSÍ¨ĞÅµÄ½áÊø
+ * <tr><td>22-09-2020 <td>1.0     <td>Ryan¡¤Chen     <td>´úÂë¹æ·¶»¯
  * </table>
  */
 
-/* å¤´æ–‡ä»¶åŒ…å« */
+/* Í·ÎÄ¼ş°üº¬ */
 #include "TIM6.h"
 
 /**
- * @brief TIM6 æ—¶åŸºåˆå§‹åŒ–
+ * @brief TIM6 Ê±»ù³õÊ¼»¯
  */
 static void TIM6_TimeBaseConfig(void)
 {
-    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;                         // å®šæ—¶å™¨æ—¶åŸºåˆå§‹åŒ–ç»“æ„ä½“å£°æ˜
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;                         // ¶¨Ê±Æ÷Ê±»ù³õÊ¼»¯½á¹¹ÌåÉùÃ÷
 
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, ENABLE);                       // å¼€å¯TIM6æ—¶é’Ÿ
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM6, ENABLE);                       // ¿ªÆôTIM6Ê±ÖÓ
 
-    TIM_TimeBaseInitStructure.TIM_Prescaler = (72 - 1);                        // è®¡æ•°å™¨é¢„é¢‘ç‡ï¼Œ 72 / 72 = 1MHz
-    TIM_TimeBaseInitStructure.TIM_Period    = (3000 - 1);                      // è®¡æ•°å™¨å‘¨æœŸï¼Œ 3000
+    TIM_TimeBaseInitStructure.TIM_Prescaler = (72 - 1);                        // ¼ÆÊıÆ÷Ô¤ÆµÂÊ£¬ 72 / 72 = 1MHz
+    TIM_TimeBaseInitStructure.TIM_Period    = (3000 - 1);                      // ¼ÆÊıÆ÷ÖÜÆÚ£¬ 3000
 
-    /* ä»¥ä¸‹ä¸‰ä¸ªé…ç½®åŸºæœ¬å®šæ—¶å™¨ä¸ä½¿ç”¨ */
+    /* ÒÔÏÂÈı¸öÅäÖÃ»ù±¾¶¨Ê±Æ÷²»Ê¹ÓÃ */
     TIM_TimeBaseInitStructure.TIM_CounterMode       = TIM_CounterMode_Up;
     TIM_TimeBaseInitStructure.TIM_ClockDivision     = TIM_CKD_DIV1;
     TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;
 
-    TIM_TimeBaseInit(TIM6, &TIM_TimeBaseInitStructure);                        // åˆå§‹åŒ–æ—¶åŸºç»“æ„ä½“
+    TIM_TimeBaseInit(TIM6, &TIM_TimeBaseInitStructure);                        // ³õÊ¼»¯Ê±»ù½á¹¹Ìå
 }
 
 
 /**
- * @brief TIM6ä¸­æ–­ä¼˜å…ˆçº§é…ç½®
+ * @brief TIM6ÖĞ¶ÏÓÅÏÈ¼¶ÅäÖÃ
  */
 static void TIM6_NVICConfig(void)
 {
-    NVIC_InitTypeDef NVIC_InitStructure;                                       // å£°æ˜ä¸­æ–­æ§åˆ¶å‘é‡çš„åˆå§‹åŒ–ç»“æ„ä½“å˜é‡
+    NVIC_InitTypeDef NVIC_InitStructure;                                       // ÉùÃ÷ÖĞ¶Ï¿ØÖÆÏòÁ¿µÄ³õÊ¼»¯½á¹¹Ìå±äÁ¿
 
-    /* æ¯ä¸ªå·¥ç¨‹éƒ½éœ€è¦é€‰æ‹©åµŒå¥—å‘é‡ä¸­æ–­æ§åˆ¶åˆ†ç»„ï¼Œä½†æ˜¯åªé€‰æ‹©ä¸€æ¬¡ï¼Œæ‰€ä»¥æˆ‘åœ¨ä¸»å‡½æ•°ä¸­é€‰æ‹© */
+    /* Ã¿¸ö¹¤³Ì¶¼ĞèÒªÑ¡ÔñÇ¶Ì×ÏòÁ¿ÖĞ¶Ï¿ØÖÆ·Ö×é£¬µ«ÊÇÖ»Ñ¡ÔñÒ»´Î£¬ËùÒÔÎÒÔÚÖ÷º¯ÊıÖĞÑ¡Ôñ */
 
-    NVIC_InitStructure.NVIC_IRQChannel                   = TIM6_IRQn;          // é€‰æ‹©ä¸­æ–­æº
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;                  // è®¾ç½®ä¸­æ–­çš„æŠ¢å ä¼˜å…ˆçº§
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 1;                  // è®¾ç½®ä¸­æ–­çš„å­ä¼˜å…ˆçº§
-    NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;             // æ˜¯å¦ä½¿èƒ½è¯¥ä¸­æ–­æº
-    NVIC_Init(&NVIC_InitStructure);                                            // åˆå§‹åŒ–ç»“æ„ä½“
+    NVIC_InitStructure.NVIC_IRQChannel                   = TIM6_IRQn;          // Ñ¡ÔñÖĞ¶ÏÔ´
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 1;                  // ÉèÖÃÖĞ¶ÏµÄÇÀÕ¼ÓÅÏÈ¼¶
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority        = 1;                  // ÉèÖÃÖĞ¶ÏµÄ×ÓÓÅÏÈ¼¶
+    NVIC_InitStructure.NVIC_IRQChannelCmd                = ENABLE;             // ÊÇ·ñÊ¹ÄÜ¸ÃÖĞ¶ÏÔ´
+    NVIC_Init(&NVIC_InitStructure);                                            // ³õÊ¼»¯½á¹¹Ìå
 }
 
 /**
- * @brief TIM6åˆå§‹åŒ–ï¼Œä¾›å¤–éƒ¨è°ƒç”¨
+ * @brief TIM6³õÊ¼»¯£¬¹©Íâ²¿µ÷ÓÃ
  */
 void TIM6_Init(void)
 {
     TIM6_NVICConfig();
     TIM6_TimeBaseConfig();
 
-    TIM_ClearFlag(TIM6, TIM_FLAG_Update);                                      // æ¸…é™¤æ›´æ–°ä¸­æ–­æ ‡å¿—ä½
-    TIM_ITConfig(TIM6, TIM_IT_Update, ENABLE);                                 // å¼€å¯TIM6æ›´æ–°ä¸­æ–­
-    TIM_Cmd(TIM6, DISABLE);                                                    // æš‚ä¸ä½¿èƒ½TIM6
+    TIM_ClearFlag(TIM6, TIM_FLAG_Update);                                      // Çå³ı¸üĞÂÖĞ¶Ï±êÖ¾Î»
+    TIM_ITConfig(TIM6, TIM_IT_Update, ENABLE);                                 // ¿ªÆôTIM6¸üĞÂÖĞ¶Ï
+    TIM_Cmd(TIM6, DISABLE);                                                    // Ôİ²»Ê¹ÄÜTIM6
 }

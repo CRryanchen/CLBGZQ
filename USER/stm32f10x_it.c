@@ -23,7 +23,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
-#include "global.h"
+#include "MODBUS_USART1.h"
+#include "MODBUS_USART2.h"
+#include "ADC.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Template
   * @{

@@ -1,58 +1,58 @@
 /**
  * @file MODBUS_USART1.c
- * @brief ä½¿ç”¨ä¸²å£1è¿›è¡ŒMODBUSé€šä¿¡
- * @author RyanÂ·Chen (ryan.cr.chen@gmail.com)
+ * @brief Ê¹ÓÃ´®¿Ú1½øĞĞMODBUSÍ¨ĞÅ
+ * @author Ryan¡¤Chen (ryan.cr.chen@gmail.com)
  * @version 1.0
  * @date 23-07-2020
  *
- * @copyright Copyright (c) 2020  RyanÂ·Chen
+ * @copyright Copyright (c) 2020  Ryan¡¤Chen
  *
- * @par æ›´æ”¹æ—¥å¿—:
+ * @par ¸ü¸ÄÈÕÖ¾:
  * <table>
  * <tr><th>Date       <th>Version <th>Author  <th>Description
- * <tr><td>23-07-2020 <td>1.0     <td>RyanÂ·Chen     <td>ä½¿ç”¨ä¸²å£1è¿›è¡ŒMODBUSé€šä¿¡
- * <tr><td>21-09-2020 <td>1.0     <td>RyanÂ·Chen     <td>ä»£ç è§„èŒƒåŒ–
+ * <tr><td>23-07-2020 <td>1.0     <td>Ryan¡¤Chen     <td>Ê¹ÓÃ´®¿Ú1½øĞĞMODBUSÍ¨ĞÅ
+ * <tr><td>21-09-2020 <td>1.0     <td>Ryan¡¤Chen     <td>´úÂë¹æ·¶»¯
  * </table>
  */
 
-/* å¤´æ–‡ä»¶åŒ…å« */
+/* Í·ÎÄ¼ş°üº¬ */
 #include "MODBUS_USART1.h"
-#include <string.h>                                         // ä½¿ç”¨ string åº“å‡½æ•°
-#include "USART1.h"                                         // ä½¿ç”¨ä¸²å£1
-#include "stm32f10x_it.h"                                   // ä¸²å£æ¥æ”¶æ•°æ®æ•°ç»„
+#include <string.h>                                         // Ê¹ÓÃ string ¿âº¯Êı
+#include "USART1.h"                                         // Ê¹ÓÃ´®¿Ú1
+#include "stm32f10x_it.h"                                   // ´®¿Ú½ÓÊÕÊı¾İÊı×é
 #include "INTER_FLASH.h"                                    // DEVICE_ID_ADDR
 
-/* å…¨å±€å˜é‡å£°æ˜ */
+/* È«¾Ö±äÁ¿¶¨Òå */
 
-MODBUS_USART_RECV_STRUCT MODBUS_USART1_RECV;                /**< ç”¨äºMODBUS_USART1æ•°æ®æ¥æ”¶çš„ç»“æ„ä½“ */
-uint8_t DEVICE_ID;                                          /**< è®¾å¤‡ ID */
-float WEIYI1    = 0.555;                                    /**< ä½ç§»1 */
-float WEIYI2    = 1.0;                                      /**< ä½ç§»2 */
-float WEIYI3    = 1.5;                                      /**< ä½ç§»3 */
-float WEIYI4    = 2.0;                                      /**< ä½ç§»4 */
-float K1_Value  = 0.0;                                      /**< å‚æ•°1 */
-float K2_Value  = 0.0;                                      /**< å‚æ•°2 */
-float K3_Value  = 0.0;                                      /**< å‚æ•°3 */
-float K4_Value  = 0.0;                                      /**< å‚æ•°4 */
-float K5_Value  = 0.0;                                      /**< å‚æ•°5 */
-float K6_Value  = 0.0;                                      /**< å‚æ•°6 */
-float K7_Value  = 0.0;                                      /**< å‚æ•°7 */
-float K8_Value  = 0.0;                                      /**< å‚æ•°8 */
-float K9_Value  = 0.0;                                      /**< å‚æ•°9 */
-float K10_Value = 0.0;                                      /**< å‚æ•°10 */
+MODBUS_USART_RECV_STRUCT MODBUS_USART1_RECV;                /**< ÓÃÓÚMODBUS_USART1Êı¾İ½ÓÊÕµÄ½á¹¹Ìå */
+uint8_t DEVICE_ID;                                          /**< Éè±¸ ID */
+float WEIYI1    = 0.555;                                    /**< Î»ÒÆ1 */
+float WEIYI2    = 1.0;                                      /**< Î»ÒÆ2 */
+float WEIYI3    = 1.5;                                      /**< Î»ÒÆ3 */
+float WEIYI4    = 2.0;                                      /**< Î»ÒÆ4 */
+float K1_Value  = 0.0;                                      /**< ²ÎÊı1 */
+float K2_Value  = 0.0;                                      /**< ²ÎÊı2 */
+float K3_Value  = 0.0;                                      /**< ²ÎÊı3 */
+float K4_Value  = 0.0;                                      /**< ²ÎÊı4 */
+float K5_Value  = 0.0;                                      /**< ²ÎÊı5 */
+float K6_Value  = 0.0;                                      /**< ²ÎÊı6 */
+float K7_Value  = 0.0;                                      /**< ²ÎÊı7 */
+float K8_Value  = 0.0;                                      /**< ²ÎÊı8 */
+float K9_Value  = 0.0;                                      /**< ²ÎÊı9 */
+float K10_Value = 0.0;                                      /**< ²ÎÊı10 */
 
 
 
 /**
- * @brief MODBUS_USART1_CTL1å¼•è„šåˆå§‹åŒ–
+ * @brief MODBUS_USART1_CTL1Òı½Å³õÊ¼»¯
  */
 static void MODBUS_USART1_CTL1_GpioInit(void)
 {
-    GPIO_InitTypeDef GPIO_InitStructure;                        // GPIO åˆå§‹åŒ–ç»“æ„ä½“å®šä¹‰
+    GPIO_InitTypeDef GPIO_InitStructure;                        // GPIO ³õÊ¼»¯½á¹¹Ìå¶¨Òå
 
-    RCC_APB2PeriphClockCmd(MODBUS_USART1_CTL1_GPIO_CLK, ENABLE);// å¼€å¯GPIOæ—¶é’Ÿ
+    RCC_APB2PeriphClockCmd(MODBUS_USART1_CTL1_GPIO_CLK, ENABLE);// ¿ªÆôGPIOÊ±ÖÓ
 
-    /* ç»“æ„ä½“é…ç½® */
+    /* ½á¹¹ÌåÅäÖÃ */
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Pin   = MODBUS_USART1_CTL1_GPIO_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -62,15 +62,15 @@ static void MODBUS_USART1_CTL1_GpioInit(void)
 
 
 /**
- * @brief MODBUS_USART1_CTL2å¼•è„šåˆå§‹åŒ–
+ * @brief MODBUS_USART1_CTL2Òı½Å³õÊ¼»¯
  */
 static void MODBUS_USART1_CTL2_GpioInit(void)
 {
-    GPIO_InitTypeDef GPIO_InitStructure;                        // GPIO åˆå§‹åŒ–ç»“æ„ä½“å®šä¹‰
+    GPIO_InitTypeDef GPIO_InitStructure;                        // GPIO ³õÊ¼»¯½á¹¹Ìå¶¨Òå
 
-    RCC_APB2PeriphClockCmd(MODBUS_USART1_CTL2_GPIO_CLK, ENABLE);// å¼€å¯GPIOæ—¶é’Ÿ
+    RCC_APB2PeriphClockCmd(MODBUS_USART1_CTL2_GPIO_CLK, ENABLE);// ¿ªÆôGPIOÊ±ÖÓ
 
-    /* ç»“æ„ä½“é…ç½® */
+    /* ½á¹¹ÌåÅäÖÃ */
     GPIO_InitStructure.GPIO_Mode  = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Pin   = MODBUS_USART1_CTL2_GPIO_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -80,55 +80,55 @@ static void MODBUS_USART1_CTL2_GpioInit(void)
 
 
 /**
- * @brief MODBUS_USART1åˆå§‹åŒ–ï¼Œä¾›å¤–éƒ¨è°ƒç”¨
+ * @brief MODBUS_USART1³õÊ¼»¯£¬¹©Íâ²¿µ÷ÓÃ
  */
 void MODBUS_USART1_Init(void)
 {
-    USART1_Init();                                              // åˆå§‹åŒ–ä¸²å£1
+    USART1_Init();                                              // ³õÊ¼»¯´®¿Ú1
 
-    MODBUS_USART1_CTL1_GpioInit();                              // åˆå§‹åŒ– MODBUS CTL1 å¼•è„š
-    MODBUS_USART1_CTL2_GpioInit();                              // åˆå§‹åŒ– MODBUS CTL2 å¼•è„š
+    MODBUS_USART1_CTL1_GpioInit();                              // ³õÊ¼»¯ MODBUS CTL1 Òı½Å
+    MODBUS_USART1_CTL2_GpioInit();                              // ³õÊ¼»¯ MODBUS CTL2 Òı½Å
 
-    MODBUS_USART1_RECV_STATUS;                                  // MODBUS_USART1ç½®ä¸ºæ¥æ”¶æ¨¡å¼
+    MODBUS_USART1_RECV_STATUS;                                  // MODBUS_USART1ÖÃÎª½ÓÊÕÄ£Ê½
 
-    MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT = 0;             // æ¸…é›¶MODBUS_USART1æ•°æ®æ¥æ”¶è®¡æ•°å™¨
-    MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG = 0;          // æ¥æ”¶å®Œæˆæ ‡å¿—ç½®1
+    MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT = 0;             // ÇåÁãMODBUS_USART1Êı¾İ½ÓÊÕ¼ÆÊıÆ÷
+    MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG = 0;          // ½ÓÊÕÍê³É±êÖ¾ÖÃ1
 
-    DEVICE_ID = *(uint8_t *)DEVICE_ID_ADDR;                     // è¯»å– DEVICE_ID
+    DEVICE_ID = *(uint8_t *)DEVICE_ID_ADDR;                     // ¶ÁÈ¡ DEVICE_ID
 }
 
 
 /**
- * @brief  MODBUS ä½¿ç”¨ä¸²å£1å‘é€æ•°æ®
- * @param  l_addr           èµ·å§‹åœ°å€
- * @param  l_count          æ•°æ®ä¸ªæ•°
+ * @brief  MODBUS Ê¹ÓÃ´®¿Ú1·¢ËÍÊı¾İ
+ * @param  l_addr           ÆğÊ¼µØÖ·
+ * @param  l_count          Êı¾İ¸öÊı
  */
 void MODBUS_USART1_SendData(uint8_t *l_addr, uint8_t l_count)
 {
-    MODBUS_USART1_SEND_STATUS;                                  // ç½®äºå‘é€çŠ¶æ€
+    MODBUS_USART1_SEND_STATUS;                                  // ÖÃÓÚ·¢ËÍ×´Ì¬
 
-    USART1_SendData(l_addr, l_count);                           // ä¸²å£1å‘é€æ•°æ®
+    USART1_SendData(l_addr, l_count);                           // ´®¿Ú1·¢ËÍÊı¾İ
 
-    MODBUS_USART1_RECV_STATUS;                                  // ç½®äºæ¥æ”¶çŠ¶æ€
+    MODBUS_USART1_RECV_STATUS;                                  // ÖÃÓÚ½ÓÊÕ×´Ì¬
 }
 
-/* å› ä¸ºä¸²å£2æµ‹è¯•æ—¶ä¹Ÿä¼šç”¨é‡å†™printfå‡½æ•°ï¼Œæ‰€ä»¥æˆ‘ç”¨ä¸€ä¸ªå®æ¥åŒºåˆ† */
+/* ÒòÎª´®¿Ú2²âÊÔÊ±Ò²»áÓÃÖØĞ´printfº¯Êı£¬ËùÒÔÎÒÓÃÒ»¸öºêÀ´Çø·Ö */
 #if defined PRINTF_USE_USART2
 
 #else
 /**
- * @brief é‡å®šå‘Cåº“å‡½æ•°printfåˆ°ä¸²å£1
- * @param  ch               å‘é€çš„å­—èŠ‚æ•°æ®
- * @param  f                æ–‡ä»¶æµæŒ‡é’ˆ
+ * @brief ÖØ¶¨ÏòC¿âº¯Êıprintfµ½´®¿Ú1
+ * @param  ch               ·¢ËÍµÄ×Ö½ÚÊı¾İ
+ * @param  f                ÎÄ¼şÁ÷Ö¸Õë
  * @return int
  */
 int fputc(int ch, FILE *f)
 {
-    MODBUS_USART1_SEND_STATUS;                                  // åˆ‡æ¢ä¸ºå‘é€æ¨¡å¼
+    MODBUS_USART1_SEND_STATUS;                                  // ÇĞ»»Îª·¢ËÍÄ£Ê½
 
-    /** è¿™é‡Œæˆ‘ä¸ä½¿ç”¨è‡ªå·±å†™çš„USART_SendByteå‡½æ•°ï¼Œå› ä¸ºé‚£ä¸ªå‡½æ•°é‡Œé¢åˆ¤æ–­ä½¿ç”¨çš„æ˜¯TXEæ ‡å¿—ä½
-     *  è¿™é‡Œå› ä¸ºè¦åˆ‡æ¢å‘é€å’Œæ¥æ”¶ï¼Œæ‰€ä»¥ä¸èƒ½ä½¿ç”¨TXEæ ‡å¿—ä½è¿›è¡Œåˆ¤æ–­ï¼Œæ‰€ä»¥è¿™é‡Œæˆ‘ä½¿ç”¨åº“å‡½æ•°ï¼Œ
-     * å¹¶åˆ¤æ–­TCæ ‡å¿—ä½
+    /** ÕâÀïÎÒ²»Ê¹ÓÃ×Ô¼ºĞ´µÄUSART_SendByteº¯Êı£¬ÒòÎªÄÇ¸öº¯ÊıÀïÃæÅĞ¶ÏÊ¹ÓÃµÄÊÇTXE±êÖ¾Î»
+     *  ÕâÀïÒòÎªÒªÇĞ»»·¢ËÍºÍ½ÓÊÕ£¬ËùÒÔ²»ÄÜÊ¹ÓÃTXE±êÖ¾Î»½øĞĞÅĞ¶Ï£¬ËùÒÔÕâÀïÎÒÊ¹ÓÃ¿âº¯Êı£¬
+     * ²¢ÅĞ¶ÏTC±êÖ¾Î»
      */
     USART_SendData(USART1, ch);
     while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET)
@@ -136,7 +136,7 @@ int fputc(int ch, FILE *f)
         ;
     }
 
-    MODBUS_USART1_RECV_STATUS;                                  // å‘é€å®Œæˆï¼Œç½®ä¸ºæ¥æ”¶æ¨¡å¼
+    MODBUS_USART1_RECV_STATUS;                                  // ·¢ËÍÍê³É£¬ÖÃÎª½ÓÊÕÄ£Ê½
 
     return ch;
 }
@@ -144,9 +144,9 @@ int fputc(int ch, FILE *f)
 
 
 /**
- * @brief é‡å®šå‘Cåº“å‡½æ•°scanfåˆ°ä¸²å£1
- * @param  f                æ–‡ä»¶æµæŒ‡é’ˆ
- * @return int              æ¥æ”¶çš„æ•°æ®
+ * @brief ÖØ¶¨ÏòC¿âº¯Êıscanfµ½´®¿Ú1
+ * @param  f                ÎÄ¼şÁ÷Ö¸Õë
+ * @return int              ½ÓÊÕµÄÊı¾İ
  */
 int fgetc(FILE *f)
 {
@@ -162,38 +162,38 @@ int fgetc(FILE *f)
 
 
 /**
- * @brief  MODBUS é”™è¯¯ç å¤„ç†è¿”å›
- * @param  l_ErrorNum       é”™è¯¯ç 
+ * @brief  MODBUS ´íÎóÂë´¦Àí·µ»Ø
+ * @param  l_ErrorNum       ´íÎóÂë
  */
 static void MOSBUS_USART_ErrorHandle(uint8_t l_ErrorNum)
 {
-    uint8_t  l_ErrResponseBuf[5] = {0};                                           // ç”¨äºå­˜å‚¨è¿”å›é”™è¯¯ä¿¡æ¯
-    uint32_t l_CRC16CheckNum     = 0;                                             // CRCæ ¡éªŒç 
+    uint8_t  l_ErrResponseBuf[5] = {0};                                           // ÓÃÓÚ´æ´¢·µ»Ø´íÎóĞÅÏ¢
+    uint32_t l_CRC16CheckNum     = 0;                                             // CRCĞ£ÑéÂë
 
-    /* è¿”å›æ•°æ®çš„å‰ä¸¤ä¸ªå­—èŠ‚å›ºå®šï¼Œéƒ½æ˜¯Device_IDå’ŒåŠŸèƒ½ç åŠ 0x80 */
+    /* ·µ»ØÊı¾İµÄÇ°Á½¸ö×Ö½Ú¹Ì¶¨£¬¶¼ÊÇDevice_IDºÍ¹¦ÄÜÂë¼Ó0x80 */
     l_ErrResponseBuf[0] = DEVICE_ID;
     l_ErrResponseBuf[1] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[1] + 0x80;
-    /* é”™è¯¯ç 
-     * 0X01ï¼šä¸æ”¯æŒè¯¥åŠŸèƒ½ç 
-     * 0X02ï¼šå†…éƒ¨å¯„å­˜å™¨å¯»å€å¼‚å¸¸
-     * 0X03ï¼šå†…éƒ¨å¯„å­˜å™¨æ•°é‡å¼‚å¸¸
-     * 0X04ï¼šå†…éƒ¨å¯„å­˜å™¨æ•°æ®å¼‚å¸¸
+    /* ´íÎóÂë
+     * 0X01£º²»Ö§³Ö¸Ã¹¦ÄÜÂë
+     * 0X02£ºÄÚ²¿¼Ä´æÆ÷Ñ°Ö·Òì³£
+     * 0X03£ºÄÚ²¿¼Ä´æÆ÷ÊıÁ¿Òì³£
+     * 0X04£ºÄÚ²¿¼Ä´æÆ÷Êı¾İÒì³£
      */
     l_ErrResponseBuf[2] = l_ErrorNum;
     l_CRC16CheckNum     = CRC16(l_ErrResponseBuf, sizeof(l_ErrResponseBuf) - 2);
-    l_ErrResponseBuf[3] = l_CRC16CheckNum & 0XFF;                                 // æ ¡éªŒç ä½8ä½
-    l_ErrResponseBuf[4] = l_CRC16CheckNum >> 8;                                   // æ ¡éªŒç é«˜8ä½
+    l_ErrResponseBuf[3] = l_CRC16CheckNum & 0XFF;                                 // Ğ£ÑéÂëµÍ8Î»
+    l_ErrResponseBuf[4] = l_CRC16CheckNum >> 8;                                   // Ğ£ÑéÂë¸ß8Î»
 
-    MODBUS_USART1_SendData(l_ErrResponseBuf, sizeof(l_ErrResponseBuf));           // å‘é€æ•°æ®
+    MODBUS_USART1_SendData(l_ErrResponseBuf, sizeof(l_ErrResponseBuf));           // ·¢ËÍÊı¾İ
 }
 
 
 
 /**
- * @brief  å†…å­˜ä¸­çš„æ•°æ®å¤åˆ¶åˆ°å¦ä¸€å—å†…å­˜ï¼Œé«˜ä½å­—èŠ‚äº¤æ¢
- * @param  l_des            ç›®çš„æ•°æ®åœ°å€
- * @param  l_src            æºæ•°æ®åœ°å€
- * @param  l_length         æ•°æ®é•¿åº¦ï¼ˆå•ä½ï¼šå­—èŠ‚ï¼‰
+ * @brief  ÄÚ´æÖĞµÄÊı¾İ¸´ÖÆµ½ÁíÒ»¿éÄÚ´æ£¬¸ßµÍ×Ö½Ú½»»»
+ * @param  l_des            Ä¿µÄÊı¾İµØÖ·
+ * @param  l_src            Ô´Êı¾İµØÖ·
+ * @param  l_length         Êı¾İ³¤¶È£¨µ¥Î»£º×Ö½Ú£©
  */
 static void MOSBUS_USART_Memcpy(void * l_des, void * l_src, uint8_t l_length)
 {
@@ -210,19 +210,19 @@ static void MOSBUS_USART_Memcpy(void * l_des, void * l_src, uint8_t l_length)
 
 
 /**
- * @brief  ä»èµ·å§‹åœ°å€ä½œä¸ºé«˜å­—èŠ‚åœ°å€ï¼Œè¯»å–4å­—èŠ‚çš„æ•°æ®å¯¹åº”çš„floatå€¼
- * @param  l_src            èµ·å§‹åœ°å€
- * @return float            å¯¹åº”çš„float å€¼
+ * @brief  ´ÓÆğÊ¼µØÖ·×÷Îª¸ß×Ö½ÚµØÖ·£¬¶ÁÈ¡4×Ö½ÚµÄÊı¾İ¶ÔÓ¦µÄfloatÖµ
+ * @param  l_src            ÆğÊ¼µØÖ·
+ * @return float            ¶ÔÓ¦µÄfloat Öµ
  */
 static float MODBUS_USART_FloatAss(uint8_t *l_src)
 {
     uint8_t l_tempbuf[4] = {0};
     float   l_tempres    = 0.0;
 
-    l_tempbuf[3] = *(l_src + 0);                                                  // ç¬¬1ä¸ªå­—èŠ‚æ•°æ®èµ‹å€¼ç»™æ•°ç»„[3]
-    l_tempbuf[2] = *(l_src + 1);                                                  // ç¬¬2ä¸ªå­—èŠ‚æ•°æ®èµ‹å€¼ç»™æ•°ç»„[2]
-    l_tempbuf[1] = *(l_src + 2);                                                  // ç¬¬3ä¸ªå­—èŠ‚æ•°æ®èµ‹å€¼ç»™æ•°ç»„[1]
-    l_tempbuf[0] = *(l_src + 3);                                                  // ç¬¬4ä¸ªå­—èŠ‚æ•°æ®èµ‹å€¼ç»™æ•°ç»„[0]
+    l_tempbuf[3] = *(l_src + 0);                                                  // µÚ1¸ö×Ö½ÚÊı¾İ¸³Öµ¸øÊı×é[3]
+    l_tempbuf[2] = *(l_src + 1);                                                  // µÚ2¸ö×Ö½ÚÊı¾İ¸³Öµ¸øÊı×é[2]
+    l_tempbuf[1] = *(l_src + 2);                                                  // µÚ3¸ö×Ö½ÚÊı¾İ¸³Öµ¸øÊı×é[1]
+    l_tempbuf[0] = *(l_src + 3);                                                  // µÚ4¸ö×Ö½ÚÊı¾İ¸³Öµ¸øÊı×é[0]
 
 	l_tempres = *(float *)l_tempbuf;
 
@@ -232,19 +232,19 @@ static float MODBUS_USART_FloatAss(uint8_t *l_src)
 
 
 /**
- * @brief  MODBUS 03 å‘½ä»¤ç å¤„ç†ç¨‹åº
+ * @brief  MODBUS 03 ÃüÁîÂë´¦Àí³ÌĞò
  */
 static void MODBUS_USART_03_Handle()
 {
-    if (8 == MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT)             // è¯»å–çš„å­—èŠ‚é•¿åº¦åº”è¯¥æ˜¯8ä¸ªå­—èŠ‚ï¼Œå¦‚æœä¸æ˜¯ï¼Œåˆ™å‡ºé”™
+    if (8 == MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT)             // ¶ÁÈ¡µÄ×Ö½Ú³¤¶ÈÓ¦¸ÃÊÇ8¸ö×Ö½Ú£¬Èç¹û²»ÊÇ£¬Ôò³ö´í
     {
-        /* å±€éƒ¨å˜é‡å£°æ˜ */
-        uint16_t l_RegAddr         = 0;                              // å¯„å­˜å™¨åœ°å€
-        uint16_t l_ResCnt          = 0;                              // å¯„å­˜å™¨ä¸ªæ•°
-        uint32_t l_CRC16CheckNum   = 0;                              // CRCæ ¡éªŒç 
-        uint8_t  l_ResponseBuf[46] = {0};                            // ç”¨äºå­˜å‚¨è¿”å›æ•°æ®
+        /* ¾Ö²¿±äÁ¿ÉùÃ÷ */
+        uint16_t l_RegAddr         = 0;                              // ¼Ä´æÆ÷µØÖ·
+        uint16_t l_ResCnt          = 0;                              // ¼Ä´æÆ÷¸öÊı
+        uint32_t l_CRC16CheckNum   = 0;                              // CRCĞ£ÑéÂë
+        uint8_t  l_ResponseBuf[46] = {0};                            // ÓÃÓÚ´æ´¢·µ»ØÊı¾İ
 
-        /* è¿”å›æ•°æ®çš„å‰ä¸¤ä¸ªå­—èŠ‚å›ºå®šï¼Œéƒ½æ˜¯Device_IDå’ŒåŠŸèƒ½ç  */
+        /* ·µ»ØÊı¾İµÄÇ°Á½¸ö×Ö½Ú¹Ì¶¨£¬¶¼ÊÇDevice_IDºÍ¹¦ÄÜÂë */
         l_ResponseBuf[0] = DEVICE_ID;
         l_ResponseBuf[1] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[1];
 
@@ -252,7 +252,7 @@ static void MODBUS_USART_03_Handle()
 
         switch (l_RegAddr)
         {
-            /* è®¾å¤‡IDå· */
+            /* Éè±¸IDºÅ */
             case 1001:
             {
 			    l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
@@ -263,12 +263,12 @@ static void MODBUS_USART_03_Handle()
                     l_ResponseBuf[4] = DEVICE_ID;
 
                     l_CRC16CheckNum  = CRC16(l_ResponseBuf, 5);
-                    l_ResponseBuf[5] = l_CRC16CheckNum & 0XFF;       // æ ¡éªŒç ä½8ä½
-                    l_ResponseBuf[6] = l_CRC16CheckNum >> 8;         // æ ¡éªŒç é«˜8ä½
+                    l_ResponseBuf[5] = l_CRC16CheckNum & 0XFF;       // Ğ£ÑéÂëµÍ8Î»
+                    l_ResponseBuf[6] = l_CRC16CheckNum >> 8;         // Ğ£ÑéÂë¸ß8Î»
 
                     MODBUS_USART1_SendData(l_ResponseBuf, 7);
                 }
-                /* å¯„å­˜å™¨æ•°é‡å¼‚å¸¸ */
+                /* ¼Ä´æÆ÷ÊıÁ¿Òì³£ */
                 else
                 {
                     MOSBUS_USART_ErrorHandle(0x03);
@@ -283,19 +283,19 @@ static void MODBUS_USART_03_Handle()
                 {
                     l_ResponseBuf[2] = 0x10;
 
-                    /* è¯»å–ä½ç§»1-4 */
+                    /* ¶ÁÈ¡Î»ÒÆ1-4 */
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[3], (uint8_t *)&WEIYI1, 4);
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[7], (uint8_t *)&WEIYI2, 4);
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[11], (uint8_t *)&WEIYI3, 4);
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[15], (uint8_t *)&WEIYI4, 4);
 
                     l_CRC16CheckNum   = CRC16(l_ResponseBuf, 19);
-                    l_ResponseBuf[19] = l_CRC16CheckNum & 0XFF;      // æ ¡éªŒç ä½8ä½
-                    l_ResponseBuf[20] = l_CRC16CheckNum >> 8;        // æ ¡éªŒç é«˜8ä½
+                    l_ResponseBuf[19] = l_CRC16CheckNum & 0XFF;      // Ğ£ÑéÂëµÍ8Î»
+                    l_ResponseBuf[20] = l_CRC16CheckNum >> 8;        // Ğ£ÑéÂë¸ß8Î»
 
                     MODBUS_USART1_SendData(l_ResponseBuf, 21);
                 }
-                /* å¯„å­˜å™¨æ•°é‡å¼‚å¸¸ */
+                /* ¼Ä´æÆ÷ÊıÁ¿Òì³£ */
                 else
                 {
                     MOSBUS_USART_ErrorHandle(0x03);
@@ -310,7 +310,7 @@ static void MODBUS_USART_03_Handle()
                 {
                     l_ResponseBuf[2] = 0x28;
 
-                    /* è¯»å–å‚æ•°K1-K10 */
+                    /* ¶ÁÈ¡²ÎÊıK1-K10 */
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[3]  , (uint8_t *)K1_ADDR  , 4);
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[7]  , (uint8_t *)K2_ADDR  , 4);
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[11] , (uint8_t *)K3_ADDR  , 4);
@@ -323,12 +323,12 @@ static void MODBUS_USART_03_Handle()
                     MOSBUS_USART_Memcpy(&l_ResponseBuf[39] , (uint8_t *)K10_ADDR , 4);
 
                     l_CRC16CheckNum   = CRC16(l_ResponseBuf, 43);
-                    l_ResponseBuf[43] = l_CRC16CheckNum & 0XFF;      // æ ¡éªŒç ä½8ä½
-                    l_ResponseBuf[44] = l_CRC16CheckNum >> 8;        // æ ¡éªŒç é«˜8ä½
+                    l_ResponseBuf[43] = l_CRC16CheckNum & 0XFF;      // Ğ£ÑéÂëµÍ8Î»
+                    l_ResponseBuf[44] = l_CRC16CheckNum >> 8;        // Ğ£ÑéÂë¸ß8Î»
 
                     MODBUS_USART1_SendData(l_ResponseBuf, 45);
                 }
-                /* å¯„å­˜å™¨æ•°é‡å¼‚å¸¸ */
+                /* ¼Ä´æÆ÷ÊıÁ¿Òì³£ */
                 else
                 {
                     MOSBUS_USART_ErrorHandle(0x03);
@@ -338,12 +338,12 @@ static void MODBUS_USART_03_Handle()
 
             default:
             {
-                /* å¯„å­˜å™¨å¯»å€å¼‚å¸¸ */
+                /* ¼Ä´æÆ÷Ñ°Ö·Òì³£ */
                 MOSBUS_USART_ErrorHandle(0x02);
             }
         }
     }
-    /* æ•°æ®é•¿åº¦å¼‚å¸¸ */
+    /* Êı¾İ³¤¶ÈÒì³£ */
     else
     {
         MOSBUS_USART_ErrorHandle(0X04);
@@ -353,20 +353,20 @@ static void MODBUS_USART_03_Handle()
 
 
 /**
- * @brief MODBUS 10 å‘½ä»¤ç å¤„ç†ç¨‹åº
+ * @brief MODBUS 10 ÃüÁîÂë´¦Àí³ÌĞò
  */
 static void MODBUS_USART_10_Handle()
 {
-    if (MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT >= 11)                        // å†™å…¥çš„å­—èŠ‚é•¿åº¦åº”è¯¥å¤§äºç­‰äº11ä¸ªå­—èŠ‚ï¼Œå¦‚æœä¸æ˜¯ï¼Œåˆ™å‡ºé”™
+    if (MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT >= 11)                        // Ğ´ÈëµÄ×Ö½Ú³¤¶ÈÓ¦¸Ã´óÓÚµÈÓÚ11¸ö×Ö½Ú£¬Èç¹û²»ÊÇ£¬Ôò³ö´í
     {
-        /* å±€éƒ¨å˜é‡å£°æ˜ */
-        uint16_t l_RegAddr = 0;                                                  // å¯„å­˜å™¨åœ°å€
-        uint16_t l_ResCnt = 0;                                                   // å¯„å­˜å™¨ä¸ªæ•°
-        uint16_t l_ByteCnt = 0;                                                  // æœ‰å¤šå°‘å­—èŠ‚æ•°æ®
-        uint32_t l_CRC16CheckNum = 0;                                            // CRCæ ¡éªŒç 
-        uint8_t l_ResponseBuf[8] = {0};                                          // ç”¨äºå­˜å‚¨è¿”å›æ•°æ®
+        /* ¾Ö²¿±äÁ¿ÉùÃ÷ */
+        uint16_t l_RegAddr = 0;                                                  // ¼Ä´æÆ÷µØÖ·
+        uint16_t l_ResCnt = 0;                                                   // ¼Ä´æÆ÷¸öÊı
+        uint16_t l_ByteCnt = 0;                                                  // ÓĞ¶àÉÙ×Ö½ÚÊı¾İ
+        uint32_t l_CRC16CheckNum = 0;                                            // CRCĞ£ÑéÂë
+        uint8_t l_ResponseBuf[8] = {0};                                          // ÓÃÓÚ´æ´¢·µ»ØÊı¾İ
 
-        /* è¿”å›æ•°æ®çš„å‰ä¸¤ä¸ªå­—èŠ‚å›ºå®šï¼Œéƒ½æ˜¯Device_IDå’ŒåŠŸèƒ½ç  */
+        /* ·µ»ØÊı¾İµÄÇ°Á½¸ö×Ö½Ú¹Ì¶¨£¬¶¼ÊÇDevice_IDºÍ¹¦ÄÜÂë */
         l_ResponseBuf[0] = DEVICE_ID;
         l_ResponseBuf[1] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[1];
 
@@ -384,30 +384,30 @@ static void MODBUS_USART_10_Handle()
                         uint16_t l_temp_DeviceID = 0;
 
                         l_temp_DeviceID = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[7] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[8];
-                        DEVICE_ID = (uint8_t)l_temp_DeviceID;                    // æ›´æ–°Device ID
-                        INTER_FLASH_ProgramWord(DEVICE_ID_ADDR, l_temp_DeviceID);// å†™å…¥FLASHï¼Œé‡å¯åå¯ä»¥æ›´æ–°
+                        DEVICE_ID = (uint8_t)l_temp_DeviceID;                    // ¸üĞÂDevice ID
+                        INTER_FLASH_ProgramWord(DEVICE_ID_ADDR, l_temp_DeviceID);// Ğ´ÈëFLASH£¬ÖØÆôºó¿ÉÒÔ¸üĞÂ
 
-                        l_ResponseBuf[0] = DEVICE_ID;                            // è¿™é‡Œéœ€è¦æ›´æ–°ä¸€æ¬¡
+                        l_ResponseBuf[0] = DEVICE_ID;                            // ÕâÀïĞèÒª¸üĞÂÒ»´Î
 
-                        /* [2][3]è¿”å›æ—¶è¿˜æ˜¯å¯„å­˜å™¨åœ°å€ï¼Œ[4][5]è¿”å›æ—¶ä¾æ—§æ˜¯å¯„å­˜å™¨ä¸ªæ•° */
+                        /* [2][3]·µ»ØÊ±»¹ÊÇ¼Ä´æÆ÷µØÖ·£¬[4][5]·µ»ØÊ±ÒÀ¾ÉÊÇ¼Ä´æÆ÷¸öÊı */
                         l_ResponseBuf[2] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[2];
                         l_ResponseBuf[3] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[3];
                         l_ResponseBuf[4] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4];
                         l_ResponseBuf[5] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
 
                         l_CRC16CheckNum  = CRC16(l_ResponseBuf, 6);
-                        l_ResponseBuf[6] = l_CRC16CheckNum & 0XFF;               // æ ¡éªŒç ä½8ä½
-                        l_ResponseBuf[7] = l_CRC16CheckNum >> 8;                 // æ ¡éªŒç é«˜8ä½
+                        l_ResponseBuf[6] = l_CRC16CheckNum & 0XFF;               // Ğ£ÑéÂëµÍ8Î»
+                        l_ResponseBuf[7] = l_CRC16CheckNum >> 8;                 // Ğ£ÑéÂë¸ß8Î»
 
                         MODBUS_USART1_SendData(l_ResponseBuf, sizeof(l_ResponseBuf)/sizeof(uint8_t));
                     }
-                    /* å†…éƒ¨å¯„å­˜å™¨æ•°æ®å¼‚å¸¸ */
+                    /* ÄÚ²¿¼Ä´æÆ÷Êı¾İÒì³£ */
                     else
                     {
                         MOSBUS_USART_ErrorHandle(0x04);
                     }
                 }
-                /* å¯„å­˜å™¨æ•°é‡å¼‚å¸¸ */
+                /* ¼Ä´æÆ÷ÊıÁ¿Òì³£ */
                 else
                 {
                     MOSBUS_USART_ErrorHandle(0x03);
@@ -423,7 +423,7 @@ static void MODBUS_USART_10_Handle()
                     l_ByteCnt = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[6];
                     if (0x28 == l_ByteCnt)
                     {
-                        /* å­˜å‚¨Kå€¼ä¸´æ—¶å˜é‡ */
+                        /* ´æ´¢KÖµÁÙÊ±±äÁ¿ */
                         float l_temp_K1 = 0;
                         float l_temp_K2 = 0;
                         float l_temp_K3 = 0;
@@ -446,7 +446,7 @@ static void MODBUS_USART_10_Handle()
                         l_temp_K9  = MODBUS_USART_FloatAss(&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[39]);
                         l_temp_K10 = MODBUS_USART_FloatAss(&MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[43]);
 
-                        /* æ›´æ–°K1-K10 */
+                        /* ¸üĞÂK1-K10 */
                         K1_Value = l_temp_K1;
                         K2_Value = l_temp_K2;
                         K3_Value = l_temp_K3;
@@ -458,9 +458,9 @@ static void MODBUS_USART_10_Handle()
                         K9_Value = l_temp_K9;
                         K10_Value = l_temp_K10;
 
-                        /* å°†æ–°çš„K1-K10å†™å…¥FLASH */
-                        FLASH_Unlock();                                          // è§£é”
-                        FLASH_ErasePage(K1_ADDR);                                // æ“¦é™¤é¡µæ•°æ®
+                        /* ½«ĞÂµÄK1-K10Ğ´ÈëFLASH */
+                        FLASH_Unlock();                                          // ½âËø
+                        FLASH_ErasePage(K1_ADDR);                                // ²Á³ıÒ³Êı¾İ
 
                         FLASH_ProgramWord(K1_ADDR  , *(uint32_t *)&K1_Value );
                         FLASH_ProgramWord(K2_ADDR  , *(uint32_t *)&K2_Value );
@@ -473,27 +473,27 @@ static void MODBUS_USART_10_Handle()
                         FLASH_ProgramWord(K9_ADDR  , *(uint32_t *)&K9_Value );
                         FLASH_ProgramWord(K10_ADDR , *(uint32_t *)&K10_Value);
 
-                        FLASH_Lock();                                            // ä¸Šé”
+                        FLASH_Lock();                                            // ÉÏËø
 
-                        /* [2][3]è¿”å›æ—¶è¿˜æ˜¯å¯„å­˜å™¨åœ°å€ï¼Œ[4][5]è¿”å›æ—¶ä¾æ—§æ˜¯å¯„å­˜å™¨ä¸ªæ•° */
+                        /* [2][3]·µ»ØÊ±»¹ÊÇ¼Ä´æÆ÷µØÖ·£¬[4][5]·µ»ØÊ±ÒÀ¾ÉÊÇ¼Ä´æÆ÷¸öÊı */
                         l_ResponseBuf[2] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[2];
                         l_ResponseBuf[3] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[3];
                         l_ResponseBuf[4] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4];
                         l_ResponseBuf[5] = MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
 
                         l_CRC16CheckNum  = CRC16(l_ResponseBuf, 6);
-                        l_ResponseBuf[6] = l_CRC16CheckNum & 0XFF;               // æ ¡éªŒç ä½8ä½
-                        l_ResponseBuf[7] = l_CRC16CheckNum >> 8;                 // æ ¡éªŒç é«˜8ä½
+                        l_ResponseBuf[6] = l_CRC16CheckNum & 0XFF;               // Ğ£ÑéÂëµÍ8Î»
+                        l_ResponseBuf[7] = l_CRC16CheckNum >> 8;                 // Ğ£ÑéÂë¸ß8Î»
 
                         MODBUS_USART1_SendData(l_ResponseBuf, sizeof(l_ResponseBuf)/sizeof(uint8_t));
                     }
-                    /* å†…éƒ¨å¯„å­˜å™¨æ•°æ®å¼‚å¸¸ */
+                    /* ÄÚ²¿¼Ä´æÆ÷Êı¾İÒì³£ */
                     else
                     {
                         MOSBUS_USART_ErrorHandle(0x04);
                     }
                 }
-                /* å¯„å­˜å™¨æ•°é‡å¼‚å¸¸ */
+                /* ¼Ä´æÆ÷ÊıÁ¿Òì³£ */
                 else
                 {
                     MOSBUS_USART_ErrorHandle(0x03);
@@ -505,7 +505,7 @@ static void MODBUS_USART_10_Handle()
             break;
         }
     }
-    /* æ•°æ®é•¿åº¦å¼‚å¸¸ */
+    /* Êı¾İ³¤¶ÈÒì³£ */
     else
     {
         MOSBUS_USART_ErrorHandle(0X04);
@@ -515,21 +515,21 @@ static void MODBUS_USART_10_Handle()
 
 
 /**
- * @brief MOSBUS_USART1é€šä¿¡å¤„ç†å‡½æ•°
+ * @brief MOSBUS_USART1Í¨ĞÅ´¦Àíº¯Êı
  */
 void MODBUS_USART1_COMMUNICATION(void)
 {
-    /* å±€éƒ¨å˜é‡å£°æ˜ */
-    uint16_t l_CRCCheckSum = 0;                                                                                                                                                                                          // CRCæ ¡éªŒå’Œ
+    /* ¾Ö²¿±äÁ¿ÉùÃ÷ */
+    uint16_t l_CRCCheckSum = 0;                                                                                                                                                                                          // CRCĞ£ÑéºÍ
 
     if (MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
     {
-        if (DEVICE_ID == MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[0])                                                                                                                                                     // è®¾å¤‡IDæ˜¯å¦æ­£ç¡®
+        if (DEVICE_ID == MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[0])                                                                                                                                                     // Éè±¸IDÊÇ·ñÕıÈ·
         {
-            l_CRCCheckSum = ((MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT - 1] << 8) | (MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT - 2]));// CRCæ ¡éªŒç æ˜¯å¦æ­£ç¡®
+            l_CRCCheckSum = ((MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT - 1] << 8) | (MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT - 2]));// CRCĞ£ÑéÂëÊÇ·ñÕıÈ·
             if (CRC16(MODBUS_USART1_RECV.MODBUS_USART_RECVBUF, MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT - 2) == l_CRCCheckSum)
             {
-                /* æ ¹æ®åŠŸèƒ½ç é€‰æ‹©å¯¹åº”çš„å¤„ç†å‡½æ•° */
+                /* ¸ù¾İ¹¦ÄÜÂëÑ¡Ôñ¶ÔÓ¦µÄ´¦Àíº¯Êı */
                 switch (MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[1])
                 {
                     case 0x03:
@@ -546,7 +546,7 @@ void MODBUS_USART1_COMMUNICATION(void)
 
                     default:
                     {
-                        MOSBUS_USART_ErrorHandle(0x01);                                                                                                                                                                  // æœªå®šä¹‰çš„åŠŸèƒ½ç 
+                        MOSBUS_USART_ErrorHandle(0x01);                                                                                                                                                                  // Î´¶¨ÒåµÄ¹¦ÄÜÂë
                     }
                     break;
                 }
@@ -554,7 +554,7 @@ void MODBUS_USART1_COMMUNICATION(void)
         }
         else
         {
-            /* è®¾å¤‡IDä¸åŒ
+            /* Éè±¸ID²»Í¬
              * DEBUG_INFO("Error Device_ID");
              */
         }
@@ -562,14 +562,14 @@ void MODBUS_USART1_COMMUNICATION(void)
 }
 
 /**
- * @brief  CRC16_Modbusæ ¡éªŒç è®¡ç®—
- * @param  nData            æ•°æ®èµ·å§‹åœ°å€
- * @param  wLength          æ•°æ®é•¿åº¦
- * @return unsigned int     CRCæ ¡éªŒå’Œ
+ * @brief  CRC16_ModbusĞ£ÑéÂë¼ÆËã
+ * @param  nData            Êı¾İÆğÊ¼µØÖ·
+ * @param  wLength          Êı¾İ³¤¶È
+ * @return unsigned int     CRCĞ£ÑéºÍ
  */
 unsigned int CRC16(unsigned char *nData, unsigned int wLength)
 {
-    /* å±€éƒ¨å˜é‡å£°æ˜ */
+    /* ¾Ö²¿±äÁ¿ÉùÃ÷ */
     unsigned char nTemp = 0;
     unsigned int wCRCWord = 0xFFFF;
     static const unsigned int wCRCTable[] =

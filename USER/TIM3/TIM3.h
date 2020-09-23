@@ -5,43 +5,43 @@
 extern "C"{
 #endif
 
-/* å¤´æ–‡ä»¶åŒ…å« */
+/* Í·ÎÄ¼ş°üº¬ */
 #include "stm32f10x.h"								// Device header
 
-/* å®å®šä¹‰ */
-/*  PWM ä¿¡å·çš„é¢‘ç‡ F = TIM_CLK / {(ARR+1)*(PSC+1)} */
-#define TIM3_PERIOD                                     (1000 - 1) /**< å®šæ—¶å™¨è®¡æ•°å‘¨æœŸ */
-#define TIM3_PSC                                        (36 - 1)   /**< å®šæ—¶å™¨åˆ†é¢‘ */
-#define TIM3_PULSE                                      500        /**< PWMæ¨¡å¼ OC é…ç½® */
+/* ºê¶¨Òå */
+/*  PWM ĞÅºÅµÄÆµÂÊ F = TIM_CLK / {(ARR+1)*(PSC+1)} */
+#define TIM3_PERIOD                                     (1000 - 1) /**< ¶¨Ê±Æ÷¼ÆÊıÖÜÆÚ */
+#define TIM3_PSC                                        (36 - 1)   /**< ¶¨Ê±Æ÷·ÖÆµ */
+#define TIM3_PULSE                                      500        /**< PWMÄ£Ê½ OC ÅäÖÃ */
 
-// TIM3 è¾“å‡ºæ¯”è¾ƒé€šé“1
-#define TIM3_CH1_GPIO_CLK								(RCC_APB2Periph_GPIOA)/**< TIM3 CH1 GPIOæ—¶é’Ÿ */
-#define TIM3_CH1_GPIO_PORT								(GPIOA)              /**< TIM3 CH1 GPIOç«¯å£ */
-#define TIM3_CH1_GPIO_PIN								(GPIO_Pin_6)          /**< TIM3 CH1 GPIO PINå¼•è„š */
+// TIM3 Êä³ö±È½ÏÍ¨µÀ1
+#define TIM3_CH1_GPIO_CLK								(RCC_APB2Periph_GPIOA)/**< TIM3 CH1 GPIOÊ±ÖÓ */
+#define TIM3_CH1_GPIO_PORT								(GPIOA)              /**< TIM3 CH1 GPIO¶Ë¿Ú */
+#define TIM3_CH1_GPIO_PIN								(GPIO_Pin_6)          /**< TIM3 CH1 GPIO PINÒı½Å */
 
-// TIM3 è¾“å‡ºæ¯”è¾ƒé€šé“2
-#define TIM3_CH2_GPIO_CLK								(RCC_APB2Periph_GPIOA)/**< TIM3 CH2 GPIOæ—¶é’Ÿ */
-#define TIM3_CH2_GPIO_PORT								(GPIOA)              /**< TIM3 CH2 GPIOç«¯å£ */
-#define TIM3_CH2_GPIO_PIN								(GPIO_Pin_7)          /**< TIM3 CH2 GPIO PINå¼•è„š */
+// TIM3 Êä³ö±È½ÏÍ¨µÀ2
+#define TIM3_CH2_GPIO_CLK								(RCC_APB2Periph_GPIOA)/**< TIM3 CH2 GPIOÊ±ÖÓ */
+#define TIM3_CH2_GPIO_PORT								(GPIOA)              /**< TIM3 CH2 GPIO¶Ë¿Ú */
+#define TIM3_CH2_GPIO_PIN								(GPIO_Pin_7)          /**< TIM3 CH2 GPIO PINÒı½Å */
 
-// TIM3 è¾“å‡ºæ¯”è¾ƒé€šé“3
-#define TIM3_CH3_GPIO_CLK								(RCC_APB2Periph_GPIOB)/**< TIM3 CH3 GPIOæ—¶é’Ÿ */
-#define TIM3_CH3_GPIO_PORT								(GPIOB)              /**< TIM3 CH3 GPIOç«¯å£ */
-#define TIM3_CH3_GPIO_PIN								(GPIO_Pin_0)          /**< TIM3 CH3 GPIO PINå¼•è„š */
+// TIM3 Êä³ö±È½ÏÍ¨µÀ3
+#define TIM3_CH3_GPIO_CLK								(RCC_APB2Periph_GPIOB)/**< TIM3 CH3 GPIOÊ±ÖÓ */
+#define TIM3_CH3_GPIO_PORT								(GPIOB)              /**< TIM3 CH3 GPIO¶Ë¿Ú */
+#define TIM3_CH3_GPIO_PIN								(GPIO_Pin_0)          /**< TIM3 CH3 GPIO PINÒı½Å */
 
-// TIM3 è¾“å‡ºæ¯”è¾ƒé€šé“4
-#define TIM3_CH4_GPIO_CLK								(RCC_APB2Periph_GPIOB)/**< TIM3 CH4 GPIOæ—¶é’Ÿ */
-#define TIM3_CH4_GPIO_PORT								(GPIOB)              /**< TIM3 CH4 GPIOç«¯å£ */
-#define TIM3_CH4_GPIO_PIN								(GPIO_Pin_1)          /**< TIM3 CH4 GPIO PINå¼•è„š */
+// TIM3 Êä³ö±È½ÏÍ¨µÀ4
+#define TIM3_CH4_GPIO_CLK								(RCC_APB2Periph_GPIOB)/**< TIM3 CH4 GPIOÊ±ÖÓ */
+#define TIM3_CH4_GPIO_PORT								(GPIOB)              /**< TIM3 CH4 GPIO¶Ë¿Ú */
+#define TIM3_CH4_GPIO_PIN								(GPIO_Pin_1)          /**< TIM3 CH4 GPIO PINÒı½Å */
 
-/* å‡½æ•°å£°æ˜ */
+/* º¯ÊıÉùÃ÷ */
 
 static void TIM3_CH_GpioInit(void);
 static void TIM3_TimeBaseConfig(void);
 static void TIM3_OCConfig(void);
 void TIM3_Init(void);
 
-/* å…¨å±€å˜é‡å£°æ˜ */
+/* È«¾Ö±äÁ¿ÉùÃ÷ */
 
 #ifdef __cplusplus
 }

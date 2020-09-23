@@ -1,33 +1,33 @@
 /**
  * @file LED.c
- * @brief LED ç¯åˆå§‹åŒ–
- * @author RyanÂ·Chen (ryan.cr.chen@gmail.com)
+ * @brief LED µÆ³õÊ¼»¯
+ * @author Ryan¡¤Chen (ryan.cr.chen@gmail.com)
  * @version 1.0
  * @date 23-07-2020
- * 
- * @copyright Copyright (c) 2020  RyanÂ·Chen
- * 
- * @par ä¿®æ”¹æ—¥å¿—:
+ *
+ * @copyright Copyright (c) 2020  Ryan¡¤Chen
+ *
+ * @par ĞŞ¸ÄÈÕÖ¾:
  * <table>
  * <tr><th>Date       <th>Version <th>Author  <th>Description
- * <tr><td>23-07-2020 <td>1.0     <td>RyanÂ·Chen     <td>LEDä½¿ç”¨GPIOå¼•è„šåˆå§‹åŒ–
- * <tr><td>21-09-2020 <td>1.0     <td>RyanÂ·Chen     <td>ä»£ç è§„èŒƒåŒ–
+ * <tr><td>23-07-2020 <td>1.0     <td>Ryan¡¤Chen     <td>LEDÊ¹ÓÃGPIOÒı½Å³õÊ¼»¯
+ * <tr><td>21-09-2020 <td>1.0     <td>Ryan¡¤Chen     <td>´úÂë¹æ·¶»¯
  * </table>
  */
 
-/* å¤´æ–‡ä»¶åŒ…å« */
+/* Í·ÎÄ¼ş°üº¬ */
 #include "LED.h"
 
 /**
- * @brief LED1 GPIOåˆå§‹åŒ–
+ * @brief LED1 GPIO³õÊ¼»¯
  */
 static void LED1_GpioInit(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
-    RCC_APB2PeriphClockCmd(LED1_GPIO_CLK, ENABLE);// å¼€å¯GPIOæ—¶é’Ÿ
+    RCC_APB2PeriphClockCmd(LED1_GPIO_CLK, ENABLE);// ¿ªÆôGPIOÊ±ÖÓ
 
-    /* ç»“æ„ä½“é…ç½® */
+    /* ½á¹¹ÌåÅäÖÃ */
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Pin = LED1_GPIO_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -35,15 +35,15 @@ static void LED1_GpioInit(void)
 }
 
 /**
- * @brief LED2 GPIOåˆå§‹åŒ–
+ * @brief LED2 GPIO³õÊ¼»¯
  */
 static void LED2_GpioInit(void)
 {
-    GPIO_InitTypeDef GPIO_InitStructure;          // åˆå§‹åŒ–ç»“æ„ä½“å®šä¹‰
+    GPIO_InitTypeDef GPIO_InitStructure;          // ³õÊ¼»¯½á¹¹Ìå¶¨Òå
 
-    RCC_APB2PeriphClockCmd(LED2_GPIO_CLK, ENABLE);// å¼€å¯GPIOæ—¶é’Ÿ
+    RCC_APB2PeriphClockCmd(LED2_GPIO_CLK, ENABLE);// ¿ªÆôGPIOÊ±ÖÓ
 
-    /* ç»“æ„ä½“é…ç½® */
+    /* ½á¹¹ÌåÅäÖÃ */
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Pin = LED2_GPIO_PIN;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -51,12 +51,12 @@ static void LED2_GpioInit(void)
 }
 
 /**
- * @brief LED1/2 GPIOåˆå§‹åŒ–ï¼Œä¾›å¤–éƒ¨è°ƒç”¨
+ * @brief LED1/2 GPIO³õÊ¼»¯£¬¹©Íâ²¿µ÷ÓÃ
  */
 void LED_Init(void)
 {
-    LED1_GpioInit();                              // LED1 GPIOåˆå§‹åŒ–
-    LED2_GpioInit();                              // LED2 GPIOåˆå§‹åŒ–
-    LED1(OFF);                                    // åˆå§‹å…³æ‰ LED1
-    LED2(OFF);                                    // åˆå§‹å…³æ‰ LED2
+    LED1_GpioInit();                              // LED1 GPIO³õÊ¼»¯
+    LED2_GpioInit();                              // LED2 GPIO³õÊ¼»¯
+    LED1(OFF);                                    // ³õÊ¼¹Øµô LED1
+    LED2(OFF);                                    // ³õÊ¼¹Øµô LED2
 }

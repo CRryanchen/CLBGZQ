@@ -46,14 +46,16 @@ void PendSV_Handler(void);
 void SysTick_Handler(void);
 
 // 宏定义
-#define MODBUS_USART_RECV_MAX_BUFSIZE								(100)
+#define MODBUS_USART_RECV_MAX_BUFSIZE								(100)       /**< 串口MODBUS接收数据数组最大值 */
 
-// 数据定义
+/**
+ * @brief 自定义数据类型，用于处理串口数据
+ */
 typedef struct
 {
-    uint8_t MODBUS_USART_RECVBUF[MODBUS_USART_RECV_MAX_BUFSIZE];
-    uint8_t MODBUS_USART_RECV_COUNT;
-    uint8_t MODBUS_USART_COMPLETE_FLAG;
+    uint8_t MODBUS_USART_RECVBUF[MODBUS_USART_RECV_MAX_BUFSIZE];/**< 接收数据数组 */
+    uint8_t MODBUS_USART_RECV_COUNT;                            /**< 接收数据计数器 */
+    uint8_t MODBUS_USART_COMPLETE_FLAG;                         /**< MODBUS接收完成标志 */
 }MODBUS_USART_RECV_STRUCT;
 
 #ifdef __cplusplus

@@ -5,24 +5,25 @@
 extern "C"{
 #endif
 
-/* å¤´æ–‡ä»¶åŒ…å« */
+/* Í·ÎÄ¼ş°üº¬ */
 #include "stm32f10x.h"								        // Device header
-#include <stdio.h>                                          // ä½¿ç”¨ printf()
+#include <stdio.h>                                          // Ê¹ÓÃ printf()
+#include "stm32f10x_it.h"
 
-/* å®å®šä¹‰ */
-/* PE2ã€PE3æ§åˆ¶ä¸²å£å‘é€è¿˜æ˜¯æ¥å— */
-#define MODBUS_USART1_CTL1_GPIO_CLK								(RCC_APB2Periph_GPIOE)                                                                                                                           /**< MODBUS CTL1 GPIOæ—¶é’Ÿ */
-#define MODBUS_USART1_CTL1_GPIO_PORT							(GPIOE)                                                                                                                                          /**< MODBUS CTL1 GPIOç«¯å£ */
-#define MODBUS_USART1_CTL1_GPIO_PIN								(GPIO_Pin_2)                                                                                                                                     /**< MODBUS CTL1 GPIO Pinå¼•è„š */
+/* ºê¶¨Òå */
+/* PE2¡¢PE3¿ØÖÆ´®¿Ú·¢ËÍ»¹ÊÇ½ÓÊÜ */
+#define MODBUS_USART1_CTL1_GPIO_CLK								(RCC_APB2Periph_GPIOE)                                                                                                                           /**< MODBUS CTL1 GPIOÊ±ÖÓ */
+#define MODBUS_USART1_CTL1_GPIO_PORT							(GPIOE)                                                                                                                                          /**< MODBUS CTL1 GPIO¶Ë¿Ú */
+#define MODBUS_USART1_CTL1_GPIO_PIN								(GPIO_Pin_2)                                                                                                                                     /**< MODBUS CTL1 GPIO PinÒı½Å */
 
-#define MODBUS_USART1_CTL2_GPIO_CLK								(RCC_APB2Periph_GPIOE)                                                                                                                           /**< MODBUS CTL2 GPIOæ—¶é’Ÿ */
-#define MODBUS_USART1_CTL2_GPIO_PORT							(GPIOE)                                                                                                                                          /**< MODBUS CTL2 GPIOç«¯å£ */
-#define MODBUS_USART1_CTL2_GPIO_PIN								(GPIO_Pin_3)                                                                                                                                     /**< MODBUS CTL2 GPIO Pinå¼•è„š */
+#define MODBUS_USART1_CTL2_GPIO_CLK								(RCC_APB2Periph_GPIOE)                                                                                                                           /**< MODBUS CTL2 GPIOÊ±ÖÓ */
+#define MODBUS_USART1_CTL2_GPIO_PORT							(GPIOE)                                                                                                                                          /**< MODBUS CTL2 GPIO¶Ë¿Ú */
+#define MODBUS_USART1_CTL2_GPIO_PIN								(GPIO_Pin_3)                                                                                                                                     /**< MODBUS CTL2 GPIO PinÒı½Å */
 
-#define MODBUS_USART1_SEND_STATUS								GPIO_SetBits(MODBUS_USART1_CTL1_GPIO_PORT, MODBUS_USART1_CTL1_GPIO_PIN);GPIO_SetBits(MODBUS_USART1_CTL2_GPIO_PORT, MODBUS_USART1_CTL2_GPIO_PIN)    /**< MODBUS_USART1ç½®ä¸ºå‘é€çŠ¶æ€ */
-#define MODBUS_USART1_RECV_STATUS							    GPIO_ResetBits(MODBUS_USART1_CTL1_GPIO_PORT, MODBUS_USART1_CTL1_GPIO_PIN);GPIO_ResetBits(MODBUS_USART1_CTL2_GPIO_PORT, MODBUS_USART1_CTL2_GPIO_PIN)/**< MODBUS_USART1ç½®ä¸ºæ¥å—çŠ¶æ€ */
+#define MODBUS_USART1_SEND_STATUS								GPIO_SetBits(MODBUS_USART1_CTL1_GPIO_PORT, MODBUS_USART1_CTL1_GPIO_PIN);GPIO_SetBits(MODBUS_USART1_CTL2_GPIO_PORT, MODBUS_USART1_CTL2_GPIO_PIN)    /**< MODBUS_USART1ÖÃÎª·¢ËÍ×´Ì¬ */
+#define MODBUS_USART1_RECV_STATUS							    GPIO_ResetBits(MODBUS_USART1_CTL1_GPIO_PORT, MODBUS_USART1_CTL1_GPIO_PIN);GPIO_ResetBits(MODBUS_USART1_CTL2_GPIO_PORT, MODBUS_USART1_CTL2_GPIO_PIN)/**< MODBUS_USART1ÖÃÎª½ÓÊÜ×´Ì¬ */
 
-/* å‡½æ•°å£°æ˜ */
+/* º¯ÊıÉùÃ÷ */
 
 void MODBUS_USART1_Init(void);
 int fputc(int ch, FILE *f);
@@ -30,7 +31,25 @@ int fgetc(FILE *f);
 void MODBUS_USART1_COMMUNICATION(void);
 unsigned int CRC16(unsigned char *nData, unsigned int wLength);
 
-/* å…¨å±€å˜é‡å£°æ˜ */
+/* È«¾Ö±äÁ¿ÉùÃ÷ */
+
+extern MODBUS_USART_RECV_STRUCT MODBUS_USART1_RECV;          /**< ÓÃÓÚMODBUS_USART1Êı¾İ½ÓÊÕµÄ½á¹¹Ìå */
+extern uint8_t DEVICE_ID;                                    /*!< Éè±¸ID */
+
+extern float WEIYI1 ;                                        /*!< Î»ÒÆ1 */
+extern float WEIYI2 ;                                        /*!< Î»ÒÆ2 */
+extern float WEIYI3 ;                                        /*!< Î»ÒÆ3 */
+extern float WEIYI4 ;                                        /*!< Î»ÒÆ4 */
+extern float K1_Value;                                       /*!< ²ÎÊı1 */
+extern float K2_Value;                                       /*!< ²ÎÊı2 */
+extern float K3_Value;                                       /*!< ²ÎÊı3 */
+extern float K4_Value;                                       /*!< ²ÎÊı4 */
+extern float K5_Value;                                       /*!< ²ÎÊı5 */
+extern float K6_Value;                                       /*!< ²ÎÊı6 */
+extern float K7_Value;                                       /*!< ²ÎÊı7 */
+extern float K8_Value;                                       /*!< ²ÎÊı8 */
+extern float K9_Value;                                       /*!< ²ÎÊı9 */
+extern float K10_Value;                                      /*!< ²ÎÊı10 */
 
 #ifdef __cplusplus
 }

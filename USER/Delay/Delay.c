@@ -1,12 +1,19 @@
 /**
-  ******************************************************************************
-  * @file    DEBUG_Delay.c
-  * @author  Ryan·Chen
-  * @version V1.0
-  * @date    23-March-2020
-  * @brief   使用STM32的系统滴答定时器实现us,ms,s级延时函数        
-  ******************************************************************************
-  */
+ * @file Delay.c
+ * @brief 使用STM32的系统滴答定时器实现us,ms,s级延时函数
+ * @author Ryan·Chen (ryan.cr.chen@gmail.com)
+ * @version 1.0
+ * @date 23-09-2020
+ *
+ * @copyright Copyright (c) 2020  Ryan·Chen
+ *
+ * @par 更改日志:
+ * <table>
+ * <tr><th>Date       <th>Version <th>Author  <th>Description
+ * <tr><td>23-09-2020 <td>1.0     <td>Ryan·Chen     <td>增加文件头说明
+ * <tr><td>23-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范化
+ * </table>
+ */
 
 /* 头文件包含 */
 #include "Delay.h"
@@ -25,20 +32,20 @@
   */
 static u8 SysTick_Configuration(uint32_t ticks)
 {
-	if (ticks > SysTick_LOAD_RELOAD_Msk)  						/* 重装载值不合法 */
+	if (ticks > SysTick_LOAD_RELOAD_Msk)                   // 重装载值不合法
 	{
 		return (1);
 	}
 
-	SysTick->LOAD  = (ticks & SysTick_LOAD_RELOAD_Msk) - 1;  	/* 设置重装载寄存器 */  
-	SysTick->VAL   = 0;                             			/* 清零计数器值 */
+	SysTick->LOAD  = (ticks & SysTick_LOAD_RELOAD_Msk) - 1;// 设置重装载寄存器
+	SysTick->VAL   = 0;                                    // 清零计数器值
 /* 设置SysTick预分频 */
 #if defined SysTickUseAHB
-	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);			/* 使用AHB--72M */
+	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK);       // 使用AHB--72M
 #else
-	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);		/* 使用AHB/8--9M */
+	SysTick_CLKSourceConfig(SysTick_CLKSource_HCLK_Div8);  // 使用AHB/8--9M
 #endif
-	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;     				/* 使能SysTick */
+	SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;              // 使能SysTick
 	return (0);
 }
 
@@ -56,9 +63,9 @@ void SysTick_Delayus(__IO uint32_t nus)
 	SysTick_Configuration(SysTickClock / 1000000);
 	for (i = 0; i < nus; i++)
 	{
-		while (!(SysTick->CTRL & (1 << 16)));					/* 读取COUNTFLAG位可清除该位 */
+		while (!(SysTick->CTRL & (1 << 16)));    // 读取COUNTFLAG位可清除该位
 	}
-	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;     				/* 关闭SysTick */
+	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk; // 关闭SysTick
 }
 
 /**
@@ -71,11 +78,11 @@ void SysTick_Delayus(__IO uint32_t nus)
 void SysTick_Delayms(__IO uint32_t nms)
 {
 	uint32_t i;
-	
+
 	SysTick_Configuration(SysTickClock / 1000);
 	for (i = 0; i < nms; i++)
 	{
-		while (!(SysTick->CTRL & (1 << 16)));					/* 读取COUNTFLAG位可清除该位 */
+		while (!(SysTick->CTRL & (1 << 16)));    // 读取COUNTFLAG位可清除该位
 	}
-	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;     				/* 关闭SysTick */
+	SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk; // 关闭SysTick
 }

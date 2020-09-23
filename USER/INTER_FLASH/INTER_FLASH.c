@@ -1,19 +1,21 @@
 /**
  * @file INTER_FLASH.c
- * @brief 
+ * @brief 内部FLASH存储数据
  * @author Ryan·Chen (ryan.cr.chen@gmail.com)
  * @version 1.0
  * @date 27-07-2020
- * 
+ *
  * @copyright Copyright (c) 2020  Ryan·Chen
- * 
+ *
  * @par 更改日志:
  * <table>
  * <tr><th>Date       <th>Version <th>Author  <th>Description
  * <tr><td>27-07-2020 <td>1.0     <td>Ryan·Chen     <td>内部FLASH存储数据
+ * <tr><td>23-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范
  * </table>
  */
 
+/* 头文件包含 */
 #include "INTER_FLASH.h"
 
 /**
@@ -24,20 +26,15 @@
  */
 int INTER_FLASH_ProgramWord(uint32_t l_address, uint32_t l_data)
 {
-    // 解锁
-    FLASH_Unlock();
+    FLASH_Unlock();                           // 解锁
 
-    // 擦除数据
-    FLASH_ErasePage(l_address);
+    FLASH_ErasePage(l_address);               // 擦除数据
 
-    // 写入数据
-    FLASH_ProgramWord(l_address, l_data);
+    FLASH_ProgramWord(l_address, l_data);     // 写入数据
 
-    // 上锁
-    FLASH_Lock();
+    FLASH_Lock();                             // 上锁
 
-    // 验证数据是否正确
-    if (*(__IO uint32_t *)l_address == l_data)
+    if (*(__IO uint32_t *)l_address == l_data)// 验证数据是否正确
     {
         return 0;
     }
