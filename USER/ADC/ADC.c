@@ -12,6 +12,7 @@
  * <tr><th>Date       <th>Version <th>Author  <th>Description
  * <tr><td>13-08-2020 <td>1.0     <td>Ryan·Chen     <td>ADC采集电压信号
  * <tr><td>22-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范
+ * <tr><td>27-09-2020 <td>1.0     <td>Ryan·Chen     <td>将位移限制在0-20mm之间
  * </table>
  */
 
@@ -183,7 +184,20 @@ static double ADC_CalcHuanSuan(double Value, float Max, float Min)
     /* 计算方法
     MAX -- MIN
     0   -- 20   这里20代表2厘米 */
-    return (20 * ((Value - Max) / (Min - Max)));
+    float temp = 0.0;
+    temp = (20 * ((Value - Max) / (Min - Max)));
+    
+    /* 将结果限定在0-20之间 */
+    if (temp < 0)
+    {
+        temp = 0;
+    }
+    if (temp > 20)
+    {
+        temp = 20;
+    }
+    
+    return temp;
 }
 
 /**

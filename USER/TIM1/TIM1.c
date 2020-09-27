@@ -1,7 +1,7 @@
 /**
  * @file TIM1.c
  * @brief 定时器1输出4路PWM信号，通道1、通道2、通道3、通道4对应PA8、PA9、PA10、PA11
- *        PWM频率配置为100HZ
+ *        PWM频率配置为100HZ,9月27号将频率改为200Hz
  * @author Ryan·Chen (ryan.cr.chen@gmail.com)
  * @version 1.0
  * @date 14-08-2020
@@ -13,6 +13,8 @@
  * <tr><th>Date       <th>Version <th>Author  <th>Description
  * <tr><td>14-08-2020 <td>1.0     <td>Ryan·Chen     <td>定时器1配置输出
  * <tr><td>22-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范化
+ * <tr><td>27-09-2020 <td>1.0     <td>Ryan·Chen     <td>频率设置为200Hz
+ * <tr><td>27-09-2020 <td>1.0     <td>Ryan·Chen     <td>TIM1 通道的引脚设置成了TIM3的，现已改正
  * </table>
  */
 

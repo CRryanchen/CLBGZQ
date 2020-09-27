@@ -51,43 +51,59 @@ int main(void)
 
     while(1)
     {
-        if (ADC_ConvertCompleteFlag == 1)
-        {
-            /* 为了便于调试，下面这个循环用于打印采样数组中（第一个通道）的每一个点的值，用于在Excel查看
-             * 波形是否可行。如果定义该宏则打印。没有定义则输出计算第一通道的位移，与触摸屏通信。
-             */
-#ifdef WAVEPRINT
-            for (int i = 0; i < SAMPLE_TIMES; i++)
-            {
-                for (int j = 0; j < 1; j++)
-                {
-                    printf("%d\r\n", ADC_ConvertValue[i][j]);
-                }
-            }
-            SysTick_Delayms(2000);
-#else
-            ADC_CalcRootMeanSquare();
-            ADC_CalcWeiYi(0);
-#endif
-            ADC_ConvertCompleteFlag = 0;                        // ADC_ConvertCompleteFlag 置为0
-            ADC_LocalInit();                                    // 重启 DMA
+        /* TIM1 脉宽改变测试 */
+        SysTick_Delayms(100);
+        TIM_SetCompare4(TIM1, 0);
 
-        }
+        SysTick_Delayms(100);
+        TIM_SetCompare4(TIM1, 125);
 
-#if defined PRINTF_USE_USART2
-        if (MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
-				{
-					MODBUS_USART2_COMMUNICATION();                    // 处理MODBUS信息
-					MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT = 0;   // 串口计数器清零
-				MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG = 0;    // 串口通信标志清零
-				}
-#else
-        if (MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
-				{
-					MODBUS_USART1_COMMUNICATION();                    // 处理MODBUS信息
-					MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT = 0;   // 串口计数器清零
-					MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG = 0;// 串口通信标志清零
-				}
-#endif
+        SysTick_Delayms(100);
+        TIM_SetCompare4(TIM1, 250);
+
+        SysTick_Delayms(100);
+        TIM_SetCompare4(TIM1, 375);
+
+        SysTick_Delayms(100);
+        TIM_SetCompare4(TIM1, 500);
+
+
+//         if (ADC_ConvertCompleteFlag == 1)
+//         {
+//             /* 为了便于调试，下面这个循环用于打印采样数组中（第一个通道）的每一个点的值，用于在Excel查看
+//              * 波形是否可行。如果定义该宏则打印。没有定义则输出计算第一通道的位移，与触摸屏通信。
+//              */
+// #ifdef WAVEPRINT
+//             for (int i = 0; i < SAMPLE_TIMES; i++)
+//             {
+//                 for (int j = 0; j < 1; j++)
+//                 {
+//                     printf("%d\r\n", ADC_ConvertValue[i][j]);
+//                 }
+//             }
+//             SysTick_Delayms(2000);
+// #else
+//             ADC_CalcRootMeanSquare();
+//             ADC_CalcWeiYi(0);
+// #endif
+//             ADC_ConvertCompleteFlag = 0;                        // ADC_ConvertCompleteFlag 置为0
+//             ADC_LocalInit();                                    // 重启 DMA
+//         }
+
+// #if defined PRINTF_USE_USART2
+//         if (MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
+// 				{
+// 					MODBUS_USART2_COMMUNICATION();                    // 处理MODBUS信息
+// 					MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT = 0;   // 串口计数器清零
+// 				MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG = 0;    // 串口通信标志清零
+// 				}
+// #else
+//         if (MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
+// 				{
+// 					MODBUS_USART1_COMMUNICATION();                    // 处理MODBUS信息
+// 					MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT = 0;   // 串口计数器清零
+// 					MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG = 0;// 串口通信标志清零
+// 				}
+// #endif
     }
 }

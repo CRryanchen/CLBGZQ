@@ -16,23 +16,23 @@ extern "C"{
 
 // TIM3 输出比较通道1
 #define TIM3_CH1_GPIO_CLK								(RCC_APB2Periph_GPIOA)/**< TIM3 CH1 GPIO时钟 */
-#define TIM3_CH1_GPIO_PORT								(GPIOA)              /**< TIM3 CH1 GPIO端口 */
+#define TIM3_CH1_GPIO_PORT								(GPIOC)              /**< TIM3 CH1 GPIO端口 */
 #define TIM3_CH1_GPIO_PIN								(GPIO_Pin_6)          /**< TIM3 CH1 GPIO PIN引脚 */
 
 // TIM3 输出比较通道2
 #define TIM3_CH2_GPIO_CLK								(RCC_APB2Periph_GPIOA)/**< TIM3 CH2 GPIO时钟 */
-#define TIM3_CH2_GPIO_PORT								(GPIOA)              /**< TIM3 CH2 GPIO端口 */
+#define TIM3_CH2_GPIO_PORT								(GPIOC)              /**< TIM3 CH2 GPIO端口 */
 #define TIM3_CH2_GPIO_PIN								(GPIO_Pin_7)          /**< TIM3 CH2 GPIO PIN引脚 */
 
 // TIM3 输出比较通道3
 #define TIM3_CH3_GPIO_CLK								(RCC_APB2Periph_GPIOB)/**< TIM3 CH3 GPIO时钟 */
-#define TIM3_CH3_GPIO_PORT								(GPIOB)              /**< TIM3 CH3 GPIO端口 */
-#define TIM3_CH3_GPIO_PIN								(GPIO_Pin_0)          /**< TIM3 CH3 GPIO PIN引脚 */
+#define TIM3_CH3_GPIO_PORT								(GPIOC)              /**< TIM3 CH3 GPIO端口 */
+#define TIM3_CH3_GPIO_PIN								(GPIO_Pin_8)          /**< TIM3 CH3 GPIO PIN引脚 */
 
 // TIM3 输出比较通道4
 #define TIM3_CH4_GPIO_CLK								(RCC_APB2Periph_GPIOB)/**< TIM3 CH4 GPIO时钟 */
-#define TIM3_CH4_GPIO_PORT								(GPIOB)              /**< TIM3 CH4 GPIO端口 */
-#define TIM3_CH4_GPIO_PIN								(GPIO_Pin_1)          /**< TIM3 CH4 GPIO PIN引脚 */
+#define TIM3_CH4_GPIO_PORT								(GPIOC)              /**< TIM3 CH4 GPIO端口 */
+#define TIM3_CH4_GPIO_PIN								(GPIO_Pin_9)          /**< TIM3 CH4 GPIO PIN引脚 */
 
 /* 函数声明 */
 
