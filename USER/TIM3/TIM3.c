@@ -13,6 +13,7 @@
  * <tr><td>17-08-2020 <td>1.0     <td>Ryan·Chen     <td>配置定时器3
  * <tr><td>22-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范化
  * <tr><td>27-09-2020 <td>1.0     <td>Ryan·Chen     <td>更正引脚宏定义错误定义在TIM1头文件中
+ * <tr><td>19-10-2020 <td>1.0     <td>Ryan·Chen     <td>TIM3头文件CLK宏定义更正
  */
 
 /* 头文件包含 */
