@@ -22,7 +22,7 @@ extern "C"{
 
 /* ∫Í∂®“Â */
 //#define PRINTF_USE_USART2
-//#define WAVEPRINT
+#define WAVEPRINT
 
 #define DEBUG									1
 #define DEBUG_INFO(fmt, arg...)					do{\

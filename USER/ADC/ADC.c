@@ -13,7 +13,7 @@
  * <tr><td>13-08-2020 <td>1.0     <td>Ryan·Chen     <td>ADC采集电压信号
  * <tr><td>22-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范
  * <tr><td>27-09-2020 <td>1.0     <td>Ryan·Chen     <td>将位移限制在0-20mm之间
- * </table>
+ * <tr><td>15-10-2020 <td>1.0     <td>Ryan·Chen     <td>修改按通道计算均方根函数和计算位移函数
  */
 
 /* 头文件包含 */
@@ -91,6 +91,7 @@ static void ADC_ModeConfig(void)
 }
 
 
+
 /**
  * @brief ADC DMA 中断配置
  */
@@ -140,6 +141,8 @@ static void ADC_DmaConfig(void)
     DMA_Cmd(ADC_DMA_CHANNEL, ENABLE);                                                // 使能DMA通道
 }
 
+
+
 /**
  * @brief ADC 初始化
  */
@@ -150,31 +153,78 @@ void ADC_LocalInit(void)
     ADC_ModeConfig();
 }
 
+
+
 /**
- * @brief 计算均方根值
+ * @brief  计算相应通道的均方根值
+ * @param  channel          通道选择，0-3对应通道1-4，4表示所有通道。
  */
-void ADC_CalcRootMeanSquare(void)
+void ADC_CalcRootMeanSquare(uint8_t channel)
 {
     uint64_t SumOfSquare = 0;
     uint16_t i           = 0;
     uint16_t j           = 0;
 
-    for ( i = 0; i < 1; i++)
+    if (4 == channel)                           // 计算4个通道的均方根
     {
+        for ( i = 0; i < 4; i++)
+        {
+            for (j = 0; j < SAMPLE_TIMES; j++)
+            {
+                SumOfSquare += (uint64_t)ADC_ConvertValue[j][i] * (uint64_t)ADC_ConvertValue[j][i];
+            }
+
+            ADC_RootMeanSquare[i] = sqrt((double)SumOfSquare / SAMPLE_TIMES);
+            SumOfSquare = 0;
+        }
+    }
+    else if (0 == channel)                      // 计算通道1的均方根
+    {
+        SumOfSquare = 0;
         for (j = 0; j < SAMPLE_TIMES; j++)
         {
-            SumOfSquare += (uint64_t)ADC_ConvertValue[j][i] * (uint64_t)ADC_ConvertValue[j][i];
+            SumOfSquare += (uint64_t)ADC_ConvertValue[j][0] * (uint64_t)ADC_ConvertValue[j][0];
         }
 
-        ADC_RootMeanSquare[i] = sqrt((double)SumOfSquare / SAMPLE_TIMES);
+        ADC_RootMeanSquare[0] = sqrt((double)SumOfSquare / SAMPLE_TIMES);
+    }
+    else if (1 == channel)                      // 计算通道2的均方根
+    {
         SumOfSquare = 0;
+        for (j = 0; j < SAMPLE_TIMES; j++)
+        {
+            SumOfSquare += (uint64_t)ADC_ConvertValue[j][1] * (uint64_t)ADC_ConvertValue[j][1];
+        }
+
+        ADC_RootMeanSquare[1] = sqrt((double)SumOfSquare / SAMPLE_TIMES);
+    }
+    else if (2 == channel)                      // 计算通道3的均方根
+    {
+        SumOfSquare = 0;
+        for (j = 0; j < SAMPLE_TIMES; j++)
+        {
+            SumOfSquare += (uint64_t)ADC_ConvertValue[j][2] * (uint64_t)ADC_ConvertValue[j][2];
+        }
+
+        ADC_RootMeanSquare[2] = sqrt((double)SumOfSquare / SAMPLE_TIMES);
+    }
+    else if (3 == channel)                      // 计算通道4的均方根
+    {
+        SumOfSquare = 0;
+        for (j = 0; j < SAMPLE_TIMES; j++)
+        {
+            SumOfSquare += (uint64_t)ADC_ConvertValue[j][3] * (uint64_t)ADC_ConvertValue[j][3];
+        }
+
+        ADC_RootMeanSquare[3] = sqrt((double)SumOfSquare / SAMPLE_TIMES);
     }
 }
 
 
+
 /**
  * @brief  ADC 测量值与位移换算方法
- * @param  Value            通道测量值
+ * @param  Value            通道测量值（均方根）
  * @param  Max              0 位移对应的 通道测量值
  * @param  Min              20 位移对应的 通道测量值
  * @return double           对应的位移值
@@ -200,40 +250,57 @@ static double ADC_CalcHuanSuan(double Value, float Max, float Min)
     return temp;
 }
 
+
+
 /**
  * @brief  计算位移
- * @param  channel          通道选择，0表示所有通道1，1表示通道2，其他类似
+ * @param  channel          通道选择，0-3对应通道1-4，4表示所有通道。
  */
 void ADC_CalcWeiYi(uint8_t channel)
 {
+    // 首先计算对应通道的均方根值
+    ADC_CalcRootMeanSquare(channel);
+
     if (4 == channel)
     {
         ADC_WeiYi[0] = ADC_CalcHuanSuan(ADC_RootMeanSquare[0], ADC_CHANNEL_0_MAX, ADC_CHANNEL_0_MIN);
         ADC_WeiYi[1] = ADC_CalcHuanSuan(ADC_RootMeanSquare[1], ADC_CHANNEL_1_MAX, ADC_CHANNEL_1_MIN);
         ADC_WeiYi[2] = ADC_CalcHuanSuan(ADC_RootMeanSquare[2], ADC_CHANNEL_2_MAX, ADC_CHANNEL_2_MIN);
         ADC_WeiYi[3] = ADC_CalcHuanSuan(ADC_RootMeanSquare[3], ADC_CHANNEL_3_MAX, ADC_CHANNEL_3_MIN);
+
+        /* 位移赋值 */
+        WEIYI1 = ADC_WeiYi[0];
+        WEIYI2 = ADC_WeiYi[1];
+        WEIYI3 = ADC_WeiYi[2];
+        WEIYI4 = ADC_WeiYi[3];
     }
     else if (0 == channel)
     {
         ADC_WeiYi[0] = ADC_CalcHuanSuan(ADC_RootMeanSquare[0], ADC_CHANNEL_0_MAX, ADC_CHANNEL_0_MIN);
+
+         /* 位移赋值 */
+        WEIYI1 = ADC_WeiYi[0];
     }
     else if (1 == channel)
     {
         ADC_WeiYi[1] = ADC_CalcHuanSuan(ADC_RootMeanSquare[1], ADC_CHANNEL_1_MAX, ADC_CHANNEL_1_MIN);
+
+         /* 位移赋值 */
+        WEIYI2 = ADC_WeiYi[1];
     }
     else if (2 == channel)
     {
         ADC_WeiYi[2] = ADC_CalcHuanSuan(ADC_RootMeanSquare[2], ADC_CHANNEL_2_MAX, ADC_CHANNEL_2_MIN);
+
+         /* 位移赋值 */
+        WEIYI3 = ADC_WeiYi[2];
     }
     else if (3 == channel)
     {
         ADC_WeiYi[3] = ADC_CalcHuanSuan(ADC_RootMeanSquare[3], ADC_CHANNEL_3_MAX, ADC_CHANNEL_3_MIN);
-    }
 
-    /* 位移赋值 */
-    WEIYI1 = ADC_WeiYi[0];
-    WEIYI2 = ADC_WeiYi[1];
-    WEIYI3 = ADC_WeiYi[2];
-    WEIYI4 = ADC_WeiYi[3];
+         /* 位移赋值 */
+        WEIYI4 = ADC_WeiYi[3];
+    }
 }
 

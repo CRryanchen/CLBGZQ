@@ -54,7 +54,7 @@ extern "C"{
 /* 函数声明 */
 
 void ADC_LocalInit(void);
-void ADC_CalcRootMeanSquare(void);
+void ADC_CalcRootMeanSquare(uint8_t channel);
 void ADC_CalcWeiYi(uint8_t channel);
 
 /* 全局变量声明 */
