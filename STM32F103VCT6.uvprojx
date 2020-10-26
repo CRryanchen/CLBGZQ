@@ -538,6 +538,11 @@
               <FileType>1</FileType>
               <FilePath>.\USER\stm32f10x_it.c</FilePath>
             </File>
+            <File>
+              <FileName>global.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USER\global.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

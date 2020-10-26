@@ -30,7 +30,9 @@ extern "C"{
 												printf("<<-DEBUG-INFO->> [%s],[%d]"fmt"\n", __FILE__, __LINE__, ##arg );\
 												}while(0)
 /* 函数声明 */
-int globalInit(void);
+void globalInit(void);
+void globalAdcHandle(void);
+void globalModbusHandle(void);
 
 /* 全局变量声明 */
 
