@@ -7,7 +7,7 @@ extern "C"{
 
 /* 头文件包含 */
 #include "stm32f10x.h"								// Device header
-#include "stm32f10x_it.h"                           // 使用自定义数据类型
+#include "MODBUS_USART1.h"                          // 串口自定义数据
 #include <stdio.h>                                  // 使用FILE 数据类型
 
 /* 宏定义 */

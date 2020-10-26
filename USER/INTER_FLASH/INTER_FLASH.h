@@ -20,13 +20,22 @@ extern "C"{
 #define K1_ADDR								((uint32_t)0X08008800)/**< K1  在FLASH中地址 */
 #define K2_ADDR								((uint32_t)0X08008804)/**< K2  在FLASH中地址 */
 #define K3_ADDR								((uint32_t)0X08008808)/**< K3  在FLASH中地址 */
-#define K4_ADDR								((uint32_t)0X0800880c)/**< K4  在FLASH中地址 */
+#define K4_ADDR								((uint32_t)0X0800880C)/**< K4  在FLASH中地址 */
 #define K5_ADDR								((uint32_t)0X08008810)/**< K5  在FLASH中地址 */
 #define K6_ADDR								((uint32_t)0X08008814)/**< K6  在FLASH中地址 */
 #define K7_ADDR								((uint32_t)0X08008818)/**< K7  在FLASH中地址 */
-#define K8_ADDR								((uint32_t)0X0800881c)/**< K8  在FLASH中地址 */
+#define K8_ADDR								((uint32_t)0X0800881C)/**< K8  在FLASH中地址 */
 #define K9_ADDR								((uint32_t)0X08008820)/**< K9  在FLASH中地址 */
 #define K10_ADDR							((uint32_t)0X08008824)/**< K10 在FLASH中地址 */
+
+#define CH1MIN_ADDR                         ((uint32_t)0X08009000)/**< CH1MIN 在FLASH中地址 */
+#define CH1MAX_ADDR                         ((uint32_t)0X08009800)/**< CH1MAX 在FLASH中地址 */
+#define CH2MIN_ADDR                         ((uint32_t)0X0800A000)/**< CH2MIN 在FLASH中地址 */
+#define CH2MAX_ADDR                         ((uint32_t)0X0800A800)/**< CH2MAX 在FLASH中地址 */
+#define CH3MIN_ADDR                         ((uint32_t)0X0800B000)/**< CH3MIN 在FLASH中地址 */
+#define CH3MAX_ADDR                         ((uint32_t)0X0800B800)/**< CH3MAX 在FLASH中地址 */
+#define CH0MIN_ADDR                         ((uint32_t)0X0800C000)/**< CH4MIN 在FLASH中地址 */
+#define CH0MAX_ADDR                         ((uint32_t)0X0800C800)/**< CH4MAX 在FLASH中地址 */
 
 /* 函数声明 */
 

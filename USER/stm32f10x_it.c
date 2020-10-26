@@ -23,8 +23,6 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
-#include "MODBUS_USART1.h"
-#include "MODBUS_USART2.h"
 #include "ADC.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Template
@@ -155,88 +153,10 @@ void SysTick_Handler(void)
 {
 }*/
 
-/**
-* @brief  This function handles USART1 interrupt request.
-* @param  None
-* @retval None
-*/
-void USART1_IRQHandler(void)
-{
-	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
-	{
-        // 接收到数据就启动定时器从0计数
-        TIM_SetCounter(TIM6, 0);
-        TIM_Cmd(TIM6, ENABLE);
-        // 如果数组接收数据还没有达到最大
-		if(MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT < MODBUS_USART_RECV_MAX_BUFSIZE)
-        {
-            MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT++] = USART_ReceiveData(USART1);
-        }
 
-        // 如果接收数据已满，则不保存数据
-        else
-        {
-            USART_ReceiveData(USART1);
-        }
-	}
-}
-
-
-/**
-* @brief  This function handles USART2 interrupt request.
-* @param  None
-* @retval None
-*/
-void USART2_IRQHandler(void)
-{
-	if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
-	{
-        // 接收到数据就启动定时器从0计数
-        TIM_SetCounter(TIM6, 0);
-        TIM_Cmd(TIM6, ENABLE);
-
-	  	 // 如果数组接收数据还没有达到最大
-        if (MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT < MODBUS_USART_RECV_MAX_BUFSIZE)
-        {
-            MODBUS_USART2_RECV.MODBUS_USART_RECVBUF[MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT++] = USART_ReceiveData(USART2);
-        }
-
-        // 如果接收数据已满，则不保存数据
-        else
-        {
-            USART_ReceiveData(USART2);
-        }
-	}
-}
-
-/**
-* @brief  This function handles TIM6 interrupt request.
-* @param  None
-* @retval None
-*/
-void TIM6_IRQHandler(void)
-{
-    if (TIM_GetITStatus(TIM6, TIM_IT_Update) != RESET)
-    {
-        // 清楚更新中断标志位
-        TIM_ClearITPendingBit(TIM6, TIM_IT_Update);
-        // 关闭定时器
-        TIM_Cmd(TIM6, DISABLE);
-
-        // 接收完成标志置1
-
-        // 调用MODBUS通信处理函数
-#if defined PRINTF_USE_USART2
-        MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG = 1;
-#else
-        MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG = 1;
-#endif  /* PRINTF_USE_USART2 */
-    }
-    
-}
 
 void DMA1_Channel1_IRQHandler(void)
-{    
+{
   if(DMA_GetITStatus(DMA1_IT_TC1) != RESET)
   {
       DMA_ClearITPendingBit(DMA1_IT_TC1);

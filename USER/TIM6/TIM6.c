@@ -14,11 +14,13 @@
  * <tr><th>Date       <th>Version <th>Author  <th>Description
  * <tr><td>24-07-2020 <td>1.0     <td>Ryan·Chen     <td>使用基本定时器TIM6判断MODBUS通信的结束
  * <tr><td>22-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范化
+ * <tr><td>22-10-2020 <td>1.0     <td>Ryan·Chen     <td>中断服务函数移到本模块文件中
  * </table>
  */
 
 /* 头文件包含 */
 #include "TIM6.h"
+#include "MODBUS_USART1.h"// 串口自定义数据
 
 /**
  * @brief TIM6 时基初始化
@@ -68,4 +70,31 @@ void TIM6_Init(void)
     TIM_ClearFlag(TIM6, TIM_FLAG_Update);                                      // 清除更新中断标志位
     TIM_ITConfig(TIM6, TIM_IT_Update, ENABLE);                                 // 开启TIM6更新中断
     TIM_Cmd(TIM6, DISABLE);                                                    // 暂不使能TIM6
+}
+
+
+/**
+* @brief  This function handles TIM6 interrupt request.
+* @param  None
+* @retval None
+*/
+void TIM6_IRQHandler(void)
+{
+    if (TIM_GetITStatus(TIM6, TIM_IT_Update) != RESET)
+    {
+        // 清楚更新中断标志位
+        TIM_ClearITPendingBit(TIM6, TIM_IT_Update);
+        // 关闭定时器
+        TIM_Cmd(TIM6, DISABLE);
+
+        // 接收完成标志置1
+
+        // 调用MODBUS通信处理函数
+#if defined PRINTF_USE_USART2
+        MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG = 1;
+#else
+        MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG = 1;
+#endif  /* PRINTF_USE_USART2 */
+    }
+    
 }

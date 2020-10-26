@@ -15,6 +15,7 @@
  * <tr><td>22-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范化
  * <tr><td>27-09-2020 <td>1.0     <td>Ryan·Chen     <td>频率设置为200Hz
  * <tr><td>27-09-2020 <td>1.0     <td>Ryan·Chen     <td>TIM1 通道的引脚设置成了TIM3的，现已改正
+ * <tr><td>22-10-2020 <td>1.0     <td>Ryan·Chen     <td>TIM1 分频更改，增加PWM每个周期计数值，分辨率提高
  * </table>
  */
 

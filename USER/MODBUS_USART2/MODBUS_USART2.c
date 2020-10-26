@@ -131,3 +131,31 @@ void MODBUS_USART2_COMMUNICATION(void)
 {
     printf("MODBUS_USART2 通信结束，您输入的字符串是%s，共%d个。\n", MODBUS_USART2_RECV.MODBUS_USART_RECVBUF, MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT);
 }
+
+
+/**
+* @brief  串口2中断服务函数
+* @param  None
+* @retval None
+*/
+void USART2_IRQHandler(void)
+{
+	if (USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+	{
+        // 接收到数据就启动定时器从0计数
+        TIM_SetCounter(TIM6, 0);
+        TIM_Cmd(TIM6, ENABLE);
+
+	  	 // 如果数组接收数据还没有达到最大
+        if (MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT < MODBUS_USART_RECV_MAX_BUFSIZE)
+        {
+            MODBUS_USART2_RECV.MODBUS_USART_RECVBUF[MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT++] = USART_ReceiveData(USART2);
+        }
+
+        // 如果接收数据已满，则不保存数据
+        else
+        {
+            USART_ReceiveData(USART2);
+        }
+	}
+}

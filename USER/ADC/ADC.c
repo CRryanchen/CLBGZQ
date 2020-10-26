@@ -14,6 +14,7 @@
  * <tr><td>22-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范
  * <tr><td>27-09-2020 <td>1.0     <td>Ryan·Chen     <td>将位移限制在0-20mm之间
  * <tr><td>15-10-2020 <td>1.0     <td>Ryan·Chen     <td>修改按通道计算均方根函数和计算位移函数
+ * <tr><td>26-10-2020 <td>1.0     <td>Ryan·Chen     <td>计算位移加入中间变量而不是直接用宏定义的极值
  */
 
 /* 头文件包含 */
@@ -26,6 +27,16 @@ uint16_t ADC_ConvertValue       [SAMPLE_TIMES][NUMBER_OF_CHANNELS] = {0};  /**< 
 float    ADC_RootMeanSquare     [NUMBER_OF_CHANNELS]               = {0.0};/**< 存储AD 4个通道的转换值计算的均方根值 */
 float    ADC_WeiYi              [NUMBER_OF_CHANNELS]               = {0.0};/**< 存储AD 4个通道对应计算的位移值 */
 uint8_t  ADC_ConvertCompleteFlag                                   = 0;    /**< ADC-DMA转换完成一次标志位 */
+
+float    ADC_Ch0MinValue = 0.0;/**< ADC通道1参考最小值 */
+float    ADC_Ch0MaxValue = 0.0;/**< ADC通道1参考最大值 */
+float    ADC_Ch1MinValue = 0.0;/**< ADC通道2参考最小值 */
+float    ADC_Ch1MaxValue = 0.0;/**< ADC通道2参考最大值 */
+float    ADC_Ch2MinValue = 0.0;/**< ADC通道3参考最小值 */
+float    ADC_Ch2MaxValue = 0.0;/**< ADC通道3参考最大值 */
+float    ADC_Ch3MinValue = 0.0;/**< ADC通道4参考最小值 */
+float    ADC_Ch3MaxValue = 0.0;/**< ADC通道4参考最大值 */
+
 
 /**
  * @brief ADC 引脚配置
@@ -263,10 +274,10 @@ void ADC_CalcWeiYi(uint8_t channel)
 
     if (4 == channel)
     {
-        ADC_WeiYi[0] = ADC_CalcHuanSuan(ADC_RootMeanSquare[0], ADC_CHANNEL_0_MAX, ADC_CHANNEL_0_MIN);
-        ADC_WeiYi[1] = ADC_CalcHuanSuan(ADC_RootMeanSquare[1], ADC_CHANNEL_1_MAX, ADC_CHANNEL_1_MIN);
-        ADC_WeiYi[2] = ADC_CalcHuanSuan(ADC_RootMeanSquare[2], ADC_CHANNEL_2_MAX, ADC_CHANNEL_2_MIN);
-        ADC_WeiYi[3] = ADC_CalcHuanSuan(ADC_RootMeanSquare[3], ADC_CHANNEL_3_MAX, ADC_CHANNEL_3_MIN);
+        ADC_WeiYi[0] = ADC_CalcHuanSuan(ADC_RootMeanSquare[0], ADC_Ch0MaxValue, ADC_Ch0MinValue);
+        ADC_WeiYi[1] = ADC_CalcHuanSuan(ADC_RootMeanSquare[1], ADC_Ch1MaxValue, ADC_Ch1MinValue);
+        ADC_WeiYi[2] = ADC_CalcHuanSuan(ADC_RootMeanSquare[2], ADC_Ch2MaxValue, ADC_Ch2MinValue);
+        ADC_WeiYi[3] = ADC_CalcHuanSuan(ADC_RootMeanSquare[3], ADC_Ch3MaxValue, ADC_Ch3MinValue);
 
         /* 位移赋值 */
         WEIYI1 = ADC_WeiYi[0];
@@ -276,28 +287,28 @@ void ADC_CalcWeiYi(uint8_t channel)
     }
     else if (0 == channel)
     {
-        ADC_WeiYi[0] = ADC_CalcHuanSuan(ADC_RootMeanSquare[0], ADC_CHANNEL_0_MAX, ADC_CHANNEL_0_MIN);
+        ADC_WeiYi[0] = ADC_CalcHuanSuan(ADC_RootMeanSquare[0], ADC_Ch0MaxValue, ADC_Ch0MinValue);
 
          /* 位移赋值 */
         WEIYI1 = ADC_WeiYi[0];
     }
     else if (1 == channel)
     {
-        ADC_WeiYi[1] = ADC_CalcHuanSuan(ADC_RootMeanSquare[1], ADC_CHANNEL_1_MAX, ADC_CHANNEL_1_MIN);
+        ADC_WeiYi[1] = ADC_CalcHuanSuan(ADC_RootMeanSquare[1], ADC_Ch1MaxValue, ADC_Ch1MinValue);
 
          /* 位移赋值 */
         WEIYI2 = ADC_WeiYi[1];
     }
     else if (2 == channel)
     {
-        ADC_WeiYi[2] = ADC_CalcHuanSuan(ADC_RootMeanSquare[2], ADC_CHANNEL_2_MAX, ADC_CHANNEL_2_MIN);
+        ADC_WeiYi[2] = ADC_CalcHuanSuan(ADC_RootMeanSquare[2], ADC_Ch2MaxValue, ADC_Ch2MinValue);
 
          /* 位移赋值 */
         WEIYI3 = ADC_WeiYi[2];
     }
     else if (3 == channel)
     {
-        ADC_WeiYi[3] = ADC_CalcHuanSuan(ADC_RootMeanSquare[3], ADC_CHANNEL_3_MAX, ADC_CHANNEL_3_MIN);
+        ADC_WeiYi[3] = ADC_CalcHuanSuan(ADC_RootMeanSquare[3], ADC_Ch3MaxValue, ADC_Ch3MinValue);
 
          /* 位移赋值 */
         WEIYI4 = ADC_WeiYi[3];

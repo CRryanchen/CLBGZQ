@@ -62,6 +62,14 @@ extern uint16_t ADC_ConvertValue[SAMPLE_TIMES][NUMBER_OF_CHANNELS];
 extern float    ADC_RootMeanSquare[NUMBER_OF_CHANNELS];
 extern float    ADC_WeiYi[NUMBER_OF_CHANNELS];
 extern uint8_t  ADC_ConvertCompleteFlag;
+extern float    ADC_Ch0MinValue;
+extern float    ADC_Ch0MaxValue;
+extern float    ADC_Ch1MinValue;
+extern float    ADC_Ch1MaxValue;
+extern float    ADC_Ch2MinValue;
+extern float    ADC_Ch2MaxValue;
+extern float    ADC_Ch3MinValue;
+extern float    ADC_Ch3MaxValue;
 
 #ifdef __cplusplus
 }

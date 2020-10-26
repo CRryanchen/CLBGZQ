@@ -22,7 +22,7 @@ extern "C"{
 
 /* 宏定义 */
 //#define PRINTF_USE_USART2
-//#define WAVEPRINT
+#define WAVEPRINT
 
 #define DEBUG									1
 #define DEBUG_INFO(fmt, arg...)					do{\
@@ -30,6 +30,7 @@ extern "C"{
 												printf("<<-DEBUG-INFO->> [%s],[%d]"fmt"\n", __FILE__, __LINE__, ##arg );\
 												}while(0)
 /* 函数声明 */
+int globalInit(void);
 
 /* 全局变量声明 */
 

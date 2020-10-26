@@ -12,6 +12,7 @@
  * <tr><th>Date       <th>Version <th>Author  <th>Description
  * <tr><td>23-07-2020 <td>1.0     <td>Ryan·Chen     <td>使用串口1进行MODBUS通信
  * <tr><td>21-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范化
+ * <tr><td>26-10-2020 <td>1.0     <td>Ryan·Chen     <td>加入触摸屏控制设备将当前测得AD当作极值写入FLASH
  * </table>
  */
 
@@ -19,8 +20,8 @@
 #include "MODBUS_USART1.h"
 #include <string.h>                                         // 使用 string 库函数
 #include "USART1.h"                                         // 使用串口1
-#include "stm32f10x_it.h"                                   // 串口接收数据数组
 #include "INTER_FLASH.h"                                    // DEVICE_ID_ADDR
+#include "adc.h"
 
 /* 全局变量定义 */
 
@@ -336,6 +337,296 @@ static void MODBUS_USART_03_Handle()
             }
             break;
 
+            /* ADC通道0最小值 */
+            case 1030:
+            {
+			    l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
+                if (2 == l_ResCnt)
+                {
+                    l_ResponseBuf[2] = 0x04;
+                    
+                    //todo: 3、4、5、7传送此时测得的通道0最小值(全部插入)
+                    ADC_CalcRootMeanSquare(0);// 计算通道0的均方根
+                    ADC_Ch0MinValue = ADC_RootMeanSquare[0];// 重置ADC_Ch0MinValue
+
+                    //todo: 将此时的通道0最小值写入Flash
+                    FLASH_Unlock();                                          // 解锁
+                    FLASH_ErasePage(CH0MIN_ADDR);                                // 擦除页数据
+
+                    FLASH_ProgramWord(CH0MIN_ADDR  , *(uint32_t *)&ADC_RootMeanSquare[0]);
+                    FLASH_Lock();
+
+                    // 将值写入临时数组
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3] , (uint8_t *)CH0MIN_ADDR , 4);
+
+                    l_CRC16CheckNum  = CRC16(l_ResponseBuf, 7);
+                    l_ResponseBuf[7] = l_CRC16CheckNum & 0XFF;       // 校验码低8位
+                    l_ResponseBuf[8] = l_CRC16CheckNum >> 8;         // 校验码高8位
+
+                    MODBUS_USART1_SendData(l_ResponseBuf, 9);
+                }
+                /* 寄存器数量异常 */
+                else
+                {
+                    MOSBUS_USART_ErrorHandle(0x03);
+                }
+            }
+            break;
+
+            /* ADC通道0最大值 */
+            case 1032:
+            {
+			    l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
+                if (2 == l_ResCnt)
+                {
+                    l_ResponseBuf[2] = 0x04;
+                    
+                    //todo: 3、4、5、7传送此时测得的通道0最大值(全部取出)
+                    ADC_CalcRootMeanSquare(0);// 计算通道0的均方根
+                    ADC_Ch0MaxValue = ADC_RootMeanSquare[0];// 重置ADC_Ch0MaxValue
+
+                    //todo: 将此时的通道0最大值写入Flash
+                    FLASH_Unlock();                                          // 解锁
+                    FLASH_ErasePage(CH0MAX_ADDR);                                // 擦除页数据
+
+                    FLASH_ProgramWord(CH0MAX_ADDR  , *(uint32_t *)&ADC_RootMeanSquare[0]);
+                    FLASH_Lock();
+
+                    // 将值写入临时数组
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3] , (uint8_t *)CH0MAX_ADDR , 4);
+
+                    l_CRC16CheckNum  = CRC16(l_ResponseBuf, 7);
+                    l_ResponseBuf[7] = l_CRC16CheckNum & 0XFF;       // 校验码低8位
+                    l_ResponseBuf[8] = l_CRC16CheckNum >> 8;         // 校验码高8位
+
+                    MODBUS_USART1_SendData(l_ResponseBuf, 9);
+                }
+                /* 寄存器数量异常 */
+                else
+                {
+                    MOSBUS_USART_ErrorHandle(0x03);
+                }
+            }
+            break;
+
+            /* ADC通道1最小值 */
+            case 1034:
+            {
+			    l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
+                if (2 == l_ResCnt)
+                {
+                    l_ResponseBuf[2] = 0x04;
+                    
+                    //todo: 3、4、5、7传送此时测得的通道1最小值(全部插入)
+                    ADC_CalcRootMeanSquare(1);// 计算通道1的均方根
+                    ADC_Ch1MinValue = ADC_RootMeanSquare[1];// 重置ADC_Ch1MinValue
+
+                    //todo: 将此时的通道1最小值写入Flash
+                    FLASH_Unlock();                                          // 解锁
+                    FLASH_ErasePage(CH1MIN_ADDR);                                // 擦除页数据
+
+                    FLASH_ProgramWord(CH1MIN_ADDR  , *(uint32_t *)&ADC_RootMeanSquare[1]);
+                    FLASH_Lock();
+
+                    // 将值写入临时数组
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3] , (uint8_t *)CH1MIN_ADDR , 4);
+
+                    l_CRC16CheckNum  = CRC16(l_ResponseBuf, 7);
+                    l_ResponseBuf[7] = l_CRC16CheckNum & 0XFF;       // 校验码低8位
+                    l_ResponseBuf[8] = l_CRC16CheckNum >> 8;         // 校验码高8位
+
+                    MODBUS_USART1_SendData(l_ResponseBuf, 9);
+                }
+                /* 寄存器数量异常 */
+                else
+                {
+                    MOSBUS_USART_ErrorHandle(0x03);
+                }
+            }
+            break;
+
+            /* ADC通道1最大值 */
+            case 1036:
+            {
+			    l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
+                if (2 == l_ResCnt)
+                {
+                    l_ResponseBuf[2] = 0x04;
+                    
+                    //todo: 3、4、5、7传送此时测得的通道1最大值(全部取出)
+                    ADC_CalcRootMeanSquare(1);// 计算通道1的均方根
+                    ADC_Ch1MaxValue = ADC_RootMeanSquare[1];// 重置ADC_Ch1MaxValue
+
+                    //todo: 将此时的通道1最大值写入Flash
+                    FLASH_Unlock();                                          // 解锁
+                    FLASH_ErasePage(CH1MAX_ADDR);                                // 擦除页数据
+
+                    FLASH_ProgramWord(CH1MAX_ADDR  , *(uint32_t *)&ADC_RootMeanSquare[1]);
+                    FLASH_Lock();
+
+                    // 将值写入临时数组
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3] , (uint8_t *)CH1MAX_ADDR , 4);
+
+                    l_CRC16CheckNum  = CRC16(l_ResponseBuf, 7);
+                    l_ResponseBuf[7] = l_CRC16CheckNum & 0XFF;       // 校验码低8位
+                    l_ResponseBuf[8] = l_CRC16CheckNum >> 8;         // 校验码高8位
+
+                    MODBUS_USART1_SendData(l_ResponseBuf, 9);
+                }
+                /* 寄存器数量异常 */
+                else
+                {
+                    MOSBUS_USART_ErrorHandle(0x03);
+                }
+            }
+            break;
+
+            /* ADC通道2最小值 */
+            case 1038:
+            {
+			    l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
+                if (2 == l_ResCnt)
+                {
+                    l_ResponseBuf[2] = 0x04;
+                    
+                    //todo: 3、4、5、7传送此时测得的通道2最小值(全部插入)
+                    ADC_CalcRootMeanSquare(2);// 计算通道2的均方根
+                    ADC_Ch2MinValue = ADC_RootMeanSquare[2];// 重置ADC_Ch2MinValue
+
+                    //todo: 将此时的通道2最小值写入Flash
+                    FLASH_Unlock();                                          // 解锁
+                    FLASH_ErasePage(CH2MIN_ADDR);                                // 擦除页数据
+
+                    FLASH_ProgramWord(CH2MIN_ADDR  , *(uint32_t *)&ADC_RootMeanSquare[2]);
+                    FLASH_Lock();
+
+                    // 将值写入临时数组
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3] , (uint8_t *)CH2MIN_ADDR , 4);
+
+                    l_CRC16CheckNum  = CRC16(l_ResponseBuf, 7);
+                    l_ResponseBuf[7] = l_CRC16CheckNum & 0XFF;       // 校验码低8位
+                    l_ResponseBuf[8] = l_CRC16CheckNum >> 8;         // 校验码高8位
+
+                    MODBUS_USART1_SendData(l_ResponseBuf, 9);
+                }
+                /* 寄存器数量异常 */
+                else
+                {
+                    MOSBUS_USART_ErrorHandle(0x03);
+                }
+            }
+            break;
+
+            /* ADC通道2最大值 */
+            case 1040:
+            {
+			    l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
+                if (2 == l_ResCnt)
+                {
+                    l_ResponseBuf[2] = 0x04;
+                    
+                    //todo: 3、4、5、7传送此时测得的通道2最大值(全部取出)
+                    ADC_CalcRootMeanSquare(2);// 计算通道2的均方根
+                    ADC_Ch2MaxValue = ADC_RootMeanSquare[2];// 重置ADC_Ch2MaxValue
+
+                    //todo: 将此时的通道2最大值写入Flash
+                    FLASH_Unlock();                                          // 解锁
+                    FLASH_ErasePage(CH2MAX_ADDR);                                // 擦除页数据
+
+                    FLASH_ProgramWord(CH2MAX_ADDR  , *(uint32_t *)&ADC_RootMeanSquare[2]);
+                    FLASH_Lock();
+
+                    // 将值写入临时数组
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3] , (uint8_t *)CH2MAX_ADDR , 4);
+
+                    l_CRC16CheckNum  = CRC16(l_ResponseBuf, 7);
+                    l_ResponseBuf[7] = l_CRC16CheckNum & 0XFF;       // 校验码低8位
+                    l_ResponseBuf[8] = l_CRC16CheckNum >> 8;         // 校验码高8位
+
+                    MODBUS_USART1_SendData(l_ResponseBuf, 9);
+                }
+                /* 寄存器数量异常 */
+                else
+                {
+                    MOSBUS_USART_ErrorHandle(0x03);
+                }
+            }
+            break;
+
+            /* ADC通道3最小值 */
+            case 1042:
+            {
+			    l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
+                if (2 == l_ResCnt)
+                {
+                    l_ResponseBuf[2] = 0x04;
+                    
+                    //todo: 3、4、5、7传送此时测得的通道3最小值(全部插入)
+                    ADC_CalcRootMeanSquare(3);// 计算通道3的均方根
+                    ADC_Ch3MinValue = ADC_RootMeanSquare[3];// 重置ADC_Ch3MinValue
+
+                    //todo: 将此时的通道3最小值写入Flash
+                    FLASH_Unlock();                                          // 解锁
+                    FLASH_ErasePage(CH3MIN_ADDR);                                // 擦除页数据
+
+                    FLASH_ProgramWord(CH3MIN_ADDR  , *(uint32_t *)&ADC_RootMeanSquare[3]);
+                    FLASH_Lock();
+
+                    // 将值写入临时数组
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3] , (uint8_t *)CH3MIN_ADDR , 4);
+
+                    l_CRC16CheckNum  = CRC16(l_ResponseBuf, 7);
+                    l_ResponseBuf[7] = l_CRC16CheckNum & 0XFF;       // 校验码低8位
+                    l_ResponseBuf[8] = l_CRC16CheckNum >> 8;         // 校验码高8位
+
+                    MODBUS_USART1_SendData(l_ResponseBuf, 9);
+                }
+                /* 寄存器数量异常 */
+                else
+                {
+                    MOSBUS_USART_ErrorHandle(0x03);
+                }
+            }
+            break;
+
+            /* ADC通道3最大值 */
+            case 1044:
+            {
+			    l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
+                if (2 == l_ResCnt)
+                {
+                    l_ResponseBuf[2] = 0x04;
+                    
+                    //todo: 3、4、5、7传送此时测得的通道3最大值(全部取出)
+                    ADC_CalcRootMeanSquare(3);// 计算通道3的均方根
+                    ADC_Ch3MaxValue = ADC_RootMeanSquare[3];// 重置ADC_Ch3MaxValue
+
+                    //todo: 将此时的通道3最大值写入Flash
+                    FLASH_Unlock();                                          // 解锁
+                    FLASH_ErasePage(CH3MAX_ADDR);                                // 擦除页数据
+
+                    FLASH_ProgramWord(CH3MAX_ADDR  , *(uint32_t *)&ADC_RootMeanSquare[3]);
+                    FLASH_Lock();
+
+                    // 将值写入临时数组
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3] , (uint8_t *)CH3MAX_ADDR , 4);
+
+                    l_CRC16CheckNum  = CRC16(l_ResponseBuf, 7);
+                    l_ResponseBuf[7] = l_CRC16CheckNum & 0XFF;       // 校验码低8位
+                    l_ResponseBuf[8] = l_CRC16CheckNum >> 8;         // 校验码高8位
+
+                    MODBUS_USART1_SendData(l_ResponseBuf, 9);
+                }
+                /* 寄存器数量异常 */
+                else
+                {
+                    MOSBUS_USART_ErrorHandle(0x03);
+                }
+            }
+            break;
+
+
+
             default:
             {
                 /* 寄存器寻址异常 */
@@ -620,4 +911,31 @@ unsigned int CRC16(unsigned char *nData, unsigned int wLength)
     }
 
     return wCRCWord;
+}
+
+
+/**
+* @brief  串口1中断服务函数
+* @param  None
+* @retval None
+*/
+void USART1_IRQHandler(void)
+{
+	if (USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
+	{
+        // 接收到数据就启动定时器从0计数
+        TIM_SetCounter(TIM6, 0);
+        TIM_Cmd(TIM6, ENABLE);
+        // 如果数组接收数据还没有达到最大
+		if(MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT < MODBUS_USART_RECV_MAX_BUFSIZE)
+        {
+            MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT++] = USART_ReceiveData(USART1);
+        }
+
+        // 如果接收数据已满，则不保存数据
+        else
+        {
+            USART_ReceiveData(USART1);
+        }
+	}
 }

@@ -23,6 +23,20 @@ extern "C"{
 #define MODBUS_USART1_SEND_STATUS								GPIO_SetBits(MODBUS_USART1_CTL1_GPIO_PORT, MODBUS_USART1_CTL1_GPIO_PIN);GPIO_SetBits(MODBUS_USART1_CTL2_GPIO_PORT, MODBUS_USART1_CTL2_GPIO_PIN)    /**< MODBUS_USART1置为发送状态 */
 #define MODBUS_USART1_RECV_STATUS							    GPIO_ResetBits(MODBUS_USART1_CTL1_GPIO_PORT, MODBUS_USART1_CTL1_GPIO_PIN);GPIO_ResetBits(MODBUS_USART1_CTL2_GPIO_PORT, MODBUS_USART1_CTL2_GPIO_PIN)/**< MODBUS_USART1置为接受状态 */
 
+// 宏定义
+#define MODBUS_USART_RECV_MAX_BUFSIZE								(100)       /**< 串口MODBUS接收数据数组最大值 */
+
+/**
+ * @brief 自定义数据类型，用于处理串口数据
+ */
+typedef struct
+{
+    uint8_t MODBUS_USART_RECVBUF[MODBUS_USART_RECV_MAX_BUFSIZE];/**< 接收数据数组 */
+    uint8_t MODBUS_USART_RECV_COUNT;                            /**< 接收数据计数器 */
+    uint8_t MODBUS_USART_COMPLETE_FLAG;                         /**< MODBUS接收完成标志 */
+}MODBUS_USART_RECV_STRUCT;
+
+
 /* 函数声明 */
 
 void MODBUS_USART1_Init(void);
