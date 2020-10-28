@@ -22,15 +22,16 @@ int main(void)
 
     while(1)
     {
-        // SysTick_Delayms(100);
-        // TIM_SetCompare4(TIM1, 500);
         // globalAdcHandle();
 
-        // ADC转换完成
+
+        // // ADC转换完成
         if (ADC_ConvertCompleteFlag == 1)
         {
             /* Your Code */
+            ADC_CalcWeiYi(4);
 
+            // TIM_SetCompare1(TIM1, 40000 * 0.115);
 
             /* Your Code */
             ADC_ConvertCompleteFlag = 0;                        // ADC_ConvertCompleteFlag 置为0

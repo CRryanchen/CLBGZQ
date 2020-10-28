@@ -13,6 +13,7 @@
  * <tr><td>23-07-2020 <td>1.0     <td>Ryan·Chen     <td>使用串口1进行MODBUS通信
  * <tr><td>21-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范化
  * <tr><td>26-10-2020 <td>1.0     <td>Ryan·Chen     <td>加入触摸屏控制设备将当前测得AD当作极值写入FLASH
+ * <tr><td>28-10-2020 <td>1.0     <td>Ryan·Chen     <td>加入触摸屏查询各个通道的极值
  * </table>
  */
 
@@ -616,6 +617,37 @@ static void MODBUS_USART_03_Handle()
                     l_ResponseBuf[8] = l_CRC16CheckNum >> 8;         // 校验码高8位
 
                     MODBUS_USART1_SendData(l_ResponseBuf, 9);
+                }
+                /* 寄存器数量异常 */
+                else
+                {
+                    MOSBUS_USART_ErrorHandle(0x03);
+                }
+            }
+            break;
+
+            /* ADC所有通道最大最小值 */
+            case 1046:
+            {
+			    l_ResCnt = (uint16_t)MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[4] << 8 | MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[5];
+                if (2 == l_ResCnt)
+                {
+                    l_ResponseBuf[2] = 0x20;
+                    // 将值写入临时数组
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[3] , (uint8_t *)CH0MIN_ADDR , 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[7] , (uint8_t *)CH0MAX_ADDR , 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[11] , (uint8_t *)CH1MIN_ADDR , 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[15] , (uint8_t *)CH1MAX_ADDR , 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[19] , (uint8_t *)CH2MIN_ADDR , 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[23] , (uint8_t *)CH2MAX_ADDR , 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[27] , (uint8_t *)CH3MIN_ADDR , 4);
+                    MOSBUS_USART_Memcpy(&l_ResponseBuf[31] , (uint8_t *)CH3MAX_ADDR , 4);
+
+                    l_CRC16CheckNum  = CRC16(l_ResponseBuf, 35);
+                    l_ResponseBuf[35] = l_CRC16CheckNum & 0XFF;       // 校验码低8位
+                    l_ResponseBuf[36] = l_CRC16CheckNum >> 8;         // 校验码高8位
+
+                    MODBUS_USART1_SendData(l_ResponseBuf, 37);
                 }
                 /* 寄存器数量异常 */
                 else

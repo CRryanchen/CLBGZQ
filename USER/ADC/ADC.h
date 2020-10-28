@@ -37,19 +37,17 @@ extern "C"{
 // ADC1 对应DMA1通道1，
 #define ADC_DMA_CHANNEL                             (DMA1_Channel1)         /**< ADC1 对应的DMA通道 */
 
-//#define ADC_CHANNEL_0_MAX                          1962.213457            /**< ADC1 通道0 AD均方根最大值 */
-#define ADC_CHANNEL_0_MAX                            1937.2766087            /**< ADC1 通道0 AD均方根最大值 */
-//#define ADC_CHANNEL_0_MIN                            1086.357245            /**< ADC1 通道0 AD均方根最小值 */
-#define ADC_CHANNEL_0_MIN                            1010.249833            /**< ADC1 通道0 AD均方根最小值 */
+#define ADC_CHANNEL_0_MAX                            2000            /**< ADC1 通道0 AD均方根最大值 */
+#define ADC_CHANNEL_0_MIN                            1461            /**< ADC1 通道0 AD均方根最小值 */
 
 #define ADC_CHANNEL_1_MAX                            1                      /**< ADC1 通道1 AD均方根最大值 */
 #define ADC_CHANNEL_1_MIN                            1                      /**< ADC1 通道1 AD均方根最小值 */
 
-#define ADC_CHANNEL_2_MAX                            1                      /**< ADC1 通道2 AD均方根最大值 */
-#define ADC_CHANNEL_2_MIN                            1                      /**< ADC1 通道2 AD均方根最小值 */
+#define ADC_CHANNEL_2_MAX                            2476                      /**< ADC1 通道2 AD均方根最大值 */
+#define ADC_CHANNEL_2_MIN                            1944                      /**< ADC1 通道2 AD均方根最小值 */
 
-#define ADC_CHANNEL_3_MAX                            1                      /**< ADC1 通道3 AD均方根最大值 */
-#define ADC_CHANNEL_3_MIN                            1                      /**< ADC1 通道3 AD均方根最小值 */
+#define ADC_CHANNEL_3_MAX                            1978                      /**< ADC1 通道3 AD均方根最大值 */
+#define ADC_CHANNEL_3_MIN                            1219                      /**< ADC1 通道3 AD均方根最小值 */
 
 /* 函数声明 */
 

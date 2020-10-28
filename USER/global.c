@@ -162,23 +162,24 @@ void globalAdcHandle(void)
              * 波形是否可行。如果定义该宏则打印。没有定义则输出计算第一通道的位移，与触摸屏通信。
              */
 #ifdef WAVEPRINT
-            // for (int i = 0; i < SAMPLE_TIMES; i++)
-            // {
-            //     for (int j = 0; j < NUMBER_OF_CHANNELS; j++)
-            //     {
-            //         printf("%d\t", ADC_ConvertValue[i][j]);
-            //     }
-            //     printf("\n");
-            // }
+            for (int i = 0; i < SAMPLE_TIMES; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    printf("%d\t", ADC_ConvertValue[i][j]);
+                }
+                printf("\n");
+            }
             
+            ADC_CalcRootMeanSquare(4);
             for (int j = 0; j < NUMBER_OF_CHANNELS; j++)
             {
-                ADC_CalcRootMeanSquare(j);
+                // ADC_CalcRootMeanSquare(j);
                 printf("%.3f\r\n", ADC_RootMeanSquare[j]);
             }
             printf("\n");
 
-            SysTick_Delayms(2000);
+            SysTick_Delayms(3000);
 #else
             ADC_CalcWeiYi(0);
 #endif
