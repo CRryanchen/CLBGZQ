@@ -43,6 +43,7 @@ static void TIM1_CH_GpioInit(void);
 static void TIM1_TimeBaseConfig(void);
 static void TIM1_OCConfig(void);
 void TIM1_Init(void);
+void PWMx_SetWidth(uint8_t channel, float percent);
 
 /* 全局变量声明 */
 

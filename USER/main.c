@@ -19,23 +19,18 @@
 int main(void)
 {
     globalInit();
-
     while(1)
     {
-        // globalAdcHandle();
-
-
-        // // ADC转换完成
+        // ADC转换完成
         if (ADC_ConvertCompleteFlag == 1)
         {
-            /* Your Code */
             ADC_CalcWeiYi(4);
+            /* Your Code */
 
-            // TIM_SetCompare1(TIM1, 40000 * 0.115);
 
             /* Your Code */
             ADC_ConvertCompleteFlag = 0;                        // ADC_ConvertCompleteFlag 置为0
-            ADC_LocalInit();                                    // 重启 DMA
+            ADC_LocalInit();                                    // 重启 ADC
         }
         globalModbusHandle();
     }

@@ -152,7 +152,7 @@ void globalInit(void)
 
 
 /**
- * @brief ADC转换处理函数，计算各个通道位移
+ * @brief ADC转换处理函数，计算各个通道位移，用于测试输出打印相关信息
  */
 void globalAdcHandle(void)
 {

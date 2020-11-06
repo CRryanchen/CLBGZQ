@@ -115,6 +115,33 @@ void TIM1_Init(void)
 }
 
 
+/**
+ * @brief  设置PWM占空比
+ * @param  channel          设置哪一个PWM通道，输入0,1,2,3即代表PWM0,1,2,3
+ * @param  percent          占空比的百分数，如20.50%，输入20.50即可
+ */
+void PWMx_SetWidth(uint8_t channel, float percent)
+{
+    switch (channel)
+    {
+        case 0:
+            TIM_SetCompare1(TIM1, (TIM1_PERIOD + 1) * (percent / 100.0));
+            break;
+        case 1:
+            TIM_SetCompare2(TIM1, (TIM1_PERIOD + 1) * (percent / 100.0));
+            break;
+        case 2:
+            TIM_SetCompare3(TIM1, (TIM1_PERIOD + 1) * (percent / 100.0));
+            break;
+        case 3:
+            TIM_SetCompare4(TIM1, (TIM1_PERIOD + 1) * (percent / 100.0));
+            break;
+        default:
+            break;
+    }
+}
+
+
 
 
 
