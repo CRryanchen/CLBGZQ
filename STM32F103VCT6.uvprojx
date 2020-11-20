@@ -50,8 +50,8 @@
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
           <OutputName>STM32F103VCT6</OutputName>
-          <CreateExecutable>0</CreateExecutable>
-          <CreateLib>1</CreateLib>
+          <CreateExecutable>1</CreateExecutable>
+          <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
@@ -537,6 +537,11 @@
               <FileName>global.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\USER\global.c</FilePath>
+            </File>
+            <File>
+              <FileName>main.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\USER\main.c</FilePath>
             </File>
           </Files>
         </Group>

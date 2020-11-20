@@ -14,6 +14,7 @@
  * <tr><td>21-09-2020 <td>1.0     <td>Ryan·Chen     <td>代码规范化
  * <tr><td>26-10-2020 <td>1.0     <td>Ryan·Chen     <td>加入触摸屏控制设备将当前测得AD当作极值写入FLASH
  * <tr><td>28-10-2020 <td>1.0     <td>Ryan·Chen     <td>加入触摸屏查询各个通道的极值
+ * <tr><td>10-11-2020 <td>1.0     <td>Ryan·Chen     <td>删掉设备ID验证
  * </table>
  */
 
@@ -847,7 +848,7 @@ void MODBUS_USART1_COMMUNICATION(void)
 
     if (MODBUS_USART1_RECV.MODBUS_USART_COMPLETE_FLAG == 1)
     {
-        if (DEVICE_ID == MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[0])                                                                                                                                                     // 设备ID是否正确
+        //if (DEVICE_ID == MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[0])                                                                                                                                                     // 设备ID是否正确
         {
             l_CRCCheckSum = ((MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT - 1] << 8) | (MODBUS_USART1_RECV.MODBUS_USART_RECVBUF[MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT - 2]));// CRC校验码是否正确
             if (CRC16(MODBUS_USART1_RECV.MODBUS_USART_RECVBUF, MODBUS_USART1_RECV.MODBUS_USART_RECV_COUNT - 2) == l_CRCCheckSum)
@@ -875,12 +876,14 @@ void MODBUS_USART1_COMMUNICATION(void)
                 }
             }
         }
+        /*
         else
         {
-            /* 设备ID不同
-             * DEBUG_INFO("Error Device_ID");
-             */
+            设备ID不同
+            DEBUG_INFO("Error Device_ID");
+             
         }
+        */
     }
 }
 

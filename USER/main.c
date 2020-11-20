@@ -27,6 +27,10 @@ int main(void)
             ADC_CalcWeiYi(4);
             /* Your Code */
 
+            PWMx_SetWidth(0,10);
+            PWMx_SetWidth(1,10);
+            PWMx_SetWidth(2,10);
+            PWMx_SetWidth(3,10);
 
             /* Your Code */
             ADC_ConvertCompleteFlag = 0;                        // ADC_ConvertCompleteFlag ÖÃÎª0

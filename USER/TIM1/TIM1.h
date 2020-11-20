@@ -13,8 +13,8 @@ extern "C"{
  *  PWM 信号的频率 F = TIM_CLK / {(ARR+1)*(PSC+1)}
  */
 #define TIM1_PERIOD                                     (40000 - 1)         /**< 定时器计数周期 */
-#define TIM1_PSC                                        (9 - 1)          /**< 定时器分频 */
-#define TIM1_PULSE                                      20000                /**< PWM模式 OC 配置 */
+#define TIM1_PSC                                        (18 - 1)          /**< 定时器分频 */
+#define TIM1_PULSE                                      400                /**< PWM模式 OC 配置 */
 
 /* TIM1 输出比较通道1 */
 #define TIM1_CH1_GPIO_CLK								(RCC_APB2Periph_GPIOA)/**< TIM1 CH1 GPIO时钟 */

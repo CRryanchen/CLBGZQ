@@ -137,17 +137,23 @@ void globalInit(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);             // 选择NVIC 分组
     LED_Init();                                                 // LED初始化
-#if defined PRINTF_USE_USART2
-	MODBUS_USART2_Init();                                       // 初始化串口2
-#else
-    MODBUS_USART1_Init();                                       // 初始化串口1
-#endif /* PRINTF_USE_USART2 */
+
     TIM6_Init();                                                // TIM6 初始化
     K_ValueInit();                                              // K值初始化
     AdcChannelRefValueInit();                                   // ADC参考值初始化
     TIM1_Init();                                                // TIM1 初始化
     TIM3_Init();                                                // TIM3 初始化
     ADC_LocalInit();                                            // ADC1 初始化
+    
+    SysTick_Delayms(1500);
+#if defined PRINTF_USE_USART2
+	MODBUS_USART2_Init();                                       // 初始化串口2
+#else
+    MODBUS_USART1_Init();                                       // 初始化串口1
+#endif /* PRINTF_USE_USART2 */
+    
+    MODBUS_USART2_RECV.MODBUS_USART_RECV_COUNT = 0;             // 串口计数器清零
+    MODBUS_USART2_RECV.MODBUS_USART_COMPLETE_FLAG = 0;          // 串口通信标志清零
 }
 
 

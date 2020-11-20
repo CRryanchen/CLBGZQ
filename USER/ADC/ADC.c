@@ -16,6 +16,7 @@
  * <tr><td>15-10-2020 <td>1.0     <td>Ryan·Chen     <td>修改按通道计算均方根函数和计算位移函数
  * <tr><td>26-10-2020 <td>1.0     <td>Ryan·Chen     <td>计算位移加入中间变量而不是直接用宏定义的极值
  * <tr><td>28-10-2020 <td>1.0     <td>Ryan·Chen     <td>通道2计算与其他计算位移，极值调用相反
+ * <tr><td>13-11-2020 <td>1.0     <td>Ryan·Chen     <td>通道2有问题，硬件更换，计算放回与其他通道变为一致
  */
 
 /* 头文件包含 */
@@ -276,9 +277,7 @@ void ADC_CalcWeiYi(uint8_t channel)
     if (4 == channel)
     {
         ADC_WeiYi[0] = ADC_CalcHuanSuan(ADC_RootMeanSquare[0], ADC_Ch0MaxValue, ADC_Ch0MinValue);
-        // ADC_WeiYi[1] = ADC_CalcHuanSuan(ADC_RootMeanSquare[1], ADC_Ch1MaxValue, ADC_Ch1MinValue);
-        // 通道1与其他通道相反，所以最大最小值反着传递
-        ADC_WeiYi[1] = ADC_CalcHuanSuan(ADC_RootMeanSquare[1], ADC_Ch1MinValue, ADC_Ch1MaxValue);
+        ADC_WeiYi[1] = ADC_CalcHuanSuan(ADC_RootMeanSquare[1], ADC_Ch1MaxValue, ADC_Ch1MinValue);
         ADC_WeiYi[2] = ADC_CalcHuanSuan(ADC_RootMeanSquare[2], ADC_Ch2MaxValue, ADC_Ch2MinValue);
         ADC_WeiYi[3] = ADC_CalcHuanSuan(ADC_RootMeanSquare[3], ADC_Ch3MaxValue, ADC_Ch3MinValue);
 
@@ -297,9 +296,7 @@ void ADC_CalcWeiYi(uint8_t channel)
     }
     else if (1 == channel)
     {
-        // ADC_WeiYi[1] = ADC_CalcHuanSuan(ADC_RootMeanSquare[1], ADC_Ch1MaxValue, ADC_Ch1MinValue);
-        // 通道1与其他通道相反，所以最大最小值反着传递
-        ADC_WeiYi[1] = ADC_CalcHuanSuan(ADC_RootMeanSquare[1], ADC_Ch1MinValue, ADC_Ch1MaxValue);
+        ADC_WeiYi[1] = ADC_CalcHuanSuan(ADC_RootMeanSquare[1], ADC_Ch1MaxValue, ADC_Ch1MinValue);
 
          /* 位移赋值 */
         WEIYI2 = ADC_WeiYi[1];

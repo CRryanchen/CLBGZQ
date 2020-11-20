@@ -16,6 +16,7 @@
  * <tr><td>27-09-2020 <td>1.0     <td>Ryan·Chen     <td>频率设置为200Hz
  * <tr><td>27-09-2020 <td>1.0     <td>Ryan·Chen     <td>TIM1 通道的引脚设置成了TIM3的，现已改正
  * <tr><td>22-10-2020 <td>1.0     <td>Ryan·Chen     <td>TIM1 分频更改，增加PWM每个周期计数值，分辨率提高
+ * <tr><td>10-11-2020 <td>1.0     <td>Ryan·Chen     <td>TIM1频率重新设置为100Hz，设置频率增加判断，不超过30%
  * </table>
  */
 
@@ -122,6 +123,21 @@ void TIM1_Init(void)
  */
 void PWMx_SetWidth(uint8_t channel, float percent)
 {
+    if (percent > 100.0)
+    {
+        percent = 30.0;
+    }
+    
+    if (percent > 30.0)
+    {
+        percent = 30.0;
+    }
+    
+    if (percent < 0.0)
+    {
+        percent = 0.0;
+    }
+    
     switch (channel)
     {
         case 0:
